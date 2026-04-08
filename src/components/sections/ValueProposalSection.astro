@@ -1,8 +1,13 @@
 ---
 // ValueProposalSection - Sección "Más que un número, es un Sello de Válidez"
+
+// Content Data
+import valueProposalData from '../../data/content.value-proposal.json';
+
+const { section } = valueProposalData;
 ---
 
-<section class="w-full bg-[#eff1f9] px-[197px] py-[39px]" id="value-proposal">
+<section class="w-full bg-[#eff1f9] px-[197px] py-[39px]" id={section.id}>
   <!-- Container principal flex -->
   <div class="mx-auto flex max-w-[1920px] items-center justify-center gap-[54px]">
     
@@ -12,10 +17,10 @@
       <!-- Título h2 headings -->
       <div class="flex w-full flex-col items-start pb-2">
         <p class="w-full font-montserrat text-[48px] font-bold capitalize leading-[64px] tracking-[-0.03em] text-[var(--color-black)]">
-          Más que un número, es un
+          {section.title.line1}
         </p>
         <p class="w-full font-montserrat text-[48px] font-bold capitalize leading-[64px] tracking-[-0.03em] text-[var(--color-azulhorizonte)]">
-          Sello  de Válidez
+          {section.title.line2}
         </p>
       </div>
 

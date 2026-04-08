@@ -1,0 +1,45 @@
+{
+  "header": {
+    "logo": {
+      "alt": "Crediscore",
+      "name": {
+        "main": "Credi",
+        "sub": "score"
+      }
+    },
+    "navigation": [
+      {
+        "text": "Inicio",
+        "href": "#"
+      },
+      {
+        "text": "Nosotros", 
+        "href": "#"
+      },
+      {
+        "text": "Servicios",
+        "href": "#"
+      },
+      {
+        "text": "Noticias",
+        "href": "#"
+      },
+      {
+        "text": "Contacto",
+        "href": "#"
+      }
+    ],
+    "actions": [
+      {
+        "text": "Descargar App",
+        "href": "#",
+        "primary": true
+      },
+      {
+        "text": "¿Cómo funciona?",
+        "href": "#", 
+        "primary": false
+      }
+    ]
+  }
+}

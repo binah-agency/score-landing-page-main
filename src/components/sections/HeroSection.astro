@@ -8,6 +8,14 @@ import heroImage from '../../assest/hero/hero-bg.png?url';
 // Assets Common
 import logoIcon from '../../assest/common/logo-icon.svg?url';
 import menuIcon from '../../assest/common/menu-icon.svg?url';
+<<<<<<< HEAD
+=======
+
+// Content Data
+import heroData from '../../data/content.hero.json';
+
+const { header } = heroData;
+>>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
 ---
 
 <section class="hero-section mx-auto flex w-full max-w-[1920px] flex-col items-center gap-20 px-5 pb-[11px] pt-[60px]">
@@ -28,21 +36,39 @@ import menuIcon from '../../assest/common/menu-icon.svg?url';
 
       <!-- Navbar -->
       <nav class="flex flex-1 items-center justify-end gap-5 p-2">
+<<<<<<< HEAD
         <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Inicio</a>
         <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Nosotros</a>
         <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Servicios</a>
         <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Noticias</a>
         <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Contacto</a>
+=======
+        {header.navigation.map((item) => (
+          <a href={item.href} class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">{item.text}</a>
+        ))}
+>>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
       </nav>
 
       <!-- Actions -->
       <div class="flex w-[500px] items-center justify-center gap-4 p-[10px]">
+<<<<<<< HEAD
         <a href="#" class="flex h-[55px] w-[202px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte)] px-3 py-[10px] text-[20px] font-semibold text-white transition-colors hover:bg-[var(--color-azulhorizonte-alt)]">
           Descargar App
         </a>
         <a href="#" class="flex h-[55px] w-[202px] items-center justify-center whitespace-nowrap rounded-lg border-2 border-[var(--color-azulhorizonte)] p-[10px] text-[20px] font-semibold text-[var(--color-azulhorizonte)] transition-colors hover:bg-[var(--color-azulhorizonte)] hover:text-white">
           ¿Cómo funciona?
         </a>
+=======
+        {header.actions.map((action) => (
+          <a href={action.href} class={`flex h-[55px] w-[202px] items-center justify-center rounded-lg px-3 py-[10px] text-[20px] font-semibold transition-colors ${
+            action.primary 
+              ? 'bg-[var(--color-azulhorizonte)] text-white hover:bg-[var(--color-azulhorizonte-alt)]'
+              : 'border-2 border-[var(--color-azulhorizonte)] text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)] hover:text-white whitespace-nowrap'
+          }`}>
+            {action.text}
+          </a>
+        ))}
+>>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
       </div>
     </div>
 

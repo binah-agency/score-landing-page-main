@@ -1,0 +1,19 @@
+{
+  "faqs": [
+    {
+      "number": "01",
+      "question": "¿Que pasa si no tengo historial financiero?",
+      "answer": "Sí, la plataforma está diseñada para ayudarte a construir y demostrar tu confiabilidad, incluso si no cuentas con un historial financiero bancario tradicional."
+    },
+    {
+      "number": "02",
+      "question": "¿Cuanto tiempo tarda en mejorar mi Score de Oportunidad?",
+      "answer": "El tiempo que tarda en mejorar tu Score en la plataforma depende directamente del tipo de acciones financieras y de cumplimiento que apliques. A través de la \"Guía de Mejora de Score\" que ofrece la aplicación, se establecen tiempos estimados según el impacto de cada acción"
+    },
+    {
+      "number": "03",
+      "question": "¿Si mi empresa es nueva ¿puedo acceder a los servicios de sistema operativo de Credi Empresa?",
+      "answer": "Sí, una empresa nueva puede acceder a los servicios del Portal Empresarial (Módulo B2B), pero el sistema exige cumplir con ciertos requisitos previos para garantizar la seguridad y operatividad.\n\nUna vez que tu empresa esté registrada, verificada y con su suscripción activa, podrás disfrutar de todo el flujo del Portal Empresarial: buscar usuarios mediante su documento, solicitarles consentimiento para ver su score y estructurar ofertas de crédito"
+    }
+  ]
+}

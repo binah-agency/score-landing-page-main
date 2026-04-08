@@ -4,16 +4,23 @@ import worldMap from '../../assest/about/world-map.png?url';
 import iconWorld from '../../assest/about/icon-world.svg?url';
 import iconStar from '../../assest/about/icon-star.svg?url';
 import iconCheckbox from '../../assest/about/icon-checkbox.svg?url';
+
+// Content Data
+import aboutData from '../../data/content.about.json';
+
+const { section } = aboutData;
+
 ---
 
-<section class="relative mx-auto h-[1025px] w-full max-w-[1920px]" id="nosotros">
+<section class="relative mx-auto h-[1025px] w-full max-w-[1920px]" id={section.id}>
   <!-- Título -->
   <div class="absolute left-1/2 top-[50px] w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize">
     <p class="mb-2 w-full text-[24px] font-medium text-[var(--color-azulhorizonte)]">
-      QUIÉNES SOMOS
+      {section.title.subtitle}
     </p>
     <h2 class="w-full whitespace-pre-wrap text-[48px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-black)]">
-      Habilitando La Confianza Técnica En  Venezuela
+      {section.title.main}
+>>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
     </h2>
   </div>
 
