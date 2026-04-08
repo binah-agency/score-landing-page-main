@@ -2,18 +2,33 @@
   "faqs": [
     {
       "number": "01",
-      "question": "¿Que pasa si no tengo historial financiero?",
-      "answer": "Sí, la plataforma está diseñada para ayudarte a construir y demostrar tu confiabilidad, incluso si no cuentas con un historial financiero bancario tradicional."
+      "question": "¿Qué es exactamente CrediScore?",
+      "answer": "No somos una entidad financiera tradicional. Somos la primera infraestructura de confianza técnica en Venezuela. Utilizamos un Sistema de Apoyo a Decisiones (DSS) para ofrecerte una radiografía de tu salud económica en tiempo real , permitiéndote demostrar que tus comportamientos de pago y cumplimiento a tu palabra tiene un valor respaldado por datos."
     },
     {
       "number": "02",
-      "question": "¿Cuanto tiempo tarda en mejorar mi Score de Oportunidad?",
-      "answer": "El tiempo que tarda en mejorar tu Score en la plataforma depende directamente del tipo de acciones financieras y de cumplimiento que apliques. A través de la \"Guía de Mejora de Score\" que ofrece la aplicación, se establecen tiempos estimados según el impacto de cada acción"
+      "question": "¿Por qué dicen que es un modelo probado en 170 países?",
+      "answer": "Porque la metodología de validación que utilizamos es el estándar global en las economías más avanzadas del mundo. Traemos a Venezuela una tecnología que ya dinamiza el crecimiento en más de 170 países, adaptándola a nuestra realidad para que dejes de ser una \"apuesta\" y te conviertas en una inversión segura para tus negocios futuros."
     },
     {
       "number": "03",
-      "question": "¿Si mi empresa es nueva ¿puedo acceder a los servicios de sistema operativo de Credi Empresa?",
-      "answer": "Sí, una empresa nueva puede acceder a los servicios del Portal Empresarial (Módulo B2B), pero el sistema exige cumplir con ciertos requisitos previos para garantizar la seguridad y operatividad.\n\nUna vez que tu empresa esté registrada, verificada y con su suscripción activa, podrás disfrutar de todo el flujo del Portal Empresarial: buscar usuarios mediante su documento, solicitarles consentimiento para ver su score y estructurar ofertas de crédito"
+      "question": "¿Para qué sirve tener un \"Pasaporte de Confiabilidad\"?",
+      "answer": "Es tu mejor aliado para existir comercialmente. Funciona como una certificación de tu integridad técnica. Con él puedes:\n\nComo persona: Acceder a oportunidades que antes pedían requisitos imposibles.\n\nComo empresario: Blindar tu capital y reducir el miedo a vender a plazos o negociar con nuevos aliados.\n\nComo dueño de activos: Proteger tu patrimonio mediante un filtrado técnico de perfiles."
+    },
+    {
+      "number": "04",
+      "question": "¿CrediScore me da dinero o préstamos?",
+      "answer": "CrediScore es el engranaje tecnológico que genera la confianza necesaria para que el dinero y los negocios fluyan. Nosotros validamos tu perfil; esa validación es la que te abre las puertas con empresas, mayoristas y proveedores que hoy exigen seguridad técnica antes de decir que \"SÍ\"."
+    },
+    {
+      "number": "05",
+      "question": "Soy presidente de un condominio, ¿cómo nos ayuda esto?",
+      "answer": "CrediScore ataca directamente el dolor Desviación de pago . Al usar nuestra plataforma, la comunidad se dinamiza: el cumplimiento de los vecinos se convierte en un activo y la administración obtiene las herramientas para incrementar el flujo de caja y recuperar el bienestar del inmueble."
+    },
+    {
+      "number": "06",
+      "question": "¿Qué significa el número que veo?",
+      "answer": "Es tu indicador de salud económica. Refleja tu nivel de cumplimiento y responsabilidad histórica. Mientras más alto sea tu nivel, mayor es tu poder de conexión con el sistema comercial venezolano y global."
     }
   ]
 }

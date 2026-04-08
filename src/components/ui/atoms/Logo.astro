@@ -1,0 +1,39 @@
+---
+export interface Props {
+  size?: 'desktop' | 'tablet' | 'mobile';
+}
+
+const { size = 'desktop' } = Astro.props;
+
+import logoIcon from '../../../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
+
+const sizeClasses = {
+  desktop: {
+    container: 'h-[87px] w-[125px]',
+    textContainer: 'text-[48px] font-black leading-[58px]',
+    subtext: 'pb-2 text-[24px] font-normal leading-[29px]'
+  },
+  tablet: {
+    container: 'h-[67px] w-[95px]',
+    textContainer: 'text-[48px] font-black leading-[58px]',
+    subtext: 'pb-2 text-[24px] font-normal leading-[29px]'
+  },
+  mobile: {
+    container: 'h-[67px] w-[95px]',
+    textContainer: 'text-[36px] font-black leading-[44px]',
+    subtext: 'pb-1 text-[20px] font-normal leading-[24px]'
+  }
+};
+
+const currentSize = sizeClasses[size];
+---
+
+<div class="flex items-center px-10 py-[10px]">
+  <div class="flex {currentSize.container} items-center justify-center px-2 py-5">
+    <img src={logoIcon} alt="Crediscore" class="h-12 w-20 object-contain" />
+  </div>
+  <div class="flex items-end text-[var(--color-azulhorizonte-alt)]">
+    <span class={currentSize.textContainer}>Credi</span>
+    <span class={currentSize.subtext}>score</span>
+  </div>
+</div>

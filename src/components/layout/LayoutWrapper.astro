@@ -1,0 +1,17 @@
+---
+// LayoutWrapper - Global layout with smooth scroll
+import SmoothScroll from '../ui/atoms/SmoothScroll.astro';
+
+interface Props {
+  children: any;
+  className?: string;
+}
+
+const { children, className = '' } = Astro.props;
+---
+
+<div class={['min-h-screen', className].join(' ')}>
+  {children}
+</div>
+
+<SmoothScroll />

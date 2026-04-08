@@ -1,0 +1,14 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`absolute left-[350px] top-[0px] h-[650px] w-[650px] ${className}`}>
+  <!-- Círculo exterior -->
+  <div class="absolute inset-0 rounded-full border border-white/20"></div>
+  <!-- Círculo medio -->
+  <div class="absolute inset-[60px] rounded-full border border-white/15"></div>
+</div>

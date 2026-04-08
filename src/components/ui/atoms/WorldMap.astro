@@ -1,0 +1,19 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+import worldMap from '../../../assest/about/world-map.png?url';
+---
+
+<div class={`absolute left-[280px] -top-5 flex items-center ${className}`}>
+  <div class="relative h-[625px] w-[625px]">
+    <img 
+      src={worldMap} 
+      alt="Mapa Mundial" 
+      class="absolute inset-0 h-full w-full object-cover"
+      loading="lazy"
+    />
+  </div>
+</div>

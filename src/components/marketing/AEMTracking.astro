@@ -1,0 +1,430 @@
+---
+// AEM Tracking Component - Audience Engagement Measurement
+interface Props {
+  enableScrollTracking?: boolean;
+  enableClickTracking?: boolean;
+  enableFormTracking?: boolean;
+  enableVideoTracking?: boolean;
+  enableDownloadTracking?: boolean;
+  customEvents?: Array<{
+    name: string;
+    selector: string;
+    category?: string;
+    action?: string;
+    label?: string;
+  }>;
+}
+
+const {
+  enableScrollTracking = true,
+  enableClickTracking = true,
+  enableFormTracking = true,
+  enableVideoTracking = true,
+  enableDownloadTracking = true,
+  customEvents = [
+    {
+      name: "cta_download",
+      selector: "[data-track='download']",
+      category: "engagement",
+      action: "click",
+      label: "download_app"
+    },
+    {
+      name: "cta_faq",
+      selector: "[data-track='faq']",
+      category: "engagement", 
+      action: "click",
+      label: "view_faq"
+    },
+    {
+      name: "cta_contact",
+      selector: "[data-track='contact']",
+      category: "engagement",
+      action: "click", 
+      label: "contact_us"
+    },
+    {
+      name: "navigation_click",
+      selector: "nav a",
+      category: "navigation",
+      action: "click",
+      label: "main_nav"
+    },
+    {
+      name: "social_click",
+      selector: "[data-track='social']",
+      category: "social",
+      action: "click",
+      label: "social_share"
+    }
+  ]
+} = Astro.props;
+---
+
+<!-- AEM Tracking Script -->
+<script is:inline>
+  // Audience Engagement Measurement System
+  class AEMTracker {
+    constructor() {
+      this.events = [];
+      this.scrollThresholds = [25, 50, 75, 90, 100];
+      this.timeOnPage = 0;
+      this.sessionStart = Date.now();
+      this.hasScrolled = false;
+      this.hasEngaged = false;
+      
+      this.init();
+    }
+
+    init() {
+      // Page view tracking
+      this.trackEvent('page_view', {
+        page: window.location.pathname,
+        title: document.title,
+        referrer: document.referrer,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+      });
+
+      // Time on page tracking
+      this.startTimeTracking();
+
+      // Scroll tracking
+      if ({enableScrollTracking.toString()}) {
+        this.initScrollTracking();
+      }
+
+      // Click tracking
+      if ({enableClickTracking.toString()}) {
+        this.initClickTracking();
+      }
+
+      // Form tracking
+      if ({enableFormTracking.toString()}) {
+        this.initFormTracking();
+      }
+
+      // Download tracking
+      if ({enableDownloadTracking.toString()}) {
+        this.initDownloadTracking();
+      }
+
+      // Video tracking
+      if ({enableVideoTracking.toString()}) {
+        this.initVideoTracking();
+      }
+
+      // Custom events
+      this.initCustomEvents();
+
+      // Page unload tracking
+      this.initUnloadTracking();
+    }
+
+    startTimeTracking() {
+      setInterval(() => {
+        this.timeOnPage = Math.floor((Date.now() - this.sessionStart) / 1000);
+        
+        // Track engagement milestones
+        if (this.timeOnPage === 30 && !this.hasEngaged) {
+          this.hasEngaged = true;
+          this.trackEvent('engagement_30s', {
+            time_on_page: this.timeOnPage,
+            engagement_type: 'time_milestone'
+          });
+        }
+        
+        if (this.timeOnPage === 60) {
+          this.trackEvent('engagement_60s', {
+            time_on_page: this.timeOnPage,
+            engagement_type: 'time_milestone'
+          });
+        }
+        
+        if (this.timeOnPage === 180) {
+          this.trackEvent('engagement_3m', {
+            time_on_page: this.timeOnPage,
+            engagement_type: 'time_milestone'
+          });
+        }
+      }, 1000);
+    }
+
+    initScrollTracking() {
+      let maxScroll = 0;
+      
+      window.addEventListener('scroll', () => {
+        if (!this.hasScrolled) {
+          this.hasScrolled = true;
+          this.trackEvent('first_scroll', {
+            scroll_depth: this.getScrollPercentage(),
+            engagement_type: 'scroll_milestone'
+          });
+        }
+
+        const currentScroll = this.getScrollPercentage();
+        if (currentScroll > maxScroll) {
+          maxScroll = currentScroll;
+        }
+
+        // Track scroll thresholds
+        this.scrollThresholds.forEach(threshold => {
+          if (currentScroll >= threshold && !this.events.includes(`scroll_${threshold}`)) {
+            this.events.push(`scroll_${threshold}`);
+            this.trackEvent(`scroll_${threshold}`, {
+              scroll_depth: threshold,
+              engagement_type: 'scroll_milestone'
+            });
+          }
+        });
+      });
+    }
+
+    initClickTracking() {
+      document.addEventListener('click', (e) => {
+        const target = e.target.closest('a, button, [role="button"]');
+        if (target) {
+          const clickData = {
+            element_type: target.tagName.toLowerCase(),
+            element_text: target.textContent?.trim() || '',
+            element_id: target.id || '',
+            element_class: target.className || '',
+            href: target.href || '',
+            coordinates: {
+              x: e.clientX,
+              y: e.clientY
+            },
+            viewport_position: {
+              x: window.scrollX + e.clientX,
+              y: window.scrollY + e.clientY
+            }
+          };
+
+          this.trackEvent('click', clickData);
+        }
+      });
+    }
+
+    initFormTracking() {
+      const forms = document.querySelectorAll('form');
+      
+      forms.forEach(form => {
+        // Form start
+        form.addEventListener('focus', (e) => {
+          if (!form.dataset.trackingStarted) {
+            form.dataset.trackingStarted = 'true';
+            this.trackEvent('form_start', {
+              form_id: form.id || '',
+              form_class: form.className || '',
+              form_action: form.action || '',
+              trigger_element: e.target.tagName.toLowerCase()
+            });
+          }
+        }, true);
+
+        // Form submit
+        form.addEventListener('submit', (e) => {
+          this.trackEvent('form_submit', {
+            form_id: form.id || '',
+            form_class: form.className || '',
+            form_action: form.action || '',
+            form_fields: this.getFormData(form)
+          });
+        });
+
+        // Form field interactions
+        const fields = form.querySelectorAll('input, select, textarea');
+        fields.forEach(field => {
+          field.addEventListener('blur', () => {
+            this.trackEvent('field_blur', {
+              field_name: field.name || '',
+              field_type: field.type || field.tagName.toLowerCase(),
+              field_id: field.id || '',
+              form_id: form.id || ''
+            });
+          });
+        });
+      });
+    }
+
+    initDownloadTracking() {
+      document.addEventListener('click', (e) => {
+        const target = e.target.closest('a[href*="download"], a[href*=".pdf"], a[href*=".zip"], a[download]');
+        if (target) {
+          this.trackEvent('download', {
+            file_url: target.href || '',
+            file_name: target.download || target.textContent?.trim() || '',
+            file_type: this.getFileType(target.href || ''),
+            trigger_element: target.textContent?.trim() || ''
+          });
+        }
+      });
+    }
+
+    initVideoTracking() {
+      const videos = document.querySelectorAll('video, iframe[src*="youtube"], iframe[src*="vimeo"]');
+      
+      videos.forEach(video => {
+        // Video play
+        video.addEventListener('play', () => {
+          this.trackEvent('video_play', {
+            video_id: video.id || '',
+            video_src: video.src || video.src || '',
+            video_title: video.title || ''
+          });
+        });
+
+        // Video pause
+        video.addEventListener('pause', () => {
+          this.trackEvent('video_pause', {
+            video_id: video.id || '',
+            video_src: video.src || '',
+            current_time: video.currentTime || 0
+          });
+        });
+
+        // Video complete
+        video.addEventListener('ended', () => {
+          this.trackEvent('video_complete', {
+            video_id: video.id || '',
+            video_src: video.src || '',
+            total_duration: video.duration || 0
+          });
+        });
+      });
+    }
+
+    initCustomEvents() {
+      const customEventsConfig = {JSON.stringify(customEvents)};
+      
+      customEventsConfig.forEach(event => {
+        const elements = document.querySelectorAll(event.selector);
+        elements.forEach(element => {
+          element.addEventListener('click', () => {
+            this.trackEvent(event.name, {
+              category: event.category || 'custom',
+              action: event.action || 'click',
+              label: event.label || '',
+              element_text: element.textContent?.trim() || '',
+              element_id: element.id || ''
+            });
+          });
+        });
+      });
+    }
+
+    initUnloadTracking() {
+      window.addEventListener('beforeunload', () => {
+        this.trackEvent('page_unload', {
+          time_on_page: this.timeOnPage,
+          max_scroll_depth: this.getMaxScrollDepth(),
+          total_events: this.events.length,
+          session_duration: Date.now() - this.sessionStart
+        });
+      });
+
+      // Track page visibility changes
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.trackEvent('page_hidden', {
+            time_on_page: this.timeOnPage,
+            engagement_type: 'visibility_change'
+          });
+        } else {
+          this.trackEvent('page_visible', {
+            time_on_page: this.timeOnPage,
+            engagement_type: 'visibility_change'
+          });
+        }
+      });
+    }
+
+    getScrollPercentage() {
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      return Math.round(((scrollTop + windowHeight) / documentHeight) * 100);
+    }
+
+    getMaxScrollDepth() {
+      return Math.max(...this.events
+        .filter(event => event.startsWith('scroll_'))
+        .map(event => parseInt(event.replace('scroll_', ''))), 0);
+    }
+
+    getFormData(form) {
+      const formData = new FormData(form);
+      const data = {};
+      
+      for (let [key, value] of formData.entries()) {
+        // Don't track sensitive data
+        if (!key.toLowerCase().includes('password') && 
+            !key.toLowerCase().includes('credit') && 
+            !key.toLowerCase().includes('card')) {
+          data[key] = typeof value === 'string' ? value.substring(0, 50) : value;
+        }
+      }
+      
+      return data;
+    }
+
+    getFileType(url) {
+      const extension = url.split('.').pop()?.toLowerCase();
+      return extension || 'unknown';
+    }
+
+    trackEvent(eventName, data) {
+      const eventData = {
+        event: eventName,
+        timestamp: new Date().toISOString(),
+        page: window.location.pathname,
+        session_id: this.getSessionId(),
+        user_agent: navigator.userAgent,
+        ...data
+      };
+
+      // Store in events array
+      this.events.push(eventName);
+
+      // Send to data layer (for GTM)
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push(eventData);
+      }
+
+      // Send to analytics endpoint
+      this.sendToAnalytics(eventData);
+
+      // Console log for debugging
+      console.log('AEM Event:', eventData);
+    }
+
+    getSessionId() {
+      let sessionId = sessionStorage.getItem('aem_session_id');
+      if (!sessionId) {
+        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        sessionStorage.setItem('aem_session_id', sessionId);
+      }
+      return sessionId;
+    }
+
+    sendToAnalytics(data) {
+      // Send to your analytics endpoint
+      // This is a placeholder - implement your actual analytics endpoint
+      try {
+        // Example: fetch('/api/analytics', { method: 'POST', body: JSON.stringify(data) });
+      } catch (error) {
+        console.error('Analytics tracking error:', error);
+      }
+    }
+  }
+
+  // Initialize AEM Tracker when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    new AEMTracker();
+  });
+</script>

@@ -1,0 +1,24 @@
+---
+import FeatureCard from '../atoms/FeatureCard.astro';
+
+export interface Props {
+  features: any[];
+  iconWorld?: string;
+  iconStar?: string;
+  iconCheckbox?: string;
+  className?: string;
+}
+
+const { features, iconWorld, iconStar, iconCheckbox, className = '' } = Astro.props;
+---
+
+<div class={`mx-auto grid max-w-[900px] gap-6 ${className}`}>
+  {features.map((feature, index) => (
+    <FeatureCard 
+      title={feature.title}
+      subtitle={feature.subtitle}
+      icon={index === 0 ? 'world' : index === 1 ? 'star' : 'checkbox'}
+      iconSrc={index === 0 ? iconWorld : index === 1 ? iconStar : iconCheckbox}
+    />
+  ))}
+</div>

@@ -1,0 +1,24 @@
+---
+export interface Props {
+  totalSlides: number;
+  currentSlide: number;
+  dotId?: string;
+  dotClass?: string;
+  className?: string;
+}
+
+const { totalSlides, currentSlide, dotId = '', dotClass = 'about-dot', className = '' } = Astro.props;
+---
+
+<div class={`mt-6 flex items-center justify-center gap-2 px-8 pb-8 ${className}`} id={dotId}>
+  {Array.from({ length: totalSlides }, (_, index) => (
+    <div 
+      class={`${dotClass} h-3 w-12 rounded-full cursor-pointer transition-all duration-200 ${
+        index === currentSlide 
+          ? 'bg-[var(--color-verdevitalidad)]' 
+          : 'border border-white'
+      }`}
+      data-slide={index}
+    />
+  ))}
+</div>

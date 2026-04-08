@@ -22,122 +22,60 @@ const { section } = featuresData;
       <!-- Content (tarjetas y texto) - z-index más alto para que esté sobre el arco -->
       <div class="absolute left-[7px] top-0 z-10 flex h-[1198px] w-[1774px] flex-col items-center gap-[462px] py-16">
         
-        <!-- CardsContainer - 3 tarjetas -->
-        <div class="flex w-[1597px] items-start justify-center gap-[33px]">
+        <!-- CardsContainer - 4 tarjetas -->
+        <div class="flex w-full items-start justify-center gap-4">
           
-          <!-- Card 1 - Perfil Inicial 300-400 (con fondo negro y borde) -->
-          <div class="flex w-[494px] shrink-0 flex-col items-center gap-6 rounded-[24px] border border-[var(--color-azulhorizonte40)] bg-[var(--color-black)] px-3 py-6">
-            <!-- TOP -->
-            <div class="flex h-[111px] w-full items-start">
-              <!-- Icon -->
-              <div class="flex items-center p-[10px]">
-                <div class="flex items-center rounded-full bg-[#f57c00] p-2">
-                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="16" cy="14" r="6" stroke="white" stroke-width="2.5"/>
-                    <path d="M26 33C26 27.4772 21.5228 23 16 23C10.4772 23 6 27.4772 6 33" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                    <circle cx="30" cy="26" r="5" stroke="white" stroke-width="2.5"/>
-                    <path d="M34 31L37 34" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </div>
-              <!-- Container -->
-              <div class="flex w-[341px] flex-col items-start pt-4">
-                <!-- Title -->
-                <div class="flex h-[38px] w-full items-center gap-2">
-                  <p class="font-montserrat text-[24px] font-bold leading-[64px] text-white">
-                    Perfil Inicial
-                  </p>
-                  <p class="font-montserrat text-[16px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                    300-400
-                  </p>
-                </div>
-                <!-- Párrafo -->
-                <div class="h-[57px] w-full">
-                  <p class="flex h-full flex-col justify-center font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                    Momento de reorganización. Tus hábitos de pago necesitan atención inmediata para  habilitar confianza.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- BOTTOM -->
-            <div class="flex h-[51px] w-full flex-col items-start pl-[80px]">
-              <p class="font-montserrat text-[14px] font-bold uppercase leading-4 text-[var(--color-verdevitalidad)]">
-                LOGROS FINANCIEROS
-              </p>
-              <p class="mt-2 font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                Habilitar micro-créditos y planes de telefonía básica.
-              </p>
-            </div>
-          </div>
-
-          <!-- Card 2 - Perfil Inicial 481-619 (transparente, sin borde) -->
-          <div class="flex w-[494px] shrink-0 flex-col items-center rounded-[24px] px-3 py-6">
-            <!-- TOP -->
-            <div class="flex h-[111px] w-full items-start">
-              <!-- Icon -->
-              <div class="flex items-center p-[10px]">
-                <div class="flex items-center rounded-full bg-[var(--color-azulhorizonte)] p-2">
-                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="13" stroke="white" stroke-width="2.5"/>
-                    <path d="M20 12V20L25 25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-              </div>
-              <!-- Container -->
-              <div class="flex w-[341px] flex-col items-start pt-4">
-                <!-- Title -->
-                <div class="flex h-[38px] w-full items-center gap-2">
-                  <p class="font-montserrat text-[24px] font-bold leading-[64px] text-white">
-                    Perfil Inicial
-                  </p>
-                  <p class="font-montserrat text-[16px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                    481-619
-                  </p>
-                </div>
-                <!-- Párrafo -->
-                <div class="h-[57px] w-full">
-                  <p class="flex h-full flex-col justify-center font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                    Estás en el camino correcto. Eres un perfil con potencial y responsabilidad demostrada.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Card 3 - Perfil Inicial 850-900 (transparente, sin borde) -->
-          <div class="flex w-[494px] shrink-0 flex-col items-center rounded-[24px] px-3 py-6">
-            <!-- TOP -->
-            <div class="flex h-[111px] w-full items-start">
-              <!-- Icon -->
-              <div class="flex items-center p-[10px]">
-                <div class="flex items-center rounded-full bg-[var(--color-verdevitalidad)]">
-                  <div class="flex h-[56.569px] w-[56.569px] items-center justify-center">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-45">
-                      <path d="M20 8V32M20 8L10 18M20 8L30 18" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          {section.cards.map((card, index) => (
+            <div class={`flex w-auto shrink-0 flex-col items-center gap-6 rounded-[24px] px-3 py-6 ${
+              index === 0 ? 'border border-[var(--color-azulhorizonte40)] bg-[var(--color-black)]' : ''
+            }`}>
+              <!-- TOP -->
+              <div class="flex h-[111px] w-full items-start">
+                <!-- Icon -->
+                <div class="flex items-center p-[10px]">
+                  <div class="flex items-center rounded-full p-2" style={`background-color: ${card.iconColor}`}>
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="16" cy="14" r="6" stroke="white" stroke-width="2.5"/>
+                      <path d="M26 33C26 27.4772 21.5228 23 16 23C10.4772 23 6 27.4772 6 33" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                      <circle cx="30" cy="26" r="5" stroke="white" stroke-width="2.5"/>
+                      <path d="M34 31L37 34" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
                     </svg>
                   </div>
                 </div>
-              </div>
-              <!-- Container -->
-              <div class="flex w-[341px] flex-col items-start pt-4">
-                <!-- Title -->
-                <div class="flex h-[38px] w-full items-center gap-2">
-                  <p class="font-montserrat text-[24px] font-bold leading-[64px] text-white">
-                    Perfil Inicial
-                  </p>
-                  <p class="font-montserrat text-[16px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                    850-900
-                  </p>
+                <!-- Container -->
+                <div class="flex w-[341px] flex-col items-start pt-4">
+                  <!-- Title -->
+                  <div class="flex h-[38px] w-full items-center gap-2">
+                    <p class="font-montserrat text-[24px] font-bold leading-[64px] text-white">
+                      {card.title}
+                    </p>
+                    <p class="font-montserrat text-[16px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
+                      {card.range}
+                    </p>
+                  </div>
+                  <!-- Párrafo -->
+                  <div class="h-[57px] w-full">
+                    <p class="flex h-full flex-col justify-center font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
+                      {card.description}
+                    </p>
+                  </div>
                 </div>
-                <!-- Párrafo -->
-                <div class="h-[57px] w-full">
-                  <p class="flex h-full flex-col justify-center font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
-                    Confiabilidad Técnica Total. Eres el estándar de excelencia que el mercado venezolano busca.
-                  </p>
+              </div>
+              <!-- BOTTOM -->
+              <div class="flex h-[51px] w-full flex-col items-start pl-[80px]">
+                <p class="font-montserrat text-[14px] font-bold uppercase leading-4 text-[var(--color-verdevitalidad)]">
+                  BENEFICIOS
+                </p>
+                <div class="mt-2">
+                  {card.benefits.map((benefit, benefitIndex) => (
+                    <p key={benefitIndex} class="font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
+                      {benefit}
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
 
         <!-- Content inferior (título y descripción) -->
@@ -145,7 +83,7 @@ const { section } = featuresData;
           <!-- Título principal -->
           <div class="relative h-[110px] w-[918px]">
             <p class="absolute left-[84.5px] top-[23px] font-montserrat text-[64px] font-bold leading-[64px] text-white">
-              Tu Índice de Confianza
+              {section.title}
             </p>
           </div>
           
@@ -153,12 +91,12 @@ const { section } = featuresData;
           <div class="flex w-full flex-col items-start gap-[41px]">
             <div class="flex flex-col items-center justify-center">
               <p class="font-montserrat text-[32px] font-normal leading-8 text-[var(--color-verdevitalidad)]">
-                ¿QUÉ ES CREDISCORE?
+                {section.subtitle}
               </p>
             </div>
             <div class="relative h-[112px] w-full">
               <p class="absolute left-0 top-6 font-montserrat text-[24px] font-medium leading-8 text-[var(--color-azulhorizonte40)]">
-                El score es un indicador dinámico que representa de forma numérica la responsabilidad y cumpliminto de pago.  Transformandolo en un historial económico real y visible.
+                {section.description}
               </p>
             </div>
           </div>

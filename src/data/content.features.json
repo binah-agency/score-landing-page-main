@@ -1,12 +1,58 @@
 {
   "section": {
     "id": "features",
+    "title": "Tu Índice de Confianza",
+    "subtitle": "Conoce los diferentes niveles de Score y sus beneficios",
     "cards": [
       {
         "title": "Perfil Inicial",
-        "range": "300-400",
-        "iconColor": "#f57c00"
+        "range": "300-480",
+        "iconColor": "#f57c00",
+        "description": "Comienza tu viaje financiero construyendo tu historial de confianza",
+        "benefits": [
+          "Acceso básico a servicios",
+          "Reportes mensuales",
+          "Tips de mejora"
+        ]
+      },
+      {
+        "title": "Perfil en Avance",
+        "range": "481-599",
+        "iconColor": "#2196f3",
+        "description": "Demuestra consistencia y responsabilidad financiera",
+        "benefits": [
+          "Mejores tasas de interés",
+          "Límites de crédito aumentados",
+          "Acceso a productos premium"
+        ]
+      },
+      {
+        "title": "Perfil Aceptable",
+        "range": "600-699",
+        "iconColor": "#4caf50",
+        "description": "Alto nivel de confiabilidad y experiencia financiera",
+        "benefits": [
+          "Tasas preferenciales",
+          "Crédito instantáneo",
+          "Acceso exclusivo a eventos"
+        ]
+      },
+      {
+        "title": "Perfil Confiable",
+        "range": "700-800",
+        "iconColor": "#9c27b0",
+        "description": "Máxima confianza y excelencia financiera",
+        "benefits": [
+          "Condiciones especiales",
+          "Asesor personalizado",
+          "Programas VIP exclusivos"
+        ]
       }
-    ]
+    ],
+    "description": "Conoce los diferentes niveles de Score y sus beneficios para mejorar tu perfil financiero.",
+    "cta": {
+      "text": "Descubre tu nivel actual",
+      "subtext": "Evalúa tu Score gratis y comienza a mejorar tu perfil financiero"
+    }
   }
 }

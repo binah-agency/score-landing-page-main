@@ -1,0 +1,11 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<p class={`text-sm text-gray-600 leading-relaxed ${className}`}>
+  Usamos cookies para mejorar tu experiencia, analizar el tráfico de nuestro sitio y ofrecerte contenido personalizado.
+</p>

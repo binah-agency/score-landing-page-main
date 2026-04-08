@@ -1,0 +1,33 @@
+---
+export interface Props {
+  title: string;
+  content: string;
+  variant?: 'desktop' | 'tablet' | 'mobile';
+  className?: string;
+}
+
+const { title, content, variant = 'desktop', className = '' } = Astro.props;
+---
+
+{variant === 'desktop' ? (
+  <div class={`flex h-[241px] w-[530px] shrink-0 flex-col items-center justify-center text-white ${className}`}>
+    <div class="flex h-[201px] w-full flex-col items-center justify-center text-center">
+      <p class="w-full text-[52px] font-extrabold leading-normal text-center">{title}</p>
+      <p class="w-full text-[18px] font-medium leading-7 text-center mt-4">{content}</p>
+    </div>
+  </div>
+) : variant === 'tablet' ? (
+  <div class={`relative flex h-full w-full flex-shrink-0 flex-col items-center justify-center p-8 text-white ${className}`}>
+    <div class="flex w-full max-w-xl flex-col items-center justify-center text-center">
+      <p class="mb-4 text-[48px] font-extrabold leading-normal">{title}</p>
+      <p class="text-[18px] font-medium leading-7">{content}</p>
+    </div>
+  </div>
+) : (
+  <div class={`flex w-full flex-shrink-0 flex-col items-center justify-center p-8 text-white ${className}`}>
+    <div class="text-center">
+      <p class="mb-4 text-[32px] font-extrabold text-center">{title}</p>
+      <p class="text-[16px] font-medium leading-6 text-center">{content}</p>
+    </div>
+  </div>
+)}

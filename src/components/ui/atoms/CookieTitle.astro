@@ -1,0 +1,11 @@
+---
+export interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<h3 class={`font-semibold text-gray-900 text-base mb-1 ${className}`}>
+  Configuración de Cookies
+</h3>

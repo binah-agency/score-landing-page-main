@@ -1,113 +1,25 @@
 ---
-// Assets Hero
 import heroMaskDesktop from '../../assest/hero/hero-mask-desktop.svg?url';
 import heroMaskTablet from '../../assest/hero/hero-mask-tablet.svg?url';
 import heroMaskMobile from '../../assest/hero/hero-mask-mobile.svg?url';
 import heroImage from '../../assest/hero/hero-bg.png?url';
-
-// Assets Common
 import logoIcon from '../../assest/common/logo-icon.svg?url';
 import menuIcon from '../../assest/common/menu-icon.svg?url';
-<<<<<<< HEAD
-=======
-
-// Content Data
 import heroData from '../../data/content.hero.json';
-
-const { header } = heroData;
->>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
+import SmoothScroll from '../ui/atoms/SmoothScroll.astro';
+import Claim from '../ui/atoms/Claim.astro';
+import CTAButton from '../ui/atoms/CTAButton.astro';
+import Header from '../ui/organisms/Header.astro';
+const { content } = heroData;
 ---
 
-<section class="hero-section mx-auto flex w-full max-w-[1920px] flex-col items-center gap-20 px-5 pb-[11px] pt-[60px]">
+<section class="hero-section mx-auto flex w-full max-w-[1920px] flex-col items-center gap-16 px-5 pb-[11px] pt-[60px]">
   <!-- ========== HEADER ========== -->
-  <header class="mx-auto w-full max-w-[1682px]">
-    <!-- Desktop Header -->
-    <div class="hidden h-[111px] items-center rounded-[60px] bg-white p-[10px] lg:flex">
-      <!-- Logo -->
-      <div class="flex h-[71px] items-center px-10 py-[10px]">
-        <div class="flex h-[87px] w-[125px] items-center justify-center px-[25px] py-5">
-          <img src={logoIcon} alt="Crediscore" class="h-full w-full object-contain" />
-        </div>
-        <div class="flex items-end text-[var(--color-azulhorizonte-alt)]">
-          <span class="text-[48px] font-black leading-[58px]">Credi</span>
-          <span class="pb-2 text-[24px] font-normal leading-[29px]">score</span>
-        </div>
-      </div>
-
-      <!-- Navbar -->
-      <nav class="flex flex-1 items-center justify-end gap-5 p-2">
-<<<<<<< HEAD
-        <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Inicio</a>
-        <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Nosotros</a>
-        <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Servicios</a>
-        <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Noticias</a>
-        <a href="#" class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">Contacto</a>
-=======
-        {header.navigation.map((item) => (
-          <a href={item.href} class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">{item.text}</a>
-        ))}
->>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
-      </nav>
-
-      <!-- Actions -->
-      <div class="flex w-[500px] items-center justify-center gap-4 p-[10px]">
-<<<<<<< HEAD
-        <a href="#" class="flex h-[55px] w-[202px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte)] px-3 py-[10px] text-[20px] font-semibold text-white transition-colors hover:bg-[var(--color-azulhorizonte-alt)]">
-          Descargar App
-        </a>
-        <a href="#" class="flex h-[55px] w-[202px] items-center justify-center whitespace-nowrap rounded-lg border-2 border-[var(--color-azulhorizonte)] p-[10px] text-[20px] font-semibold text-[var(--color-azulhorizonte)] transition-colors hover:bg-[var(--color-azulhorizonte)] hover:text-white">
-          ¿Cómo funciona?
-        </a>
-=======
-        {header.actions.map((action) => (
-          <a href={action.href} class={`flex h-[55px] w-[202px] items-center justify-center rounded-lg px-3 py-[10px] text-[20px] font-semibold transition-colors ${
-            action.primary 
-              ? 'bg-[var(--color-azulhorizonte)] text-white hover:bg-[var(--color-azulhorizonte-alt)]'
-              : 'border-2 border-[var(--color-azulhorizonte)] text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)] hover:text-white whitespace-nowrap'
-          }`}>
-            {action.text}
-          </a>
-        ))}
->>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
-      </div>
-    </div>
-
-    <!-- Tablet Header (md screens) -->
-    <div class="hidden h-[100px] items-center justify-between rounded-[60px] bg-white px-5 py-[10px] md:flex lg:hidden">
-      <div class="flex h-[71px] items-center px-10 py-[10px]">
-        <div class="flex h-[67px] w-[95px] items-center justify-center px-[25px] py-5">
-          <img src={logoIcon} alt="Crediscore" class="h-full w-full object-contain" />
-        </div>
-        <div class="flex items-end text-[var(--color-azulhorizonte-alt)]">
-          <span class="text-[48px] font-black leading-[58px]">Credi</span>
-          <span class="pb-2 text-[24px] font-normal leading-[29px]">score</span>
-        </div>
-      </div>
-      <div class="flex h-[72px] w-[100px] items-center px-[30px]">
-        <img src={menuIcon} alt="Menu" class="h-10 w-10 cursor-pointer" />
-      </div>
-    </div>
-
-    <!-- Mobile Header -->
-    <div class="flex h-[80px] items-center justify-between rounded-[60px] bg-white px-5 py-[10px] md:hidden">
-      <div class="flex h-[71px] items-center px-10 py-[10px]">
-        <div class="flex h-[67px] w-[95px] items-center justify-center px-[25px] py-5">
-          <img src={logoIcon} alt="Crediscore" class="h-full w-full object-contain" />
-        </div>
-        <div class="flex items-end text-[var(--color-azulhorizonte-alt)]">
-          <span class="text-[36px] font-black leading-[44px]">Credi</span>
-          <span class="pb-1 text-[20px] font-normal leading-[24px]">score</span>
-        </div>
-      </div>
-      <div class="flex h-[72px] items-center px-2">
-        <img src={menuIcon} alt="Menu" class="h-10 w-10 cursor-pointer" />
-      </div>
-    </div>
-  </header>
+  <Header />
 
   <!-- ========== HERO CONTENT ========== -->
   <!-- Desktop Hero -->
-  <div class="relative hidden w-full max-w-[1702px] overflow-hidden rounded-[60px] bg-white lg:block">
+  <div class="relative hidden w-full max-w-[1700px] overflow-hidden rounded-[60px] bg-white lg:block">
     <div class="relative flex h-[775px] w-full items-center justify-end">
       <!-- Hero Image Container -->
       <div class="hero-image-container h-[775px] w-[907px]">
@@ -131,42 +43,38 @@ const { header } = heroData;
                 <span class="absolute left-20 top-0 h-[72px] w-[72px] rounded-full bg-[var(--color-verdevitalidad-light)]"></span>
               </div>
               <div class="flex w-[252px] flex-col items-center justify-center py-[14px]">
-                <p class="whitespace-nowrap text-[20px] font-semibold text-[var(--color-black)]">+ de 1000 Clientes</p>
+                <p class="whitespace-nowrap text-[20px] font-semibold text-[var(--color-black)]">{content.badge.text}</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Hero Content -->
-        <div class="flex w-[570px] flex-col gap-[72px]">
+        <div class="flex w-[570px] flex-col items-center gap-[72px]">
           <!-- Banner -->
           <div class="flex h-[51px] w-full items-center justify-center gap-[10px] rounded-[12px] bg-white p-[10px]">
             <span class="h-10 w-10 rounded bg-[var(--color-verdevitalidad)]"></span>
-            <p class="whitespace-nowrap text-[24px] font-extrabold text-[var(--color-verdevitalidad)]">Liderando la confianza en Venezuela</p>
+            <p class="whitespace-nowrap text-[24px] font-extrabold text-[var(--color-verdevitalidad)]">{content.banner.text}</p>
           </div>
 
           <!-- Tagline -->
           <div class="flex h-[300px] items-start">
             <div class="flex w-[570px] items-center justify-center self-stretch">
               <h1 class="whitespace-nowrap text-[96px] leading-[100px]">
-                <span class="block font-bold text-[var(--color-azulhorizonte-alt)]">Tu Puntaje,</span>
-                <span class="block font-semibold text-[var(--color-black)]">Tu Futuro</span>
-                <span class="block font-semibold text-[var(--color-black)]">Económico</span>
+                {content.tagline.lines.map((line, index) => (
+                  <span class={`block ${index === 0 ? 'font-bold text-[var(--color-azulhorizonte-alt)]' : 'font-semibold text-[var(--color-black)]'}`}>{line}</span>
+                ))}
               </h1>
             </div>
           </div>
 
           <!-- Claim -->
           <div class="h-[113px] w-full">
-            <p class="h-[24px] w-[570px] text-[20px] font-medium leading-7 text-[var(--color-gray600)]">
-              Somos una plataforma de Analítica Avanzada y Predictiva y de sonusltoría estrategica que fusiona la tecnología de punta con un produndo conocimiento de apoyo para la toma de decisiones.
-            </p>
+            <Claim text={content.claim} className="h-6 w-[570px]" />
           </div>
 
           <!-- CTA Button -->
-          <a href="#" class="flex h-[55px] w-[217px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte-alt)] p-3 text-[20px] font-semibold text-white transition-colors hover:bg-[var(--color-azulhorizonte)]">
-            Descarga la App
-          </a>
+          <CTAButton href={content.cta.href} text={content.cta.text} />
         </div>
       </div>
     </div>
@@ -190,29 +98,25 @@ const { header } = heroData;
         <!-- Banner -->
         <div class="flex h-[51px] items-center justify-center gap-[10px] rounded-[12px] bg-[var(--color-verdevitalidad)] p-[10px]">
           <span class="h-10 w-10 rounded bg-white"></span>
-          <p class="whitespace-nowrap text-[24px] font-extrabold text-white">Liderando la confianza en Venezuela</p>
+          <p class="whitespace-nowrap text-[24px] font-extrabold text-white">{content.banner.text}</p>
         </div>
 
         <!-- Tagline -->
         <div class="flex h-[249px] items-center justify-center">
           <h1 class="whitespace-nowrap text-center text-[80px] leading-[83px]">
-            <span class="block font-bold text-[var(--color-azulhorizonte-alt)]">Tu Puntaje,</span>
-            <span class="block font-semibold text-[var(--color-black)]">Tu Futuro</span>
-            <span class="block font-semibold text-[var(--color-black)]">Económico</span>
+            {content.tagline.lines.map((line, index) => (
+              <span class={`block ${index === 0 ? 'font-bold text-[var(--color-azulhorizonte-alt)]' : 'font-semibold text-[var(--color-black)]'}`}>{line}</span>
+            ))}
           </h1>
         </div>
 
         <!-- Claim -->
         <div class="h-[113px] w-[570px]">
-          <p class="text-center text-[20px] font-medium leading-7 text-[var(--color-gray600)]">
-            Somos una plataforma de Analítica Avanzada y Predictiva y de sonusltoría estrategica que fusiona la tecnología de punta con un produndo conocimiento de apoyo para la toma de decisiones.
-          </p>
+          <Claim text={content.claim} className="text-center" />
         </div>
 
         <!-- CTA Button -->
-        <a href="#" class="flex h-[55px] w-[217px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte-alt)] p-3 text-[20px] font-semibold text-white transition-colors hover:bg-[var(--color-azulhorizonte)]">
-          Descarga la App
-        </a>
+        <CTAButton href={content.cta.href} text={content.cta.text} />
       </div>
     </div>
   </div>
@@ -236,30 +140,29 @@ const { header } = heroData;
         <div class="flex h-[51px] items-center justify-center gap-[10px] rounded-[12px] bg-white p-[10px]">
           <span class="h-10 w-10 rounded bg-[var(--color-verdevitalidad)]"></span>
           <div class="text-center text-[16px] font-extrabold leading-normal text-[var(--color-verdevitalidad)]">
-            <p>Liderando la confianza</p>
-            <p>en Venezuela</p>
+            {content.mobile.banner.lines.map((line) => (
+              <p>{line}</p>
+            ))}
           </div>
         </div>
 
         <!-- Tagline -->
         <div class="flex h-[180px] items-center justify-center">
           <h1 class="whitespace-nowrap text-center text-[52px] leading-[60px]">
-            <span class="block font-bold text-[var(--color-azulhorizonte-alt)]">Tu Puntaje,</span>
-            <span class="block font-semibold text-[var(--color-black)]">Tu Futuro</span>
-            <span class="block font-semibold text-[var(--color-black)]">Económico</span>
+            {content.tagline.lines.map((line, index) => (
+              <span class={`block ${index === 0 ? 'font-bold text-[var(--color-azulhorizonte-alt)]' : 'font-semibold text-[var(--color-black)]'}`}>{line}</span>
+            ))}
           </h1>
         </div>
 
         <!-- Claim -->
         <div class="w-full">
-          <p class="text-center text-[20px] font-medium leading-7 text-[var(--color-gray600)]">
-            Somos una plataforma de Analítica Avanzada y Predictiva y de sonusltoría estrategica que fusiona la tecnología de punta con un produndo conocimiento de apoyo para la toma de decisiones.
-          </p>
+          <Claim text={content.claim} className="text-center" />
         </div>
 
         <!-- CTA Button -->
-        <a href="#" class="flex h-[55px] w-[217px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte-alt)] p-3 text-[20px] font-semibold text-white transition-colors hover:bg-[var(--color-azulhorizonte)]">
-          Descarga la App
+        <a href={content.cta.href} class="flex h-[55px] w-[217px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte-alt)] p-3 text-[20px] font-semibold text-white transition-colors hover:bg-[var(--color-azulhorizonte)]">
+          {content.cta.text}
         </a>
       </div>
     </div>
@@ -278,3 +181,5 @@ const { header } = heroData;
     top: 0;
   }
 </style>
+
+<SmoothScroll />
