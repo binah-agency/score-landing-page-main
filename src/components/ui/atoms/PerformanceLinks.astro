@@ -1,0 +1,26 @@
+---
+export interface DnsPrefetch {
+  href: string;
+}
+
+export interface Preconnect {
+  href: string;
+  crossorigin?: boolean;
+}
+
+export interface Props {
+  dnsPrefetch?: DnsPrefetch[];
+  preconnect?: Preconnect[];
+  className?: string;
+}
+
+const { dnsPrefetch, preconnect, className = '' } = Astro.props;
+---
+
+{dnsPrefetch?.map(domain => (
+  <link rel="dns-prefetch" href={domain.href} />
+))}
+
+{preconnect?.map(url => (
+  <link rel="preconnect" href={url.href} crossorigin={url.crossorigin || undefined} />
+))}

@@ -1,0 +1,44 @@
+---
+export interface CookieConsentData {
+  analytics_storage: 'granted' | 'denied';
+  ad_storage: 'granted' | 'denied';
+  ad_user_data: 'granted' | 'denied';
+  ad_personalization: 'granted' | 'denied';
+  functionality_storage: 'granted' | 'denied';
+  personalization_storage: 'granted' | 'denied';
+  security_storage: 'granted' | 'denied';
+}
+
+export interface Props {
+  onAcceptAll?: () => void;
+  onAcceptEssential?: () => void;
+  onSettings?: () => void;
+  className?: string;
+}
+
+const { onAcceptAll, onAcceptEssential, onSettings, className = '' } = Astro.props;
+---
+
+<div class={`flex flex-col sm:flex-row gap-3 ${className}`}>
+  <button 
+    onclick="acceptAllCookies()" 
+    class="flex-1 px-4 py-3 bg-[var(--color-azulhorizonte)] text-white text-sm font-semibold rounded-lg hover:bg-[var(--color-azulhorizonte-alt)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-azulhorizonte)]/50 focus:ring-offset-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+  >
+    Aceptar todas
+  </button>
+  <button 
+    onclick="acceptEssentialCookies()" 
+    class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300/50 focus:ring-offset-2"
+  >
+    Solo esenciales
+  </button>
+</div>
+
+<div class="mt-4 pt-4 border-t border-gray-100">
+  <button 
+    onclick="showCookieSettings()" 
+    class="w-full text-xs text-gray-500 hover:text-gray-700 hover:underline transition-colors duration-200 py-2"
+  >
+    Configurar cookies manualmente
+  </button>
+</div>

@@ -1,0 +1,45 @@
+---
+// Header Organism - Complete header with navigation and actions (Atomic Design)
+import Logo from '../atoms/Logo.astro';
+import Navigation from '../molecules/Navigation.astro';
+import HeaderActions from '../molecules/HeaderActions.astro';
+import menuIcon from '../../../assest/f500dba3-f45e-43de-8e70-c2004fb0c26f.svg?url';
+import heroData from '../../../data/content.hero.json';
+
+const { header } = heroData;
+---
+
+<header class="mx-auto w-full max-w-[1682px]">
+  <!-- Desktop Header -->
+  <div class="hidden h-24 items-center rounded-full bg-white p-2 lg:flex">
+    <Logo size="desktop" />
+    <Navigation items={header.navigation} />
+    <HeaderActions actions={header.actions} />
+  </div>
+
+  <!-- Tablet Header (md screens) -->
+  <div class="hidden h-24 items-center justify-between rounded-full bg-white px-5 py-[10px] md:flex lg:hidden">
+    <Logo size="tablet" />
+    <div class="flex h-[72px] w-[100px] items-center px-[30px]">
+      <img src={menuIcon} alt="Menu" class="h-10 w-10 cursor-pointer" />
+    </div>
+  </div>
+
+  <!-- Mobile Header -->
+  <div class="flex h-[80px] items-center justify-between rounded-[60px] bg-white px-5 py-[10px] md:hidden">
+    <Logo size="mobile" />
+    <div class="flex h-[72px] items-center px-2">
+      <img src={menuIcon} alt="Menu" class="h-10 w-10 cursor-pointer" />
+    </div>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle functionality
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+      menu.classList.toggle('hidden');
+    }
+  }
+</script>

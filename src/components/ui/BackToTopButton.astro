@@ -4,19 +4,102 @@ import arrowUp from '../../assest/back-to-top-arrow.svg?url';
 interface Props {
   targetId?: string;
   class?: string;
+  showThreshold?: number;
 }
 
-const { targetId = 'top', class: className = '' } = Astro.props;
+const { targetId = 'top', class: className = '', showThreshold = 300 } = Astro.props;
 ---
 
-<a
-  href={`#${targetId}`}
-  aria-label="Ir arriba"
+<button
+  type="button"
+  aria-label="Volver arriba"
   class:list={[
-    'fixed bottom-6 right-6 z-50 hidden h-[70px] w-[169px] items-center justify-center rounded-[48px] bg-[rgba(245,124,0,0.6)] px-3 text-white shadow-lg backdrop-blur-sm transition-opacity hover:opacity-90 lg:flex',
+    'fixed bottom-6 right-6 z-50 hidden h-[56px] w-[56px] items-center justify-center rounded-full bg-[var(--color-azulhorizonte)] text-white shadow-lg transition-all duration-300 hover:bg-[var(--color-azulhorizonte-alt)] hover:scale-110 focus:outline-none focus:ring-4 focus:ring-[var(--color-azulhorizonte)]/30 lg:flex',
     className,
   ]}
+  onclick={`scrollToTop('${targetId}')`}
 >
-  <span class="mr-3 text-[20px] font-semibold">Ir arriba</span>
-  <img src={arrowUp} alt="Subir" class="h-10 w-10" />
-</a>
+  <img src={arrowUp} alt="Subir" class="h-6 w-6" />
+</button>
+
+<script>
+  // Back to top functionality
+  const showThreshold = {showThreshold};
+  let backToTopButton;
+  let isVisible = false;
+
+  function scrollToTop(targetId) {
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    } else {
+      // Fallback to top of page
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function toggleBackToTopButton() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const shouldShow = scrollTop > showThreshold;
+    
+    if (shouldShow !== isVisible) {
+      isVisible = shouldShow;
+      if (backToTopButton) {
+        if (shouldShow) {
+          backToTopButton.classList.remove('hidden');
+          // Add fade-in animation
+          setTimeout(() => {
+            backToTopButton.style.opacity = '1';
+            backToTopButton.style.transform = 'translateY(0)';
+          }, 10);
+        } else {
+          // Add fade-out animation
+          backToTopButton.style.opacity = '0';
+          backToTopButton.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            backToTopButton.classList.add('hidden');
+          }, 300);
+        }
+      }
+    }
+  }
+
+  // Initialize on DOM load
+  document.addEventListener('DOMContentLoaded', function() {
+    backToTopButton = document.querySelector('[aria-label="Volver arriba"]');
+    
+    // Set initial state
+    backToTopButton.style.opacity = '0';
+    backToTopButton.style.transform = 'translateY(20px)';
+    backToTopButton.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    
+    // Check initial scroll position
+    toggleBackToTopButton();
+    
+    // Add scroll listener with throttle for performance
+    let scrollTimer;
+    window.addEventListener('scroll', function() {
+      if (scrollTimer) {
+        clearTimeout(scrollTimer);
+      }
+      scrollTimer = setTimeout(toggleBackToTopButton, 16); // ~60fps
+    }, { passive: true });
+  });
+
+  // Handle keyboard navigation
+  document.addEventListener('keydown', function(event) {
+    // Show/hide on Home/End keys
+    if (event.key === 'Home' && !event.ctrlKey && !event.metaKey) {
+      scrollToTop('{targetId}');
+    }
+  });
+
+  // Make scrollToTop available globally for onclick
+  window.scrollToTop = scrollToTop;
+</script>

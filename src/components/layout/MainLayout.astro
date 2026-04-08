@@ -1,0 +1,32 @@
+---
+// MainLayout - Complete page layout with header
+import HeaderComponent from './HeaderComponent.astro';
+
+interface Props {
+  children: any;
+  showHeader?: boolean;
+  headerVariant?: 'default' | 'transparent' | 'sticky';
+  className?: string;
+}
+
+const { 
+  children, 
+  showHeader = true,
+  headerVariant = 'default',
+  className = ''
+} = Astro.props;
+---
+
+<div class={['min-h-screen', className].join(' ')}>
+  {showHeader && (
+    <HeaderComponent 
+      variant={headerVariant}
+      showNavigation={true}
+      showActions={true}
+    />
+  )}
+  
+  <main>
+    {children}
+  </main>
+</div>

@@ -3,7 +3,62 @@
     "id": "nosotros",
     "title": {
       "subtitle": "QUIÉNES SOMOS",
-      "main": "Habilitando La Confianza Técnica En  Venezuela"
-    }
+      "main": "Habilitando La Confianza Técnica En Venezuela"
+    },
+    "mission": "Revolutionizar la evaluación de crédito en Venezuela mediante tecnología de confianza y datos alternativos.",
+    "vision": "Ser la plataforma líder de scoring de confianza en América Latina, empoderando a individuos y empresas con acceso justo a oportunidades financieras.",
+    "features": [
+      {
+        "title": "Tecnología De Clase Mundial",
+        "subtitle": "más de 117 paises",
+        "icon": "world"
+      },
+      {
+        "title": "Pioneros",
+        "subtitle": "en Venezuela",
+        "icon": "star"
+      },
+      {
+        "title": "Tu Identidad",
+        "subtitle": "De Confianza",
+        "icon": "checkbox"
+      }
+    ],
+    "values": [
+      {
+        "title": "Innovación",
+        "description": "Utilizamos tecnología de vanguardia para crear soluciones financieras inclusivas."
+      },
+      {
+        "title": "Confianza",
+        "description": "Construimos relaciones basadas en transparencia y seguridad."
+      },
+      {
+        "title": "Inclusión",
+        "description": "Democratizamos el acceso a servicios financieros para todos los venezolanos."
+      },
+      {
+        "title": "Excelencia",
+        "description": "Comprometidos con la calidad y mejora continua en nuestros servicios."
+      }
+    ],
+    "stats": [
+      {
+        "number": "50K+",
+        "label": "Usuarios Activos"
+      },
+      {
+        "number": "95%",
+        "label": "Tasa de Aprobación"
+      },
+      {
+        "number": "24/7",
+        "label": "Soporte Disponible"
+      },
+      {
+        "number": "100+",
+        "label": "Empresas Asociadas"
+      }
+    ]
   }
 }

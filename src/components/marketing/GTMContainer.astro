@@ -1,0 +1,324 @@
+---
+// GTM Container Component - Google Tag Manager
+interface Props {
+  gtmId?: string;
+  enableDataLayer?: boolean;
+  enablePreview?: boolean;
+  customDataLayer?: Record<string, any>;
+  consentMode?: boolean;
+  regions?: string[];
+}
+
+const {
+  gtmId = "GTM-NKMKSDN5", // Replace with actual GTM ID
+  enableDataLayer = true,
+  enablePreview = false,
+  customDataLayer = {},
+  consentMode = true,
+  regions = ["VE", "CO", "MX", "AR", "PE", "CL"]
+} = Astro.props;
+
+// Initialize dataLayer
+const initialDataLayer = {
+  page: {
+    title: "CrediScore | Tu Puntaje, Tu Futuro Económico",
+    url: "https://crediscore.ve",
+    path: "/",
+    language: "es",
+    country: "VE",
+    category: "landing-page",
+    subcategory: "fintech"
+  },
+  user: {
+    id: null, // Will be populated dynamically
+    type: "anonymous",
+    segment: "prospect",
+    login_status: false
+  },
+  product: {
+    name: "CrediScore",
+    category: "financial-technology",
+    type: "scoring-platform",
+    version: "1.0"
+  },
+  campaign: {
+    source: null, // Will be populated from URL params
+    medium: null,
+    campaign: null,
+    term: null,
+    content: null
+  },
+  technology: {
+    platform: "web",
+    framework: "astro",
+    browser: null, // Will be detected dynamically
+    device: null, // Will be detected dynamically
+    screen_resolution: null // Will be detected dynamically
+  },
+  business: {
+    region: "LATAM",
+    country: "VE",
+    currency: "VES",
+    timezone: "America/Caracas"
+  },
+  ...customDataLayer
+};
+---
+
+<!-- Google Tag Manager -->
+<script is:inline>
+  // Initialize dataLayer
+  window.dataLayer = window.dataLayer || [];
+  
+  // Initial dataLayer push
+  window.dataLayer.push({
+    'event': 'dataLayer-initialized',
+    'page': {
+      'title': document.title,
+      'url': window.location.href,
+      'path': window.location.pathname,
+      'language': 'es',
+      'country': 'VE',
+      'category': 'landing-page',
+      'subcategory': 'fintech'
+    },
+    'user': {
+      'id': null,
+      'type': 'anonymous',
+      'segment': 'prospect',
+      'login_status': false
+    },
+    'product': {
+      'name': 'CrediScore',
+      'category': 'financial-technology',
+      'type': 'scoring-platform',
+      'version': '1.0'
+    },
+    'campaign': {
+      'source': new URLSearchParams(window.location.search).get('utm_source'),
+      'medium': new URLSearchParams(window.location.search).get('utm_medium'),
+      'campaign': new URLSearchParams(window.location.search).get('utm_campaign'),
+      'term': new URLSearchParams(window.location.search).get('utm_term'),
+      'content': new URLSearchParams(window.location.search).get('utm_content')
+    },
+    'technology': {
+      'platform': 'web',
+      'framework': 'astro',
+      'browser': navigator.userAgent.split(' ')[0],
+      'device': /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+      'screen_resolution': `${screen.width}x${screen.height}`
+    },
+    'business': {
+      'region': 'LATAM',
+      'country': 'VE',
+      'currency': 'VES',
+      'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
+    },
+    'timestamp': new Date().toISOString()
+  });
+
+  // Consent Mode Configuration
+  {consentMode.toString() && `
+  window.dataLayer.push({
+    'event': 'consent_mode',
+    'consent': {
+      'analytics_storage': 'granted',
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'functionality_storage': 'granted',
+      'personalization_storage': 'granted',
+      'security_storage': 'granted'
+    }
+  });
+  `}
+
+  // GTM Script
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+
+    // Track form submissions
+    trackForm: function(formId, formData = {}) {
+      window.dataLayer.push({
+        'event': 'form_submit',
+        'form': {
+          'id': formId,
+          'data': formData
+        },
+        'timestamp': new Date().toISOString()
+      });
+    },
+
+    // Track conversions
+    trackConversion: function(conversionType, conversionValue = 0, currency = 'VES') {
+      window.dataLayer.push({
+        'event': 'conversion',
+        'conversion': {
+          'type': conversionType,
+          'value': conversionValue,
+          'currency': currency
+        },
+        'timestamp': new Date().toISOString()
+      });
+    },
+
+    // Update user data
+    updateUser: function(userData = {}) {
+      window.dataLayer.push({
+        'event': 'user_update',
+        'user': userData,
+        'timestamp': new Date().toISOString()
+      });
+    },
+
+    // E-commerce tracking
+    trackEcommerce: function(eventType, ecommerceData) {
+      window.dataLayer.push({
+        'event': eventType,
+        'ecommerce': ecommerceData,
+        'timestamp': new Date().toISOString()
+      });
+    },
+
+    // Track scroll depth
+    trackScroll: function(scrollDepth) {
+      window.dataLayer.push({
+        'event': 'scroll_tracking',
+        'scroll': {
+          'depth': scrollDepth,
+          'max_depth': Math.max(scrollDepth, window.gtmUtils.maxScrollDepth || 0)
+        },
+        'timestamp': new Date().toISOString()
+      });
+      
+      window.gtmUtils.maxScrollDepth = Math.max(scrollDepth, window.gtmUtils.maxScrollDepth || 0);
+    },
+
+    // Track time on page
+    trackTimeOnPage: function(timeInSeconds) {
+      window.dataLayer.push({
+        'event': 'time_on_page',
+        'timing': {
+          'value': timeInSeconds,
+          'category': 'engagement',
+          'label': 'time_on_page'
+        },
+        'timestamp': new Date().toISOString()
+      });
+    },
+
+    // Track errors
+    trackError: function(errorType, errorMessage, errorUrl = null, errorLine = null) {
+      window.dataLayer.push({
+        'event': 'error_tracking',
+        'error': {
+          'type': errorType,
+          'message': errorMessage,
+          'url': errorUrl || window.location.href,
+          'line': errorLine,
+          'user_agent': navigator.userAgent
+        },
+        'timestamp': new Date().toISOString()
+      });
+    },
+
+    // Track performance
+    trackPerformance: function(metrics = {}) {
+      window.dataLayer.push({
+        'event': 'performance_tracking',
+        'performance': {
+          'load_time': metrics.loadTime || 0,
+          'dom_interactive': metrics.domInteractive || 0,
+          'first_contentful_paint': metrics.firstContentfulPaint || 0,
+          'largest_contentful_paint': metrics.largestContentfulPaint || 0
+        },
+        'timestamp': new Date().toISOString()
+      });
+    }
+  };
+
+  // Auto-track page views on SPA navigation
+  let currentPath = window.location.pathname;
+  const observer = new MutationObserver(() => {
+    if (window.location.pathname !== currentPath) {
+      currentPath = window.location.pathname;
+      window.gtmUtils.pageView();
+    }
+  });
+  observer.observe(document, { subtree: true, childList: true });
+
+  // Track scroll depth automatically
+  let maxScrollDepth = 0;
+  window.addEventListener('scroll', function() {
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const currentScroll = window.pageYOffset;
+    const scrollPercentage = Math.round((currentScroll / scrollHeight) * 100);
+    
+    if (scrollPercentage > maxScrollDepth) {
+      maxScrollDepth = scrollPercentage;
+      window.gtmUtils.trackScroll(scrollPercentage);
+    }
+  });
+
+  // Track time on page milestones
+  let timeOnPage = 0;
+  setInterval(() => {
+    timeOnPage++;
+    if (timeOnPage === 30 || timeOnPage === 60 || timeOnPage === 180) {
+      window.gtmUtils.trackTimeOnPage(timeOnPage);
+    }
+  }, 1000);
+
+  // Track JavaScript errors
+  window.addEventListener('error', function(e) {
+    window.gtmUtils.trackError('javascript', e.message, e.filename, e.lineno);
+  });
+
+  // Track performance metrics
+  window.addEventListener('load', function() {
+    if ('performance' in window && 'getEntriesByType' in performance) {
+      const navigationEntries = performance.getEntriesByType('navigation');
+      if (navigationEntries.length > 0) {
+        const navEntry = navigationEntries[0];
+        window.gtmUtils.trackPerformance({
+          loadTime: navEntry.loadEventEnd - navEntry.loadEventStart,
+          domInteractive: navEntry.domInteractive - navEntry.navigationStart,
+          firstContentfulPaint: navEntry.domContentLoadedEventStart - navEntry.navigationStart,
+          largestContentfulPaint: navEntry.loadEventEnd - navEntry.navigationStart
+        });
+      }
+    }
+  });
+
+  // Debug mode for development
+  {enablePreview.toString() && `
+  window.dataLayer.push({
+    'event': 'gtm.debug',
+    'debug_mode': true
+  });
+  `
+<!-- GTM NoScript Fallback -->
+<noscript>
+  <iframe 
+    src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+    height="0" 
+    width="0" 
+    style="display:none;visibility:hidden"
+    loading="lazy"
+  ></iframe>
+</noscript>
+
+import CookieBanner from '../ui/molecules/CookieBanner.astro';
+
+// Cookie Consent Banner
+{consentMode.toString() && <CookieBanner 
+  onConsentUpdate={(consent) => {
+    window.dataLayer.push({
+      'event': 'consent_update',
+      'consent': consent
+    });
+  }}
+  onSettingsClick={() => {
+    // Placeholder for detailed cookie settings modal
+    alert('Configuración detallada de cookies próximamente disponible');
+  }}
+/>}

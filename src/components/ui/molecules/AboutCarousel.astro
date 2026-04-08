@@ -1,0 +1,26 @@
+---
+import CarouselSlide from '../atoms/CarouselSlide.astro';
+import CarouselDots from '../atoms/CarouselDots.astro';
+
+export interface Props {
+  mission: string;
+  vision: string;
+  values: string[];
+  carouselId?: string;
+  dotsId?: string;
+  dotClass?: string;
+  className?: string;
+  variant?: 'desktop' | 'tablet' | 'mobile';
+}
+
+const { mission, vision, values, carouselId = 'about-carousel', dotsId = 'about-dots', dotClass = 'about-dot', className = '', variant = 'desktop' } = Astro.props;
+---
+
+<div class={`mx-auto mb-12 w-full  overflow-hidden rounded-[40px] bg-[var(--color-azulhorizonte)] ${className}`}>
+  <div id={carouselId} class="flex transition-transform duration-500 ease-in-out">
+    <CarouselSlide title="Misión" content={mission} variant={variant} />
+    <CarouselSlide title="Visión" content={vision} variant={variant} />
+    <CarouselSlide title="Valores" content={values.join(' · ')} variant={variant} />
+  </div>
+  <CarouselDots totalSlides={3} currentSlide={0} dotId={dotsId} dotClass={dotClass} />
+</div>

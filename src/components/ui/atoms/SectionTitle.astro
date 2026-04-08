@@ -1,0 +1,43 @@
+---
+export interface TitleData {
+  main: string;
+  subtitle: string;
+}
+
+export interface Props {
+  title: TitleData;
+  variant?: 'desktop' | 'tablet' | 'mobile';
+  className?: string;
+}
+
+const { title, variant = 'desktop', className = '' } = Astro.props;
+---
+
+{variant === 'desktop' ? (
+  <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
+    <p class="mb-2 w-full text-[24px] font-medium text-[var(--color-azulhorizonte)]">
+      {title.subtitle}
+    </p>
+    <h2 class="w-full whitespace-pre-wrap text-[36px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-black)]">
+      {title.main}
+    </h2>
+  </div>
+) : variant === 'tablet' ? (
+  <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
+    <p class="mb-2 w-full text-[20px] font-medium text-[var(--color-azulhorizonte)]">
+      {title.subtitle}
+    </p>
+    <h2 class="w-full whitespace-pre-wrap text-[30px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-white)]">
+      {title.main}
+    </h2>
+  </div>
+) : (
+  <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
+    <p class="mb-2 w-full text-[18px] font-medium text-[var(--color-azulhorizonte)]">
+      {title.subtitle}
+    </p>
+    <h2 class="w-full whitespace-pre-wrap text-[32px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-white)]">
+      {title.main}
+    </h2>
+  </div>
+)}

@@ -1,311 +1,129 @@
 ---
-// Assets About
 import worldMap from '../../assest/about/world-map.png?url';
 import iconWorld from '../../assest/about/icon-world.svg?url';
 import iconStar from '../../assest/about/icon-star.svg?url';
 import iconCheckbox from '../../assest/about/icon-checkbox.svg?url';
-
-// Content Data
 import aboutData from '../../data/content.about.json';
-
+import SectionTitle from '../ui/atoms/SectionTitle.astro';
+import DecorativeCircles from '../ui/atoms/DecorativeCircles.astro';
+import WorldMap from '../ui/atoms/WorldMap.astro';
+import CarouselSlide from '../ui/atoms/CarouselSlide.astro';
+import FeatureItem from '../ui/molecules/FeatureItem.astro';
+import AboutCarousel from '../ui/molecules/AboutCarousel.astro';
+import FeatureGrid from '../ui/molecules/FeatureGrid.astro';
 const { section } = aboutData;
-
 ---
 
-<section class="relative mx-auto h-[1025px] w-full max-w-[1920px]" id={section.id}>
-  <!-- Título -->
-  <div class="absolute left-1/2 top-[50px] w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize">
-    <p class="mb-2 w-full text-[24px] font-medium text-[var(--color-azulhorizonte)]">
-      {section.title.subtitle}
-    </p>
-    <h2 class="w-full whitespace-pre-wrap text-[48px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-black)]">
-      {section.title.main}
->>>>>>> e7399a8 (refactor: move hardcoded content to JSON files)
-    </h2>
-  </div>
+<section class="relative flex align-center mx-auto h-fit w-full max-w-[1920px]" id={section.id}>
+  <div class="relative w-full h-[700px] my-10 sticky top-0 z-10">
+    <!-- Título -->
+    <SectionTitle title={section.title} variant="desktop" />
+    <div class="relative h-full w-full grid justify-center vertical-center grid-cols-2">
+      <!-- Scroll Container (izquierda) -->
+      <div class="relative h-fit w-[90%] bg-blue-500 items-center justify-center align-middle justify-items-center rounded-br-[300px] rounded-tr-[300px] bg-[var(--color-azulhorizonte)] p-[10px]" style={{ top: '120px' }}  >
+        <div class="flex w-[550px] flex-col items-start p-[10px]">
+          <!-- Text Scroll -->
+          <div class="relative h-[277px] w-full overflow-hidden ">
+            <div id="about-carousel" class="absolute left-0 top-0 flex h-[241px] items-center gap-[68px] transition-transform duration-500 ease-in-out">
+              <CarouselSlide title="Misión" content={section.mission} variant="desktop" />
+              <CarouselSlide title="Visión" content={section.vision} variant="desktop" />
+              <CarouselSlide title="Valores" content={section.values.map(value => value.title).join(' · ')} variant="desktop" />
+            </div>
+            <!-- Scroll Selector -->
+            <div class="absolute bottom-[27px] left-1/2 flex -translate-x-1/2 items-center gap-[7px] ">
+              <button id="dot-0" class="about-dot h-4 w-[62px] rounded-[24px] bg-[var(--color-verdevitalidad)] transition-all duration-300" aria-label="Slide 1"></button>
+              <button id="dot-1" class="about-dot h-4 w-[62px] rounded-[24px] border border-white transition-all duration-300" aria-label="Slide 2"></button>
+              <button id="dot-2" class="about-dot h-4 w-[62px] rounded-[24px] border border-white transition-all duration-300" aria-label="Slide 3"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Contenedor derecho: Globo + Items -->
+      <div class="relative h-auto w-fit ">
+        <!-- Círculos decorativos -->
+        <DecorativeCircles />
 
-  <!-- Contenedor derecho: Globo + Items -->
-  <div class="absolute left-[750px] top-[247px] h-[729px] w-[1170px]">
-    <!-- Círculos decorativos -->
-    <div class="absolute left-[350px] top-[40px] h-[650px] w-[650px]">
-      <!-- Círculo exterior -->
-      <div class="absolute inset-0 rounded-full border border-white/20"></div>
-      <!-- Círculo medio -->
-      <div class="absolute inset-[60px] rounded-full border border-white/15"></div>
-    </div>
+        <!-- Mundo/Globo -->
+        <WorldMap />
 
-    <!-- Mundo/Globo -->
-    <div class="absolute left-[280px] top-0 flex items-center">
-      <div class="relative h-[725px] w-[725px]">
-        <img 
-          src={worldMap} 
-          alt="Mapa Mundial" 
-          class="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
+        <!-- Item: Tecnología de Clase Mundial -->
+        <FeatureItem 
+          feature={section.features[0]} 
+          icon="world" 
+          position={{ left: "left-[-120px]", top: "top-10" }} 
+          width="w-[604px]" 
+        />
+
+        <!-- Item: Pioneros en Venezuela -->
+        <FeatureItem 
+          feature={section.features[1]} 
+          icon="star" 
+          position={{ left: "left-[10px]", top: "top-[185px]" }} 
+          width="w-[379px]" 
+        />
+
+        <!-- Item: Tu Identidad de Confianza -->
+        <FeatureItem 
+          feature={section.features[2]} 
+          icon="checkbox" 
+          position={{ left: "left-[30px]", top: "top-[350px]" }} 
+          width="w-[377px]" 
         />
       </div>
     </div>
-
-    <!-- Item: Tecnología de Clase Mundial -->
-    <div class="absolute left-[-120px] top-[35px] flex w-[604px] flex-col items-start p-[10px]">
-      <div class="flex w-full items-center justify-center gap-[10px] p-[10px]">
-        <div class="flex items-center justify-center">
-          <div class="whitespace-nowrap text-right text-[32px] leading-[32px]">
-            <p class="mb-0 font-extrabold capitalize tracking-[-1.28px] text-[#0a6de5]">Tecnología De Clase Mundial</p>
-            <p class="font-bold text-[var(--color-gray600)]">más de 117 paises</p>
-          </div>
-        </div>
-        <div class="flex shrink-0 items-center gap-[10px] rounded-full bg-[var(--color-verdevitalidad)] p-3">
-          <div class="relative h-20 w-20 overflow-hidden">
-            <img src={iconWorld} alt="World" class="absolute inset-[12.5%] h-[75%] w-[75%]" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Item: Pioneros en Venezuela -->
-    <div class="absolute left-[-20px] top-[290px] flex w-[379px] flex-col items-start p-[10px]">
-      <div class="flex w-full items-center justify-center gap-[10px] p-[10px]">
-        <div class="flex items-center justify-center">
-          <div class="whitespace-nowrap text-right text-[32px] leading-[32px]">
-            <p class="mb-0 font-extrabold text-[#0a6de5]">Pioneros</p>
-            <p class="font-bold text-[var(--color-gray600)]">en Venezuela</p>
-          </div>
-        </div>
-        <div class="flex shrink-0 items-center gap-[10px] rounded-full bg-[var(--color-verdevitalidad)] p-3">
-          <div class="relative h-20 w-20 overflow-hidden">
-            <img src={iconStar} alt="Star" class="absolute inset-[8%] h-[84%] w-[84%]" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Item: Tu Identidad de Confianza -->
-    <div class="absolute left-[80px] top-[545px] flex w-[377px] flex-col items-start p-[10px]">
-      <div class="flex w-full items-center justify-center gap-[10px] p-[10px]">
-        <div class="flex items-center justify-center">
-          <div class="whitespace-nowrap text-right text-[32px] leading-[32px]">
-            <p class="mb-0 font-extrabold text-[#0a6de5]">Tu Identidad</p>
-            <p class="font-bold text-[var(--color-gray600)]">De Confianza</p>
-          </div>
-        </div>
-        <div class="flex shrink-0 items-center rounded-full bg-[var(--color-verdevitalidad)] p-3">
-          <div class="relative h-20 w-20 overflow-hidden">
-            <img src={iconCheckbox} alt="Checkbox" class="absolute inset-[16.67%] h-[66.66%] w-[66.66%]" />
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- Scroll Container (izquierda) -->
-  <div class="absolute left-0 top-[350px] flex h-[508px] w-[750px] flex-col items-center justify-center rounded-br-[300px] rounded-tr-[300px] bg-[var(--color-azulhorizonte)] p-[10px]">
-    <div class="flex w-[550px] flex-col items-start p-[10px]">
-      <!-- Text Scroll -->
-      <div class="relative h-[277px] w-full overflow-hidden">
-        <div id="about-carousel" class="absolute left-0 top-0 flex h-[241px] items-center gap-[68px] transition-transform duration-500 ease-in-out">
-          <!-- Tab 01 -->
-          <div class="flex h-[241px] w-[530px] shrink-0 flex-col items-center">
-            <div class="flex h-[201px] w-full flex-col items-center justify-between text-center text-white">
-              <p class="w-full text-[52px] font-extrabold leading-normal">CrediScore. 01</p>
-              <p class="w-full text-[18px] font-medium leading-7">
-                Somos una plataforma de Analítica Avanzada y Predictiva y de sonusltoría estrategica que fusiona la tecnología de punta con un produndo conocimiento de apoyo para la toma de decisiones.
-              </p>
-            </div>
-          </div>
-          <!-- Tab 02 -->
-          <div class="flex h-[241px] w-[530px] shrink-0 flex-col items-center">
-            <div class="flex h-[201px] w-full flex-col items-center justify-between text-center text-white">
-              <p class="w-full text-[52px] font-extrabold leading-normal">CrediScore. 02</p>
-              <p class="w-full text-[18px] font-medium leading-7">
-                Nuestra tecnología de punta permite evaluar el riesgo crediticio con precisión, brindando información confiable para la toma de decisiones financieras inteligentes.
-              </p>
-            </div>
-          </div>
-          <!-- Tab 03 -->
-          <div class="flex h-[241px] w-[530px] shrink-0 flex-col items-center">
-            <div class="flex h-[201px] w-full flex-col items-center justify-between text-center text-white">
-              <p class="w-full text-[52px] font-extrabold leading-normal">CrediScore. 03</p>
-              <p class="w-full text-[18px] font-medium leading-7">
-                Construimos puentes de confianza entre personas y empresas, facilitando el acceso a oportunidades financieras en toda Venezuela.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Scroll Selector -->
-        <div class="absolute bottom-[27px] left-1/2 flex -translate-x-1/2 items-center gap-[7px]">
-          <button id="dot-0" class="about-dot h-4 w-[62px] rounded-[24px] bg-[var(--color-verdevitalidad)] transition-all duration-300" aria-label="Slide 1"></button>
-          <button id="dot-1" class="about-dot h-4 w-[62px] rounded-[24px] border border-white transition-all duration-300" aria-label="Slide 2"></button>
-          <button id="dot-2" class="about-dot h-4 w-[62px] rounded-[24px] border border-white transition-all duration-300" aria-label="Slide 3"></button>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
-
-<script>
-  // About Section Carousel
-  const carousel = document.getElementById('about-carousel');
-  const dots = document.querySelectorAll('.about-dot');
-  const slideWidth = 530 + 68; // width + gap
-  let currentSlide = 0;
-  const totalSlides = 3;
-  let autoplayInterval: ReturnType<typeof setInterval>;
-
-  function goToSlide(index: number) {
-    currentSlide = index;
-    if (carousel) {
-      carousel.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
-    }
-    
-    dots.forEach((dot, i) => {
-      if (i === currentSlide) {
-        dot.classList.remove('border', 'border-white');
-        dot.classList.add('bg-[var(--color-verdevitalidad)]');
-      } else {
-        dot.classList.remove('bg-[var(--color-verdevitalidad)]');
-        dot.classList.add('border', 'border-white');
-      }
-    });
-  }
-
-  function nextSlide() {
-    const next = (currentSlide + 1) % totalSlides;
-    goToSlide(next);
-  }
-
-  // Click events for dots
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => {
-      goToSlide(index);
-      resetAutoplay();
-    });
-  });
-
-  function resetAutoplay() {
-    clearInterval(autoplayInterval);
-    autoplayInterval = setInterval(nextSlide, 4000);
-  }
-
-  // Start autoplay
-  autoplayInterval = setInterval(nextSlide, 4000);
-</script>
 
 <!-- Versión Tablet -->
 <section class="relative mx-auto hidden h-auto min-h-[800px] w-full max-w-[1920px] bg-[var(--color-black)] px-5 py-16 md:block lg:hidden" id="nosotros-tablet">
   <!-- Título -->
-  <div class="mx-auto mb-12 max-w-[900px] text-center">
-    <p class="text-[20px] font-medium text-[var(--color-azulhorizonte)]">QUIÉNES SOMOS</p>
-    <h2 class="text-[36px] font-bold tracking-[-1px] text-white">
-      Habilitando La Confianza Técnica En Venezuela
-    </h2>
-  </div>
+  <SectionTitle title={section.title} variant="tablet" />
 
-  <!-- Scroll Container -->
-  <div class="mx-auto mb-12 flex w-full max-w-[700px] flex-col items-center justify-center rounded-[40px] bg-[var(--color-azulhorizonte)] p-8">
-    <div class="text-center text-white">
-      <p class="mb-4 text-[48px] font-extrabold">CrediScore. 01</p>
-      <p class="text-[18px] font-medium leading-7">
-        Somos una plataforma de Analítica Avanzada y Predictiva y de sonusltoría estrategica que fusiona la tecnología de punta con un produndo conocimiento de apoyo para la toma de decisiones.
-      </p>
-    </div>
-    <!-- Dots -->
-    <div class="mt-6 flex items-center gap-2">
-      <div class="h-3 w-12 rounded-full bg-[var(--color-verdevitalidad)]"></div>
-      <div class="h-3 w-12 rounded-full border border-white"></div>
-      <div class="h-3 w-12 rounded-full border border-white"></div>
-    </div>
-  </div>
+  <!-- Carousel -->
+  <AboutCarousel 
+    mission={section.mission}
+    vision={section.vision}
+    values={section.values.map(value => value.title)}
+    carouselId="tablet-carousel"
+    dotsId="tablet-dots"
+    dotClass="tablet-dot"
+    variant="tablet"  
+  />
 
-  <!-- Items -->
-  <div class="mx-auto grid max-w-[900px] gap-6">
-    <div class="flex items-center justify-center gap-4">
-      <div class="text-right">
-        <p class="text-[24px] font-extrabold text-[#0a6de5]">Tecnología de clase mundial</p>
-        <p class="text-[24px] font-bold text-white">más de 117 paises</p>
-      </div>
-      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-        <img src={iconWorld} alt="World" class="h-10 w-10" />
-      </div>
-    </div>
-    <div class="flex items-center justify-center gap-4">
-      <div class="text-right">
-        <p class="text-[24px] font-extrabold text-[#0a6de5]">Pioneros</p>
-        <p class="text-[24px] font-bold text-white">en Venezuela</p>
-      </div>
-      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-        <img src={iconStar} alt="Star" class="h-10 w-10" />
-      </div>
-    </div>
-    <div class="flex items-center justify-center gap-4">
-      <div class="text-right">
-        <p class="text-[24px] font-extrabold text-[#0a6de5]">Tu Identidad</p>
-        <p class="text-[24px] font-bold text-white">De Confianza</p>
-      </div>
-      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-        <img src={iconCheckbox} alt="Checkbox" class="h-10 w-10" />
-      </div>
-    </div>
-  </div>
+  <!-- Feature Grid -->
+  <FeatureGrid 
+    features={section.features}
+    iconWorld={iconWorld}
+    iconStar={iconStar}
+    iconCheckbox={iconCheckbox}
+  />
 </section>
 
 <!-- Versión Mobile -->
 <section class="relative mx-auto block w-full bg-[var(--color-black)] px-5 py-12 md:hidden" id="nosotros-mobile">
   <!-- Título -->
-  <div class="mb-10 text-center">
-    <p class="text-[16px] font-medium text-[var(--color-azulhorizonte)]">QUIÉNES SOMOS</p>
-    <h2 class="text-[28px] font-bold tracking-[-0.5px] text-white">
-      Habilitando La Confianza Técnica En Venezuela
-    </h2>
-  </div>
+  <SectionTitle title={section.title} variant="mobile" />
 
-  <!-- Scroll Container -->
-  <div class="mx-auto mb-10 flex w-full flex-col items-center justify-center rounded-[28px] bg-[var(--color-azulhorizonte)] p-6">
-    <div class="text-center text-white">
-      <p class="mb-3 text-[32px] font-extrabold">CrediScore. 01</p>
-      <p class="text-[16px] font-medium leading-6">
-        Somos una plataforma de Analítica Avanzada y Predictiva y de sonusltoría estrategica que fusiona la tecnología de punta con un produndo conocimiento de apoyo para la toma de decisiones.
-      </p>
-    </div>
-    <!-- Dots -->
-    <div class="mt-5 flex items-center gap-2">
-      <div class="h-3 w-10 rounded-full bg-[var(--color-verdevitalidad)]"></div>
-      <div class="h-3 w-10 rounded-full border border-white"></div>
-      <div class="h-3 w-10 rounded-full border border-white"></div>
-    </div>
-  </div>
+  <!-- Carousel -->
+  <AboutCarousel 
+    mission={section.mission}
+    vision={section.vision}
+    values={section.values.map(value => value.title)}
+    carouselId="mobile-carousel"
+    dotsId="mobile-dots"
+    dotClass="mobile-dot"
+    variant="mobile"
+  />
 
-  <!-- Items -->
-  <div class="space-y-6">
-    <div class="flex items-center justify-center gap-3">
-      <div class="text-right">
-        <p class="text-[18px] font-extrabold text-[#0a6de5]">Tecnología de clase mundial</p>
-        <p class="text-[18px] font-bold text-white">más de 117 paises</p>
-      </div>
-      <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-        <img src={iconWorld} alt="World" class="h-8 w-8" />
-      </div>
-    </div>
-    <div class="flex items-center justify-center gap-3">
-      <div class="text-right">
-        <p class="text-[18px] font-extrabold text-[#0a6de5]">Pioneros</p>
-        <p class="text-[18px] font-bold text-white">en Venezuela</p>
-      </div>
-      <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-        <img src={iconStar} alt="Star" class="h-8 w-8" />
-      </div>
-    </div>
-    <div class="flex items-center justify-center gap-3">
-      <div class="text-right">
-        <p class="text-[18px] font-extrabold text-[#0a6de5]">Tu Identidad</p>
-        <p class="text-[18px] font-bold text-white">De Confianza</p>
-      </div>
-      <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-        <img src={iconCheckbox} alt="Checkbox" class="h-8 w-8" />
-      </div>
-    </div>
-  </div>
+  <!-- Feature Grid -->
+  <FeatureGrid 
+    features={section.features}
+    iconWorld={iconWorld}
+    iconStar={iconStar}
+    iconCheckbox={iconCheckbox}
+    className="grid-cols-1 gap-6"
+  />
 </section>
 
 <style>
@@ -322,3 +140,112 @@ const { section } = aboutData;
     }
   }
 </style>
+
+<script>
+  // About Section Carousel - Desktop
+  const desktopCarousel = document.getElementById('about-carousel');
+  const desktopDots = document.querySelectorAll('.about-dot');
+  const desktopSlideWidth = 530 + 68; // width + gap
+  
+  // About Section Carousel - Tablet
+  const tabletCarousel = document.getElementById('tablet-carousel');
+  const tabletDots = document.querySelectorAll('.tablet-dot');
+  
+  // About Section Carousel - Mobile
+  const mobileCarousel = document.getElementById('mobile-carousel');
+  const mobileDots = document.querySelectorAll('.mobile-dot');
+  
+  let currentSlide = 0;
+  const totalSlides = 3;
+  let autoplayInterval: ReturnType<typeof setInterval>;
+
+  function goToSlide(index: number) {
+    currentSlide = index;
+    
+    // Update desktop carousel
+    if (desktopCarousel) {
+      desktopCarousel.style.transform = `translateX(-${currentSlide * desktopSlideWidth}px)`;
+    }
+    
+    // Update tablet carousel
+    if (tabletCarousel) {
+      tabletCarousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+    
+    // Update mobile carousel
+    if (mobileCarousel) {
+      mobileCarousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+    
+    // Update desktop dots
+    desktopDots.forEach((dot, i) => {
+      if (i === currentSlide) {
+        dot.classList.remove('border', 'border-white');
+        dot.classList.add('bg-[var(--color-verdevitalidad)]');
+      } else {
+        dot.classList.remove('bg-[var(--color-verdevitalidad)]');
+        dot.classList.add('border', 'border-white');
+      }
+    });
+    
+    // Update tablet dots
+    tabletDots.forEach((dot, i) => {
+      if (i === currentSlide) {
+        dot.classList.remove('border', 'border-white');
+        dot.classList.add('bg-[var(--color-verdevitalidad)]');
+      } else {
+        dot.classList.remove('bg-[var(--color-verdevitalidad)]');
+        dot.classList.add('border', 'border-white');
+      }
+    });
+    
+    // Update mobile dots
+    mobileDots.forEach((dot, i) => {
+      if (i === currentSlide) {
+        dot.classList.remove('border', 'border-white');
+        dot.classList.add('bg-[var(--color-verdevitalidad)]');
+      } else {
+        dot.classList.remove('bg-[var(--color-verdevitalidad)]');
+        dot.classList.add('border', 'border-white');
+      }
+    });
+  }
+
+  function nextSlide() {
+    const next = (currentSlide + 1) % totalSlides;
+    goToSlide(next);
+  }
+
+  // Click events for desktop dots
+  desktopDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      goToSlide(index);
+      resetAutoplay();
+    });
+  });
+
+  // Click events for tablet dots
+  tabletDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      goToSlide(index);
+      resetAutoplay();
+    });
+  });
+
+  // Click events for mobile dots
+  mobileDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      goToSlide(index);
+      resetAutoplay();
+    });
+  });
+
+  function resetAutoplay() {
+    clearInterval(autoplayInterval);
+    autoplayInterval = setInterval(nextSlide, 4000);
+  }
+
+  // Start autoplay
+  autoplayInterval = setInterval(nextSlide, 4000);
+</script>
+

@@ -1,8 +1,8 @@
 ---
+// Section Components
 import HeroSection from '../components/sections/HeroSection.astro';
 import AboutSection from '../components/sections/AboutSection.astro';
 import PromoSection from '../components/sections/PromoSection.astro';
-import ValueProposalSection from '../components/sections/ValueProposalSection.astro';
 import FeaturesSection from '../components/sections/FeaturesSection.astro';
 import CoreModulesSection from '../components/sections/CoreModulesSection.astro';
 import ModulesSection from '../components/sections/ModulesSection.astro';
@@ -12,6 +12,20 @@ import FaqSection from '../components/sections/FaqSection.astro';
 import AppDownloadSection from '../components/sections/AppDownloadSection.astro';
 import FooterSection from '../components/sections/FooterSection.astro';
 import BackToTopButton from '../components/ui/BackToTopButton.astro';
+
+// Marketing Components
+import SEOHead from '../components/marketing/SEOHead.astro';
+import SEMSchema from '../components/marketing/SEMSchema.astro';
+import AEOContent from '../components/marketing/AEOContent.astro';
+import AEMTracking from '../components/marketing/AEMTracking.astro';
+import GTMContainer from '../components/marketing/GTMContainer.astro';
+import G4Analytics from '../components/marketing/G4Analytics.astro';
+
+// LLM Marketing Components
+import LLMSEO from '../components/marketing/LLMSEO.astro';
+import LLMSEM from '../components/marketing/LLMSEM.astro';
+
+// Assets
 import '../styles/global.css';
 import bgImage from '../assest/common/image.png?url';
 import logoIcon from '../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
@@ -19,16 +33,24 @@ import logoIcon from '../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
 
 <html lang="es">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href={logoIcon} />
-		<link rel="alternate icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Crediscore | Tu Puntaje, Tu Futuro Economico</title>
-		<meta
-			name="description"
-			content="CrediScore es la infraestructura tecnologica lider en Venezuela que certifica tu reputacion comercial."
-		/>
+		<!-- SEO Head Component -->
+		<SEOHead />
+		
+		<!-- SEM Schema Markup -->
+		<SEMSchema />
+		
+		<!-- LLM SEO Component -->
+		<LLMSEO />
+		
+		<!-- LLM SEM Component -->
+		<LLMSEM />
+		
+		<!-- Google Tag Manager -->
+		<GTMContainer /> 
+		
+		
+		<!-- Google Analytics 4 -->
+		<G4Analytics />
 	</head>
 	<body class="overflow-x-hidden bg-white text-[var(--color-black,#2d2d2c)] antialiased">
 		<div class="relative w-full overflow-hidden">
@@ -39,7 +61,6 @@ import logoIcon from '../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
 				<HeroSection />
 				<AboutSection />
 				<PromoSection />
-				<ValueProposalSection />
 				<FeaturesSection />
 				<CoreModulesSection />
 				<ModulesSection />
@@ -51,5 +72,9 @@ import logoIcon from '../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
 			</main>
 		</div>
 		<BackToTopButton />
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKMKSDN5"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
 	</body>
 </html>
