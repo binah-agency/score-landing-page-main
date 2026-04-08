@@ -23,20 +23,99 @@ const { section } = featuresData;
       <div class="absolute inset-0 z-10 flex h-full w-full flex-col items-center justify-between py-8 sm:py-12 lg:py-16">
         
         <!-- CardsContainer - 4 tarjetas -->
+<<<<<<< HEAD
         <div class="flex w-full items-start justify-center gap-2 sm:gap-3 lg:gap-4 flex-wrap lg:flex-nowrap">
           
           {section.cards.map((card, index) => (
             <FeatureCard card={card} isActive={index === 0} />
+=======
+        <div class="flex w-full items-start justify-center gap-4">
+          
+          {section.cards.map((card, index) => (
+            <div class={`flex w-auto shrink-0 flex-col items-center gap-6 rounded-[24px] px-3 py-6 ${
+              index === 0 ? 'border border-[var(--color-azulhorizonte40)] bg-[var(--color-black)]' : ''
+            }`}>
+              <!-- TOP -->
+              <div class="flex h-[111px] w-full items-start">
+                <!-- Icon -->
+                <div class="flex items-center p-[10px]">
+                  <div class="flex items-center rounded-full p-2" style={`background-color: ${card.iconColor}`}>
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="16" cy="14" r="6" stroke="white" stroke-width="2.5"/>
+                      <path d="M26 33C26 27.4772 21.5228 23 16 23C10.4772 23 6 27.4772 6 33" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                      <circle cx="30" cy="26" r="5" stroke="white" stroke-width="2.5"/>
+                      <path d="M34 31L37 34" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <!-- Container -->
+                <div class="flex w-[341px] flex-col items-start pt-4">
+                  <!-- Title -->
+                  <div class="flex h-[38px] w-full items-center gap-2">
+                    <p class="font-montserrat text-[24px] font-bold leading-[64px] text-white">
+                      {card.title}
+                    </p>
+                    <p class="font-montserrat text-[16px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
+                      {card.range}
+                    </p>
+                  </div>
+                  <!-- Párrafo -->
+                  <div class="h-[57px] w-full">
+                    <p class="flex h-full flex-col justify-center font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
+                      {card.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- BOTTOM -->
+              <div class="flex h-[51px] w-full flex-col items-start pl-[80px]">
+                <p class="font-montserrat text-[14px] font-bold uppercase leading-4 text-[var(--color-verdevitalidad)]">
+                  BENEFICIOS
+                </p>
+                <div class="mt-2">
+                  {card.benefits.map((benefit, benefitIndex) => (
+                    <p key={benefitIndex} class="font-montserrat text-[14px] font-medium leading-4 text-[var(--color-azulhorizonte40)]">
+                      {benefit}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
+>>>>>>> 61b8518 (update 080426)
           ))}
         </div>
 
         <!-- Content inferior (título y descripción) -->
+<<<<<<< HEAD
         <div class="w-full max-w-4xl mx-auto">
           <FeaturesContent 
             title={section.title}
             subtitle={section.subtitle}
             description={section.description}
           />
+=======
+        <div class="flex w-[1125px] flex-col items-center gap-[41px]">
+          <!-- Título principal -->
+          <div class="relative h-[110px] w-[918px]">
+            <p class="absolute left-[84.5px] top-[23px] font-montserrat text-[64px] font-bold leading-[64px] text-white">
+              {section.title}
+            </p>
+          </div>
+          
+          <!-- Subtítulo y párrafo -->
+          <div class="flex w-full flex-col items-start gap-[41px]">
+            <div class="flex flex-col items-center justify-center">
+              <p class="font-montserrat text-[32px] font-normal leading-8 text-[var(--color-verdevitalidad)]">
+                {section.subtitle}
+              </p>
+            </div>
+            <div class="relative h-[112px] w-full">
+              <p class="absolute left-0 top-6 font-montserrat text-[24px] font-medium leading-8 text-[var(--color-azulhorizonte40)]">
+                {section.description}
+              </p>
+            </div>
+          </div>
+>>>>>>> 61b8518 (update 080426)
         </div>
 
       </div>

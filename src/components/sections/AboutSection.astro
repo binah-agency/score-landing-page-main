@@ -1,4 +1,8 @@
 ---
+<<<<<<< HEAD
+=======
+import worldMap from '../../assest/about/world-map.png?url';
+>>>>>>> 61b8518 (update 080426)
 import iconWorld from '../../assest/about/icon-world.svg?url';
 import iconStar from '../../assest/about/icon-star.svg?url';
 import iconCheckbox from '../../assest/about/icon-checkbox.svg?url';
@@ -14,12 +18,18 @@ const { section } = aboutData;
 ---
 
 <section class="relative flex align-center mx-auto h-fit w-full max-w-[1920px]" id={section.id}>
+<<<<<<< HEAD
   <div class="relative justify-center items-center w-full h-[700px] my-10 sticky top-0 z-10">
     <!-- Título -->
     <SectionTitle data={{
       title: section.title.main,
       subtitle: section.title.subtitle
     }} variant="desktop" />
+=======
+  <div class="relative w-full h-[700px] my-10 sticky top-0 z-10">
+    <!-- Título -->
+    <SectionTitle title={section.title} variant="desktop" />
+>>>>>>> 61b8518 (update 080426)
     <div class="relative h-full w-full grid justify-center vertical-center grid-cols-2">
       <!-- Scroll Container (izquierda) -->
       <div class="relative h-fit w-[90%] bg-blue-500 items-center justify-center align-middle justify-items-center rounded-br-[300px] rounded-tr-[300px] bg-[var(--color-azulhorizonte)] p-[10px]" style={{ top: '120px' }}  >
@@ -56,11 +66,19 @@ const { section } = aboutData;
           width="w-[604px]" 
         />
 
+<<<<<<< HEAD
         <!-- Item: Somos Pioneros en Venezuela -->
         <FeatureItem 
           feature={section.features[1]} 
           icon="star" 
           position={{ left: "left-[-40px]", top: "top-[185px]" }} 
+=======
+        <!-- Item: Pioneros en Venezuela -->
+        <FeatureItem 
+          feature={section.features[1]} 
+          icon="star" 
+          position={{ left: "left-[10px]", top: "top-[185px]" }} 
+>>>>>>> 61b8518 (update 080426)
           width="w-[379px]" 
         />
 
@@ -80,10 +98,14 @@ const { section } = aboutData;
 <!-- Versión Tablet -->
 <section class="relative mx-auto hidden h-auto min-h-[800px] w-full max-w-[1920px] bg-[var(--color-black)] px-5 py-16 md:block lg:hidden" id="nosotros-tablet">
   <!-- Título -->
+<<<<<<< HEAD
   <SectionTitle data={{
     title: section.title.main,
     subtitle: section.title.subtitle
   }} variant="tablet" />
+=======
+  <SectionTitle title={section.title} variant="tablet" />
+>>>>>>> 61b8518 (update 080426)
 
   <!-- Carousel -->
   <AboutCarousel 
@@ -102,17 +124,24 @@ const { section } = aboutData;
     iconWorld={iconWorld}
     iconStar={iconStar}
     iconCheckbox={iconCheckbox}
+<<<<<<< HEAD
     screen="tablet"
+=======
+>>>>>>> 61b8518 (update 080426)
   />
 </section>
 
 <!-- Versión Mobile -->
 <section class="relative mx-auto block w-full bg-[var(--color-black)] px-5 py-12 md:hidden" id="nosotros-mobile">
   <!-- Título -->
+<<<<<<< HEAD
   <SectionTitle data={{
     title: section.title.main,
     subtitle: section.title.subtitle
   }} variant="mobile" />
+=======
+  <SectionTitle title={section.title} variant="mobile" />
+>>>>>>> 61b8518 (update 080426)
 
   <!-- Carousel -->
   <AboutCarousel 
@@ -131,7 +160,11 @@ const { section } = aboutData;
     iconWorld={iconWorld}
     iconStar={iconStar}
     iconCheckbox={iconCheckbox}
+<<<<<<< HEAD
     screen="mobile"
+=======
+    className="grid-cols-1 gap-6"
+>>>>>>> 61b8518 (update 080426)
   />
 </section>
 
