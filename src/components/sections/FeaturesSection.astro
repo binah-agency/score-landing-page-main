@@ -1,8 +1,13 @@
 ---
 // FeaturesSection - "Tu Índice de Confianza"
+
+// Content Data
+import featuresData from '../../data/content.features.json';
+
+const { section } = featuresData;
 ---
 
-<section class="relative w-full bg-[#071222]" id="features">
+<section class="relative w-full bg-[#071222]" id={section.id}>
   <div class="relative mx-auto flex w-full max-w-[1920px] flex-col items-center">
     
     <!-- ScoreSection Container -->

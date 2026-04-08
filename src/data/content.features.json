@@ -1,0 +1,12 @@
+{
+  "section": {
+    "id": "features",
+    "cards": [
+      {
+        "title": "Perfil Inicial",
+        "range": "300-400",
+        "iconColor": "#f57c00"
+      }
+    ]
+  }
+}
