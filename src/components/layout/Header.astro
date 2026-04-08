@@ -1,0 +1,45 @@
+---
+import PrimaryButton from '../ui/PrimaryButton.astro';
+import SecondaryButton from '../ui/SecondaryButton.astro';
+import logoIcon from '../../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
+import menuIcon from '../../assest/f500dba3-f45e-43de-8e70-c2004fb0c26f.svg?url';
+---
+
+<header class="mx-auto w-full max-w-[1574px] rounded-[60px] bg-white px-5 py-4">
+  <div class="hidden items-center gap-4 lg:flex">
+    <div class="flex items-center gap-3 px-4">
+      <img src={logoIcon} alt="Crediscore" class="h-[66px] w-[116px]" />
+      <div class="flex items-end text-[46px] leading-none text-[var(--color-azulhorizonte-alt,#4585c6)]">
+        <span class="font-black">Credi</span>
+        <span class="pb-1 text-[24px] font-normal">score</span>
+      </div>
+    </div>
+
+    <nav class="flex flex-1 items-center justify-end gap-8 pr-2 text-[20px] font-semibold text-[var(--color-gray600,#7a7a7a)]">
+      <a href="#" class="hover:text-[var(--color-azulhorizonte,#3467b0)]">Inicio</a>
+      <a href="#" class="hover:text-[var(--color-azulhorizonte,#3467b0)]">Nosotros</a>
+      <a href="#" class="hover:text-[var(--color-azulhorizonte,#3467b0)]">Servicios</a>
+      <a href="#" class="hover:text-[var(--color-azulhorizonte,#3467b0)]">Noticias</a>
+      <a href="#" class="hover:text-[var(--color-azulhorizonte,#3467b0)]">Contacto</a>
+    </nav>
+
+    <div class="flex shrink-0 items-center gap-4">
+      <PrimaryButton label="Descargar App" />
+      <SecondaryButton label="¿Cómo funciona?" />
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between lg:hidden">
+    <div class="flex items-center gap-2 px-2">
+      <img src={logoIcon} alt="Crediscore" class="h-[52px] w-[91px]" />
+      <div class="flex items-end text-[36px] leading-none text-[var(--color-azulhorizonte-alt,#4585c6)]">
+        <span class="font-black">Credi</span>
+        <span class="pb-1 text-[20px] font-normal">score</span>
+      </div>
+    </div>
+
+    <button type="button" aria-label="Abrir menu" class="inline-flex h-12 w-12 items-center justify-center rounded-xl">
+      <img src={menuIcon} alt="Menu" class="h-8 w-8" />
+    </button>
+  </div>
+</header>

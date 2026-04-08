@@ -1,0 +1,197 @@
+---
+// UseCasesSection - Confianza Técnica (Carrusel)
+// Dimensiones de Figma: cards 464x523px (destacada 654px), gap 57px
+
+const trustCards = [
+  {
+    title: 'Analítica Predictiva',
+    text: 'Superamos los modelos tradicionales con algoritmos que valoran tu historial de cumplimiento real',
+  },
+  {
+    title: 'Transparencia',
+    text: 'Operamos bajo estrictos protocolos de consentimiento y privacidad',
+  },
+  {
+    title: 'Soberanía de Datos',
+    text: 'Tu información está protegida en los centros de datos más avanzados del país, bajo estándares de seguridad de grado bancario',
+  },
+  {
+    title: 'Analítica Predictiva',
+    text: 'Superamos los modelos tradicionales con algoritmos que valoran tu historial de cumplimiento real',
+  },
+  {
+    title: 'Transparencia',
+    text: 'Operamos bajo estrictos protocolos de consentimiento y privacidad',
+  },
+  {
+    title: 'Soberanía de Datos',
+    text: 'Tu información está protegida en los centros de datos más avanzados del país, bajo estándares de seguridad de grado bancario',
+  },
+  {
+    title: 'Analítica Predictiva',
+    text: 'Superamos los modelos tradicionales con algoritmos que valoran tu historial de cumplimiento real',
+  },
+];
+---
+
+<section class="relative w-full overflow-hidden bg-white py-[60px]" id="use-cases">
+  <!-- Gradiente izquierdo -->
+  <div class="pointer-events-none absolute left-0 top-0 z-40 h-full w-[300px]" style="background: linear-gradient(90deg, white 37%, rgba(255, 255, 255, 0) 94%);"></div>
+  <!-- Gradiente derecho -->
+  <div class="pointer-events-none absolute right-0 top-0 z-40 h-full w-[300px]" style="background: linear-gradient(270deg, white 37%, rgba(255, 255, 255, 0) 94%);"></div>
+
+  <div class="mx-auto flex w-full max-w-[1920px] flex-col items-center">
+    
+    <!-- Título: 72px extrabold -->
+    <h2 class="text-center font-montserrat text-[72px] font-extrabold leading-normal text-[var(--color-black)]">
+      Confianza Técnica
+    </h2>
+
+    <!-- Área del carrusel -->
+    <div class="relative mt-[40px] flex h-[700px] w-full items-center justify-center">
+      <!-- Contenedor de tarjetas -->
+      <div id="trust-carousel" class="relative flex h-full w-full items-center justify-center">
+        {trustCards.map((card, index) => (
+          <article 
+            class="trust-card absolute flex cursor-pointer flex-col items-center justify-center rounded-[36px] bg-[var(--color-azulhorizonte)] p-[40px] text-white transition-all duration-700 ease-out"
+            data-index={index}
+          >
+            <div class="flex w-full flex-col items-center gap-[20px] px-[10px]">
+              <!-- Título: 36px bold -->
+              <div class="flex flex-col items-center justify-center py-[10px]">
+                <p class="text-center font-montserrat text-[36px] font-bold leading-[40px] text-white">
+                  {card.title}
+                </p>
+              </div>
+              
+              <!-- Descripción: 20px medium -->
+              <div class="flex w-full flex-col items-start gap-[10px]">
+                <p class="text-center font-montserrat text-[20px] font-medium leading-[28px] text-white">
+                  {card.text}
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- Indicadores (7 dots) -->
+    <div class="flex items-center justify-center gap-[10px]">
+      {trustCards.map((_, index) => (
+        <button 
+          class="trust-dot h-4 w-[50px] rounded-[24px] bg-[var(--color-azulhorizonte)] transition-colors duration-300" 
+          data-index={index}
+          aria-label={`Slide ${index + 1}`}
+        />
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.trust-card') as NodeListOf<HTMLElement>;
+    const dots = document.querySelectorAll('.trust-dot');
+    
+    if (!cards.length || !dots.length) return;
+
+    const TOTAL_CARDS = 7;
+    let currentIndex = 3; // Centro (Analítica Predictiva destacada)
+    let autoplayTimer: ReturnType<typeof setInterval>;
+
+    // Tamaños según Figma
+    const CENTER_WIDTH = 464;
+    const CENTER_HEIGHT = 654;
+    const SIDE_WIDTH = 464;
+    const SIDE_HEIGHT = 523;
+
+    // Configuración de posiciones para 7 tarjetas
+    const positions = {
+      farLeft3: { x: -1600, width: SIDE_WIDTH, height: SIDE_HEIGHT, opacity: 0, zIndex: 0, top: 65, bg: 'var(--color-azulhorizonte)' },
+      farLeft2: { x: -1080, width: SIDE_WIDTH, height: SIDE_HEIGHT, opacity: 0.5, zIndex: 1, top: 65, bg: 'var(--color-azulhorizonte)' },
+      left: { x: -560, width: SIDE_WIDTH, height: SIDE_HEIGHT, opacity: 0.85, zIndex: 2, top: 65, bg: 'var(--color-azulhorizonte)' },
+      center: { x: 0, width: CENTER_WIDTH, height: CENTER_HEIGHT, opacity: 1, zIndex: 3, top: 0, bg: 'var(--color-azulhorizonte-alt)' },
+      right: { x: 560, width: SIDE_WIDTH, height: SIDE_HEIGHT, opacity: 0.85, zIndex: 2, top: 65, bg: 'var(--color-azulhorizonte)' },
+      farRight2: { x: 1080, width: SIDE_WIDTH, height: SIDE_HEIGHT, opacity: 0.5, zIndex: 1, top: 65, bg: 'var(--color-azulhorizonte)' },
+      farRight3: { x: 1600, width: SIDE_WIDTH, height: SIDE_HEIGHT, opacity: 0, zIndex: 0, top: 65, bg: 'var(--color-azulhorizonte)' },
+    };
+
+    function getPosition(cardIndex: number, activeIndex: number): keyof typeof positions {
+      const diff = (cardIndex - activeIndex + TOTAL_CARDS) % TOTAL_CARDS;
+      
+      if (diff === 0) return 'center';
+      if (diff === 1) return 'right';
+      if (diff === 2) return 'farRight2';
+      if (diff === 3) return 'farRight3';
+      if (diff === TOTAL_CARDS - 1) return 'left';
+      if (diff === TOTAL_CARDS - 2) return 'farLeft2';
+      return 'farLeft3';
+    }
+
+    function updateCarousel() {
+      cards.forEach((card, index) => {
+        const posKey = getPosition(index, currentIndex);
+        const pos = positions[posKey];
+        
+        // Aplicar estilos
+        card.style.transform = `translateX(${pos.x}px) translateY(${pos.top}px)`;
+        card.style.width = `${pos.width}px`;
+        card.style.height = `${pos.height}px`;
+        card.style.opacity = String(pos.opacity);
+        card.style.zIndex = String(pos.zIndex);
+        card.style.backgroundColor = pos.bg;
+      });
+
+      // Actualizar dots
+      dots.forEach((dot, i) => {
+        if (i === currentIndex) {
+          dot.classList.remove('bg-[var(--color-azulhorizonte)]');
+          dot.classList.add('bg-[var(--color-verdevitalidad)]');
+        } else {
+          dot.classList.remove('bg-[var(--color-verdevitalidad)]');
+          dot.classList.add('bg-[var(--color-azulhorizonte)]');
+        }
+      });
+    }
+
+    function goToSlide(index: number) {
+      currentIndex = index;
+      updateCarousel();
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % TOTAL_CARDS;
+      updateCarousel();
+    }
+
+    function startAutoplay() {
+      autoplayTimer = setInterval(nextSlide, 4000);
+    }
+
+    function resetAutoplay() {
+      clearInterval(autoplayTimer);
+      startAutoplay();
+    }
+
+    // Click en dots
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        goToSlide(index);
+        resetAutoplay();
+      });
+    });
+
+    // Click en tarjetas
+    cards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        goToSlide(index);
+        resetAutoplay();
+      });
+    });
+
+    // Inicializar
+    updateCarousel();
+    startAutoplay();
+  });
+</script>

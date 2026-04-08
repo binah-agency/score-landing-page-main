@@ -1,0 +1,118 @@
+{
+  "site": {
+    "title": "Crediscore | Tu Puntaje, Tu Futuro Economico",
+    "description": "CrediScore es la infraestructura tecnologica lider en Venezuela que certifica tu reputacion comercial.",
+    "language": "es",
+    "favicon": "/assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg"
+  },
+  "header": {
+    "logo": {
+      "icon": "/assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg",
+      "alt": "Crediscore",
+      "brand": {
+        "primary": "Credi",
+        "secondary": "score"
+      }
+    },
+    "navigation": {
+      "links": [
+        {
+          "label": "Inicio",
+          "href": "#",
+          "ariaLabel": "Ir a la página de inicio"
+        },
+        {
+          "label": "Nosotros",
+          "href": "#nosotros",
+          "ariaLabel": "Conoce más sobre nosotros"
+        },
+        {
+          "label": "Servicios",
+          "href": "#servicios",
+          "ariaLabel": "Explora nuestros servicios"
+        },
+        {
+          "label": "Contacto",
+          "href": "#contacto",
+          "ariaLabel": "Contacta con nosotros"
+        }
+      ]
+    },
+    "actions": {
+      "primary": {
+        "label": "Descargar App",
+        "ariaLabel": "Descargar la aplicación de Crediscore"
+      },
+      "secondary": {
+        "label": "¿Cómo funciona?",
+        "ariaLabel": "Aprende cómo funciona Crediscore"
+      }
+    },
+    "mobile": {
+      "menu": {
+        "icon": "/assest/f500dba3-f45e-43de-8e70-c2004fb0c26f.svg",
+        "alt": "Menu",
+        "ariaLabel": "Abrir menú de navegación"
+      }
+    }
+  },
+  "hero": {
+    "background": {
+      "maskDesktop": "/assest/hero/hero-mask-desktop.svg",
+      "maskTablet": "/assest/hero/hero-mask-tablet.svg",
+      "maskMobile": "/assest/hero/hero-mask-mobile.svg",
+      "image": "/assest/hero/hero-bg.png"
+    },
+    "badge": {
+      "text": "+ de 1000 Clientes",
+      "circles": [
+        { "color": "#e87272" },
+        { "color": "#86a4d0" },
+        { "color": "#a5d470" }
+      ]
+    },
+    "banner": {
+      "text": "Liderando la confianza en Venezuela",
+      "icon": { "color": "#86b545" }
+    },
+    "tagline": {
+      "firstLine": "Tu Puntaje,",
+      "secondLine": "Tu Futuro",
+      "thirdLine": "Económico"
+    },
+    "description": "Somos tecnología de punta con analítica avanzada y predictiva, herramienta de validación única en el país. Gestiona tu reputación comercial, organiza tus flujos de pago y convierte tu cumplimiento en la llave que abre todas las puertas.",
+    "primaryAction": {
+      "label": "Descarga la App",
+      "ariaLabel": "Descargar la aplicación de Crediscore"
+    }
+  },
+  "about": {
+    "id": "nosotros",
+    "subtitle": "QUIÉNES SOMOS",
+    "title": "Habilitando La Confianza Técnica En Venezuela",
+    "description": "Somos la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial a través de análisis avanzado y validación de datos.",
+    "worldMap": "/assest/about/world-map.png",
+    "features": [
+      {
+        "icon": "/assest/about/icon-world.svg",
+        "title": "Tecnología De Clase Mundial",
+        "description": "más de 117 paises"
+      },
+      {
+        "icon": "/assest/about/icon-star.svg",
+        "title": "Pioneros",
+        "description": "en Venezuela"
+      },
+      {
+        "icon": "/assest/about/icon-checkbox.svg",
+        "title": "Tu Identidad",
+        "description": "De Confianza"
+      }
+    ]
+  },
+  "backToTop": {
+    "text": "Ir arriba",
+    "icon": "/assest/back-to-top-arrow.svg",
+    "ariaLabel": "Volver al inicio de la página"
+  }
+}

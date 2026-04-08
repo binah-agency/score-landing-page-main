@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+
+const terminosPaginas = [
+  '/legal/terminos/pagina-1.png',
+  '/legal/terminos/pagina-2.png',
+  '/legal/terminos/pagina-3.png',
+  '/legal/terminos/pagina-4.png',
+  '/legal/terminos/pagina-5.png',
+  '/legal/terminos/pagina-6.png'
+];
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Terminos y Condiciones | CrediScore</title>
+    <meta name="description" content="Consulta de Terminos y Condiciones de CrediScore." />
+  </head>
+  <body class="bg-white text-[var(--color-black,#2d2d2c)] antialiased">
+    <main class="mx-auto w-full max-w-[1160px] px-5 py-8 md:px-8 md:py-12">
+      <header class="mb-6 rounded-2xl border border-[#e5e7eb] bg-[#f8fafc] p-5 md:p-7">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-azulhorizonte,#3467b0)]">
+          Legal - Terminos
+        </p>
+        <h1 class="mt-2 text-2xl font-extrabold md:text-4xl">Terminos y Condiciones</h1>
+        <p class="mt-2 text-sm text-[var(--color-gray600,#7a7a7a)] md:text-base">
+          Informate mas sobre CrediScore
+        </p>
+      </header>
+
+      <section class="rounded-2xl border border-[#d1d5db] bg-white p-2 md:p-3" oncontextmenu="return false;">
+        <div class="space-y-3">
+          {terminosPaginas.map((pagina, index) => (
+            <img
+              src={pagina}
+              alt={`Terminos y Condiciones - Pagina ${index + 1}`}
+              class="w-full rounded-xl border border-[#e5e7eb]"
+              loading="lazy"
+              draggable="false"
+            />
+          ))}
+        </div>
+      </section>
+
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center rounded-full bg-[var(--color-azulhorizonte,#3467b0)] px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+        >
+          Volver al inicio
+        </a>
+        <a
+          href="/privacidad"
+          class="inline-flex items-center justify-center rounded-full border border-[var(--color-azulhorizonte,#3467b0)] px-6 py-3 text-sm font-semibold text-[var(--color-azulhorizonte,#3467b0)] transition-colors hover:bg-[#eff6ff]"
+        >
+          Ir a Politica de Privacidad
+        </a>
+      </div>
+
+      <p class="mt-4 text-xs text-[var(--color-gray600,#7a7a7a)]">
+        Documento en modo solo visual.
+      </p>
+    </main>
+
+    <script>
+      document.addEventListener('contextmenu', (event) => event.preventDefault());
+      document.addEventListener('keydown', (event) => {
+        const key = event.key.toLowerCase();
+        const ctrlOrMeta = event.ctrlKey || event.metaKey;
+
+        if (ctrlOrMeta && (key === 's' || key === 'p' || key === 'u')) {
+          event.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>

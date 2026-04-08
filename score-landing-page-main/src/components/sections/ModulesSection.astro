@@ -1,0 +1,122 @@
+---
+// ModulesSection - Módulos especializados
+// Dimensiones de Figma: cards 500x659px, gap 32px
+
+const cards = [
+  {
+    title: 'Empresarial',
+    icon: '/icons/briefcase.svg',
+    description: 'Potencia el crecimiento de tu empresa. Monitorea proveedores, clientes y accede a reportes detallados de solvencia comercial con nuestro DSS.',
+    items: ['Análisis de Riesgo B2B', 'Historial de pagos empresariales', 'Verificación de solvencia'],
+    accent: 'text-[var(--color-azulhorizonte-alt)]',
+  },
+  {
+    title: 'Inmobiliaria',
+    icon: '/icons/home.svg',
+    description: 'Gestión inteligente de perfiles para arrendamiento y compra-venta. Crea confianza inmediata con propietarios y agencias mediante tu score verificado.',
+    items: ['Pre-calificación inquilinos', 'Gestión de fianzas', 'Reportes de cumplimiento'],
+    accent: 'text-[var(--color-verdevitalidad)]',
+  },
+  {
+    title: 'Condominios',
+    icon: '/icons/building.svg',
+    description: 'Eleva la plusvalía de su inmueble incentivando una cultura de cumplimiento que beneficie todos',
+    items: [
+      'Certifica que la propiedad está en una comunidad solvente.',
+      'Puntualidad de servicios comunitarios.',
+      'Clientes ( la reducción de morosidad mediante el Score)',
+    ],
+    accent: 'text-[var(--color-azulhorizonte-alt)]',
+  },
+];
+---
+
+<section class="w-full bg-white" id="modules">
+  <div class="mx-auto flex w-full max-w-[1920px] flex-col items-center justify-between">
+    
+    <!-- Modules Container con fondo oscuro y border-radius izquierdo -->
+    <div class="flex w-full flex-1 flex-col items-center justify-center rounded-bl-[300px] rounded-tl-[300px] bg-[var(--color-black)] px-[80px] py-[80px]">
+      
+      <!-- Cards Container -->
+      <div class="flex flex-col items-stretch gap-[24px] px-5 lg:flex-row lg:px-0">
+        {
+          cards.map((card) => (
+            <article class="flex min-h-[500px] w-full flex-col rounded-[30px] bg-white p-[30px] lg:w-[380px]">
+              
+              <!-- Ícono -->
+              <div class="h-[70px] w-[70px] overflow-hidden">
+                <img src={card.icon} alt={card.title} class="h-full w-full" />
+              </div>
+              
+              <!-- Container -->
+              <div class="mt-2 flex flex-1 flex-col items-start">
+                
+                <!-- Title -->
+                <p class="font-montserrat text-[28px] font-bold leading-[34px] text-[var(--color-black)]">
+                  {card.title}
+                </p>
+                
+                <!-- Content -->
+                <div class="mt-2 flex w-full flex-col gap-[4px]">
+                  
+                  <!-- Descripcion -->
+                  <p class="font-montserrat text-[16px] font-medium leading-[22px] text-[var(--color-black)]">
+                    {card.description}
+                  </p>
+                  
+                  <!-- Items -->
+                  <ul class="mt-11 list-disc pl-[24px] font-montserrat text-[15px] font-medium leading-[22px] text-[var(--color-black)]">
+                    {card.items.map((item) => <li>{item}</li>)}
+                  </ul>
+                </div>
+                
+                <!-- Saber más -->
+                <div class="mt-auto flex w-full items-center justify-center pt-4">
+                  <a href="#" class:list={['font-montserrat text-[20px] font-bold leading-[32px]', card.accent]}>
+                    Saber más
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Items Section: DSS y Analítica -->
+    <div class="flex w-full flex-col items-end px-[60px] py-[40px]">
+      <div class="flex w-full flex-col items-center justify-between gap-8 md:w-[603px] md:flex-row md:gap-0">
+        
+        <!-- DSS -->
+        <div class="flex flex-col items-start border-l-4 border-[var(--color-azulhorizonte)] p-[10px]">
+          <div class="h-[60px] w-[60px] overflow-hidden">
+            <img src="/icons/database.svg" alt="DSS" class="h-full w-full" />
+          </div>
+          <div class="flex flex-col items-start gap-[10px]">
+            <p class="font-montserrat text-[36px] font-bold leading-[36px] text-[var(--color-black)]">
+              DSS
+            </p>
+            <p class="font-montserrat text-[20px] font-normal leading-[16px] text-[var(--color-black)]">
+              Sistema de Apoyo a Decisiones
+            </p>
+          </div>
+        </div>
+        
+        <!-- Analítica -->
+        <div class="flex flex-col items-start border-l-4 border-[var(--color-verdevitalidad)] p-[10px]">
+          <div class="h-[60px] w-[60px] overflow-hidden">
+            <img src="/icons/graph.svg" alt="Analítica" class="h-full w-full" />
+          </div>
+          <div class="flex flex-col items-start gap-[10px]">
+            <p class="font-montserrat text-[36px] font-bold leading-[36px] text-[var(--color-black)]">
+              Analítica
+            </p>
+            <p class="font-montserrat text-[20px] font-normal leading-[16px] text-[var(--color-black)]">
+              Modelos de Precisión
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
