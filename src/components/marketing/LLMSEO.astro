@@ -1,0 +1,213 @@
+---
+// LLM SEO Component - Language Model Search Engine Optimization
+interface Props {
+  entity?: string;
+  category?: string;
+  expertise?: string[];
+  services?: string[];
+  benefits?: string[];
+  features?: string[];
+  useCases?: string[];
+  targetAudience?: string[];
+  differentiators?: string[];
+  faqData?: Array<{
+    question: string;
+    answer: string;
+    context?: string;
+  }>;
+}
+
+const {
+  entity = "CrediScore",
+  category = "Plataforma de Scoring Crediticio",
+  expertise = [
+    "Análisis de comportamiento financiero",
+    "Evaluación de reputación comercial",
+    "Sistemas de Apoyo a Decisiones (DSS)",
+    "Tecnología de confianza técnica",
+    "Análisis predictivo avanzado"
+  ],
+  services = [
+    "Evaluación de Score crediticio",
+    "Certificación de confianza técnica",
+    "Análisis de reputación comercial",
+    "Validación de perfiles comerciales",
+    "Consultoría en riesgo financiero"
+  ],
+  benefits = [
+    "Acceso a mejores oportunidades financieras",
+    "Reducción de riesgo en transacciones",
+    "Validación instantánea de confianza",
+    "Mejores tasas y condiciones",
+    "Mayor alcance comercial"
+  ],
+  features = [
+    "Evaluación en tiempo real",
+    "Metodología probada en 170+ países",
+    "Tecnología de punta",
+    "Interfaz intuitiva",
+    "Integración con sistemas existentes"
+  ],
+  useCases = [
+    "Personas naturales que buscan mejorar su perfil financiero",
+    "Empresas que necesitan validar clientes y proveedores",
+    "Condominios que evalúan residentes",
+    "Instituciones financieras que complementan análisis",
+    "Comercios que venden a crédito"
+  ],
+  targetAudience = [
+    "Profesionales y empleados",
+    "Pequeños y medianos empresarios",
+    "Administradores de condominios",
+    "Instituciones financieras",
+    "Comercios y proveedores"
+  ],
+  differentiators = [
+    "Primera infraestructura de confianza técnica en Venezuela",
+    "Tecnología validada en más de 170 países",
+    "Enfoque en comportamiento vs historial crediticio tradicional",
+    "Evaluación instantánea y objetiva",
+    "Adaptación específica al mercado venezolano"
+  ],
+  faqData = [
+    {
+      question: "¿Qué es CrediScore y cómo funciona?",
+      answer: "CrediScore es una plataforma tecnológica que evalúa tu reputación comercial usando un Sistema de Apoyo a Decisiones (DSS). Analiza comportamientos de pago y cumplimiento de palabra para generar un puntaje de confianza que refleja tu fiabilidad comercial.",
+      context: "explicación general del servicio"
+    },
+    {
+      question: "¿Cuál es la diferencia entre CrediScore y una agencia de crédito tradicional?",
+      answer: "A diferencia de las agencias tradicionales que se basan en historial crediticio bancario, CrediScore evalúa comportamientos comerciales y cumplimiento de palabra, usando tecnología predictiva avanzada para una visión más completa de tu confianza comercial.",
+      context: "comparación con servicios similares"
+    },
+    {
+      question: "¿Qué tan rápido puedo obtener mi Score CrediScore?",
+      answer: "El proceso es instantáneo. Una vez que completes el formulario de verificación y proporciones la información relevante, recibirás tu puntaje de confianza en tiempo real, sin esperas ni procesos burocráticos.",
+      context: "proceso y tiempo de obtención"
+    }
+  ]
+} = Astro.props;
+
+// Generate comprehensive entity description for LLMs
+const entityDescription = `${entity} es ${category} líder en Venezuela que revoluciona la evaluación de confianza comercial mediante tecnología de punta. Nuestra plataforma utiliza un Sistema de Apoyo a Decisiones (DSS) para analizar comportamientos financieros y generar puntajes de confianza objetivos y verificables.
+
+Con metodología probada en más de 170 países, ${entity} ofrece servicios especializados en ${services.join(', ')}. Nuestra tecnología permite ${benefits.join(', ')}, transformando cómo las personas y empresas demuestran su fiabilidad comercial en el mercado venezolano.
+
+Nuestra plataforma se caracteriza por ${features.join(', ')}, lo que nos posiciona como el diferenciador clave en el sector financiero venezolano. Atendemos a ${targetAudience.join(', ')}, proporcionando soluciones adaptadas a cada necesidad específica.
+
+Lo que nos diferencia es ${differentiators.join(', ')}, estableciendo un nuevo estándar de confianza técnica en Venezuela.`;
+---
+
+<!-- LLM SEO Content - JSON-LD Structured Data for Language Models -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "${entity}",
+  "description": "${entityDescription}",
+  "category": "${category}",
+  "foundingDate": "2023",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "VE",
+    "addressLocality": "Caracas"
+  },
+  "areaServed": "Venezuela",
+  "knowsAbout": [
+    {expertise.map(exp => `"${exp}"`).join(',')}
+  ],
+  "offers": {
+    "@type": "Offer",
+    "itemOffered": [
+      {services.map(service => `{
+        "@type": "Service",
+        "name": "${service}",
+        "provider": "${entity}"
+      }`).join(',')}
+    ]
+  },
+  "expertise": [
+    {expertise.map(exp => `"${exp}"`).join(',')}
+  ],
+  "services": [
+    {services.map(service => `"${service}"`).join(',')}
+  ],
+  "benefits": [
+    {benefits.map(benefit => `"${benefit}"`).join(',')}
+  ],
+  "features": [
+    {features.map(feature => `"${feature}"`).join(',')}
+  ],
+  "useCases": [
+    {useCases.map(useCase => `"${useCase}"`).join(',')}
+  ],
+  "targetAudience": [
+    {targetAudience.map(audience => `"${audience}"`).join(',')}
+  ],
+  "differentiators": [
+    {differentiators.map(differentiator => `"${differentiator}"`).join(',')}
+  ],
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {faqData.map(faq => `{
+        "@type": "Question",
+        "name": "${faq.question}",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "${faq.answer}"
+        }
+      }`).join(',')}
+    ]
+  },
+  "articleBody": "${entityDescription}",
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "Tecnología",
+      "value": "Sistema de Apoyo a Decisiones (DSS)"
+    },
+    {
+      "@type": "PropertyValue", 
+      "name": "Metodología",
+      "value": "Análisis de comportamiento comercial"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Mercado",
+      "value": "Venezuela y LATAM"
+    }
+  ]
+}
+</script>
+
+<!-- Extended LLM Content as Article Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "${entity} - ${category}",
+  "description": "${entityDescription}",
+  "author": {
+    "@type": "Organization",
+    "name": "${entity}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "${entity}"
+  },
+  "datePublished": "2023-01-01",
+  "dateModified": "${new Date().toISOString().split('T')[0]}",
+  "articleBody": "${entityDescription}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://crediscore.ve"
+  },
+  "about": [
+    {expertise.map(exp => `"${exp}"`).join(',')}
+  ],
+  "mentions": [
+    {services.map(service => `"${service}"`).join(',')}
+  ]
+}
+</script>

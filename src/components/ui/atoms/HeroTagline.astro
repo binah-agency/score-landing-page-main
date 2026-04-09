@@ -1,0 +1,60 @@
+---
+export interface Props {
+  lines: string[];
+  screen?: "desktop" | "tablet" | "mobile";
+}
+
+const { lines, screen = "desktop" } = Astro.props;
+---
+
+{
+  screen === "desktop" && (
+    <div class="flex h-[300px] items-start">
+      <div class="flex w-[570px] items-center justify-center self-stretch">
+        <h1 class="whitespace-nowrap text-[92px] leading-[95px]">
+          {lines.map((line: string, index: number) => (
+            <span
+              class={`block ${index === 0 ? "font-bold text-[var(--color-azulhorizonte-alt)]" : "font-bold text-[var(--color-black)]"}`}
+            >
+              {line}
+            </span>
+          ))}
+        </h1>
+      </div>
+    </div>
+  )
+}
+{
+  screen === "tablet" && (
+    <div class="flex h-[300px] items-start">
+      <div class="flex w-[570px] items-center justify-center self-stretch">
+        <h1 class="whitespace-nowrap text-[92px] leading-[95px]">
+          {lines.map((line: string, index: number) => (
+            <span
+              class={`block ${index === 0 ? "font-bold text-[var(--color-azulhorizonte-alt)]" : "font-bold text-[var(--color-black)]"}`}
+            >
+              {line}
+            </span>
+          ))}
+        </h1>
+      </div>
+    </div>
+  )
+}
+{
+  screen === "mobile" && (
+    <div class="relative flex items-start justify-center">
+      <div class="relative flex w-full items-center justify-center self-stretch">
+        <h1 class="w-full whitespace-nowrap text-[52px] leading-[60px]">
+          {lines.map((line: string, index: number) => (
+            <span
+              class={`block ${index === 0 ? "font-bold text-[var(--color-azulhorizonte-alt)]" : "font-bold text-[var(--color-black)]"}`}
+            >
+              {line}
+            </span>
+          ))}
+        </h1>
+      </div>
+    </div>
+  )
+}

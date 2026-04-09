@@ -1,0 +1,49 @@
+---
+// Icon Component - Reusable icon wrapper
+interface Props {
+  name: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  class?: string;
+  color?: string;
+}
+
+const { 
+  name, 
+  size = 'md', 
+  class: className = '', 
+  color = 'currentColor' 
+} = Astro.props;
+
+const sizeClasses = {
+  xs: 'w-4 h-4',
+  sm: 'w-5 h-5',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8',
+  xl: 'w-10 h-10'
+};
+
+// Icon mappings - you can expand this with actual SVG paths
+const icons: Record<string, string> = {
+  'arrow-right': 'M13 7l5 5m0 0l-5 5m5-5H6',
+  'arrow-left': 'M11 19l-7-7 7-7m8 14l-7-7 7-7',
+  'check': 'M5 13l4 4L19 7',
+  'x': 'M6 18L18 6M6 6l12 12',
+  'menu': 'M4 6h16M4 12h16M4 18h16',
+  'close': 'M6 18L18 6M6 6l12 12',
+  'search': 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
+  'download': 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10'
+};
+---
+
+<svg
+  class={[sizeClasses[size], className].join(' ')}
+  fill="none"
+  stroke={color}
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d={icons[name] || icons['check']} />
+</svg>

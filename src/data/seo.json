@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "CrediScore | Tu Puntaje, Tu Futuro Económico",
+    "description": "CrediScore es la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial y te abre puertas a oportunidades financieras.",
+    "keywords": "CrediScore, scoring crediticio, Venezuela, confianza técnica, reputación comercial, puntaje crediticio, análisis financiero, DSS, sistema de apoyo a decisiones",
+    "author": "CrediScore",
+    "image": "/images/og-image.jpg",
+    "url": "https://crediscore.com.ve",
+    "type": "website",
+    "siteName": "CrediScore",
+    "locale": "es_VE",
+    "canonical": "https://crediscore.com.ve",
+    "noindex": false,
+    "nofollow": false
+  },
+  "openGraph": {
+    "type": "website",
+    "image": {
+      "url": "/images/og-image.jpg",
+      "width": "1200",
+      "height": "630",
+      "alt": "CrediScore"
+    },
+    "locale": "es_VE"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "image": "/images/og-image.jpg"
+  },
+  "additional": {
+    "language": "Spanish",
+    "geo": {
+      "region": "VE",
+      "placeName": "Venezuela",
+      "coordinates": "8.0,-66.0"
+    },
+    "icbm": "8.0,-66.0",
+    "distribution": "global",
+    "rating": "general",
+    "revisitAfter": "7 days"
+  },
+  "favicon": {
+    "svg": "/favicon.svg",
+    "ico": "/favicon.ico",
+    "appleTouchIcon": "/apple-touch-icon.png",
+    "png32": "/favicon-32x32.png",
+    "png16": "/favicon-16x16.png"
+  },
+  "performance": {
+    "dnsPrefetch": [
+      "//www.googletagmanager.com",
+      "//www.google-analytics.com",
+      "//fonts.googleapis.com",
+      "//fonts.gstatic.com"
+    ],
+    "preconnect": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com"
+    ]
+  }
+}

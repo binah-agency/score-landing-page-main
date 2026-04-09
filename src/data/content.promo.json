@@ -1,0 +1,27 @@
+{
+  "title": "TU NIVEL DE CONFIANZA",
+  "subtitle": "EVOLUCIONA TU ID DE CONFIANZA",
+  "description": "Desde tu ID Zafiro hasta convertirte en un miembro Élite. Cada nivel<br/>desbloquea nuevas ofertas financieras verificadas por el sistema DSS de Crediscore",
+  "cards": [
+    {
+      "src": "/src/assest/promo/card-zafiro.png",
+      "alt": "Tarjeta Zafiro - Nivel inicial de confianza"
+    },
+    {
+      "src": "/src/assest/promo/card-esmeralda.png",
+      "alt": "Tarjeta Esmeralda - Nivel intermedio de confianza"
+    },
+    {
+      "src": "/src/assest/promo/card-silver.png",
+      "alt": "Tarjeta Silver - Nivel avanzado de confianza"
+    },
+    {
+      "src": "/src/assest/promo/card-gold.png",
+      "alt": "Tarjeta Gold - Nivel alto de confianza"
+    },
+    {
+      "src": "/src/assest/promo/card-elite.png",
+      "alt": "Tarjeta Elite - Nivel máximo de confianza"
+    }
+  ]
+}

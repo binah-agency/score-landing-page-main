@@ -1,0 +1,246 @@
+---
+// ComponentFactory - Factory pattern for creating consistent components
+import { tokens, variants, utils } from './ThemeProvider.astro';
+
+// Base component factory
+export class ComponentFactory {
+  static createButton(props: {
+    variant?: 'primary' | 'secondary';
+    size?: 'sm' | 'md' | 'lg';
+    disabled?: boolean;
+    loading?: boolean;
+    className?: string;
+    children: any;
+  }) {
+    const { variant = 'primary', size = 'md', disabled = false, loading = false, className = '', children } = props;
+    const variantConfig = variants.button[variant];
+    
+    return {
+      tag: props.href ? 'a' : 'button',
+      props: {
+        ...props,
+        class: utils.cn(
+          variantConfig.base,
+          variantConfig.sizes[size],
+          variantConfig.colors?.base || variantConfig.variants?.[props.variantType || 'outline'],
+          loading && 'opacity-75 cursor-not-allowed',
+          className
+        ),
+        'aria-disabled': disabled || loading
+      },
+      children: loading ? this.createLoadingSpinner() : children
+    };
+  }
+  
+  static createCard(props: {
+    variant?: 'default' | 'elevated' | 'outlined';
+    padding?: 'sm' | 'md' | 'lg';
+    className?: string;
+    children: any;
+  }) {
+    const { variant = 'default', padding = 'md', className = '', children } = props;
+    const variantConfig = variants.card;
+    
+    return {
+      tag: 'div',
+      props: {
+        class: utils.cn(
+          variantConfig.base,
+          variantConfig.variants[variant],
+          variantConfig.padding[padding],
+          className
+        )
+      },
+      children
+    };
+  }
+  
+  static createAlert(props: {
+    variant?: 'info' | 'success' | 'warning' | 'error';
+    title?: string;
+    message: string;
+    dismissible?: boolean;
+    className?: string;
+  }) {
+    const { variant = 'info', title, message, dismissible = false, className = '' } = props;
+    const variantConfig = variants.alert;
+    
+    return {
+      tag: 'div',
+      props: {
+        role: 'alert',
+        class: utils.cn(
+          variantConfig.base,
+          variantConfig.variants[variant],
+          className
+        )
+      },
+      children: this.createAlertContent({ variant, title, message, dismissible })
+    };
+  }
+  
+  static createLoadingSpinner() {
+    return {
+      tag: 'svg',
+      props: {
+        class: 'animate-spin -ml-1 mr-3 h-5 w-5',
+        fill: 'none',
+        viewBox: '0 0 24 24'
+      },
+      children: [
+        {
+          tag: 'circle',
+          props: {
+            class: 'opacity-25',
+            cx: '12',
+            cy: '12',
+            r: '10',
+            stroke: 'currentColor',
+            'stroke-width': '4'
+          }
+        },
+        {
+          tag: 'path',
+          props: {
+            class: 'opacity-75',
+            fill: 'currentColor',
+            d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+          }
+        }
+      ]
+    };
+  }
+  
+  static createAlertContent(props: {
+    variant: string;
+    title?: string;
+    message: string;
+    dismissible?: boolean;
+  }) {
+    const { variant, title, message, dismissible } = props;
+    
+    const icons = {
+      info: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+      success: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+      warning: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z',
+      error: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
+    };
+    
+    const iconColors = {
+      info: 'text-blue-500',
+      success: 'text-green-500',
+      warning: 'text-yellow-500',
+      error: 'text-red-500'
+    };
+    
+    return [
+      {
+        tag: 'div',
+        props: { class: 'flex' },
+        children: [
+          {
+            tag: 'div',
+            props: { class: 'flex-shrink-0' },
+            children: {
+              tag: 'svg',
+              props: {
+                class: `h-5 w-5 ${iconColors[variant]}`,
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                stroke: 'currentColor'
+              },
+              children: {
+                tag: 'path',
+                props: {
+                  'stroke-linecap': 'round',
+                  'stroke-linejoin': 'round',
+                  'stroke-width': '2',
+                  d: icons[variant]
+                }
+              }
+            }
+          },
+          {
+            tag: 'div',
+            props: { class: 'ml-3 flex-1' },
+            children: [
+              title ? {
+                tag: 'h3',
+                props: { class: 'text-sm font-medium' },
+                children: title
+              } : null,
+              {
+                tag: 'div',
+                props: { 
+                  class: `text-sm ${title ? 'mt-1' : ''}` 
+                },
+                children: message
+              }
+            ].filter(Boolean)
+          },
+          dismissible ? {
+            tag: 'div',
+            props: { class: 'ml-auto pl-3' },
+            children: {
+              tag: 'div',
+              props: { class: '-mx-1.5 -my-1.5' },
+              children: {
+                tag: 'button',
+                props: {
+                  type: 'button',
+                  class: 'inline-flex rounded-md p-1.5 hover:bg-opacity-20 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600',
+                  onclick: 'this.closest(\'[role=alert]\').remove()'
+                },
+                children: [
+                  {
+                    tag: 'span',
+                    props: { class: 'sr-only' },
+                    children: 'Dismiss'
+                  },
+                  {
+                    tag: 'svg',
+                    props: {
+                      class: 'h-5 w-5',
+                      fill: 'none',
+                      viewBox: '0 0 24 24',
+                      stroke: 'currentColor'
+                    },
+                    children: {
+                      tag: 'path',
+                      props: {
+                        'stroke-linecap': 'round',
+                        'stroke-linejoin': 'round',
+                        'stroke-width': '2',
+                        d: 'M6 18L18 6M6 6l12 12'
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          } : null
+        ].filter(Boolean)
+      }
+    ];
+  }
+  
+  // Utility methods for consistent styling
+  static getSpacing(size: keyof typeof tokens.spacing) {
+    return tokens.spacing[size];
+  }
+  
+  static getColor(color: keyof typeof tokens.colors) {
+    return tokens.colors[color];
+  }
+  
+  static getTypography(size: keyof typeof tokens.typography.fontSize) {
+    return tokens.typography.fontSize[size];
+  }
+  
+  static getShadow(size: keyof typeof tokens.shadows) {
+    return tokens.shadows[size];
+  }
+}
+
+// Export for use in other components
+export default ComponentFactory;

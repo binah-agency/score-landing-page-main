@@ -1,0 +1,95 @@
+---
+// SEO Head Component - Meta tags, Open Graph, Twitter Cards
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  author?: string;
+  image?: string;
+  url?: string;
+  type?: string;
+  siteName?: string;
+  locale?: string;
+  canonical?: string;
+  noindex?: boolean;
+  nofollow?: boolean;
+}
+
+import seoData from '../../data/seo.json';
+import PerformanceLinks from '../ui/atoms/PerformanceLinks.astro';
+
+const {
+  title = seoData.meta.title,
+  description = seoData.meta.description,
+  keywords = seoData.meta.keywords,
+  author = seoData.meta.author,
+  image = seoData.meta.image,
+  url = seoData.meta.url,
+  type = seoData.meta.type,
+  siteName = seoData.meta.siteName,
+  locale = seoData.meta.locale,
+  canonical = seoData.meta.canonical,
+  noindex = seoData.meta.noindex,
+  nofollow = seoData.meta.nofollow
+} = Astro.props;
+
+const robots = noindex || nofollow 
+  ? `${noindex ? 'noindex' : 'index'},${nofollow ? 'nofollow' : 'follow'}`
+  : 'index,follow';
+---
+
+<!-- Basic Meta Tags -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords} />
+<meta name="author" content={author} />
+<meta name="robots" content={robots} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={seoData.openGraph.type} />
+<meta property="og:url" content={seoData.openGraph.image.url} />
+<meta property="og:title" content={seoData.openGraph.image.alt} />
+<meta property="og:description" content={seoData.openGraph.image.alt} />
+<meta property="og:image" content={seoData.openGraph.image.url} />
+<meta property="og:image:width" content={seoData.openGraph.image.width} />
+<meta property="og:image:height" content={seoData.openGraph.image.height} />
+<meta property="og:image:alt" content={seoData.openGraph.image.alt} />
+<meta property="og:site_name" content={seoData.openGraph.locale} />
+<meta property="og:locale" content={seoData.openGraph.locale} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content={seoData.twitter.card} />
+<meta name="twitter:url" content={seoData.openGraph.image.url} />
+<meta name="twitter:title" content={seoData.openGraph.image.alt} />
+<meta name="twitter:description" content={seoData.openGraph.image.alt} />
+<meta name="twitter:image" content={seoData.openGraph.image.url} />
+<meta name="twitter:image:alt" content={seoData.openGraph.image.alt} />
+
+<!-- Additional SEO Meta Tags -->
+<meta name="language" content={seoData.additional.language} />
+<meta name="geo.region" content={seoData.additional.geo.region} />
+<meta name="geo.placename" content={seoData.additional.geo.placeName} />
+<meta name="ICBM" content={seoData.additional.icbm} />
+<meta name="distribution" content={seoData.additional.distribution} />
+<meta name="rating" content={seoData.additional.rating} />
+<meta name="revisit-after" content={seoData.additional.revisitAfter} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href={seoData.favicon.svg} />
+<link rel="alternate icon" href={seoData.favicon.ico} />
+<link rel="apple-touch-icon" sizes="180x180" href={seoData.favicon.appleTouchIcon} />
+<link rel="icon" type="image/png" sizes="32x32" href={seoData.favicon.png32} />
+<link rel="icon" type="image/png" sizes="16x16" href={seoData.favicon.png16} />
+
+<!-- DNS Prefetch for Performance -->
+<PerformanceLinks dnsPrefetch={seoData.performance.dnsPrefetch} />
+
+<!-- Preconnect for Critical Resources -->
+<PerformanceLinks preconnect={seoData.performance.preconnect} />

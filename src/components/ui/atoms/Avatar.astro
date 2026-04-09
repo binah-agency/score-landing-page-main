@@ -1,0 +1,47 @@
+---
+// Avatar Component - User profile image placeholder
+interface Props {
+  src?: string;
+  alt?: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  fallback?: string;
+  class?: string;
+}
+
+const { 
+  src, 
+  alt = 'Avatar', 
+  size = 'md', 
+  fallback = 'U',
+  class: className = '' 
+} = Astro.props;
+
+const sizeClasses = {
+  xs: 'w-6 h-6 text-xs',
+  sm: 'w-8 h-8 text-sm',
+  md: 'w-10 h-10 text-base',
+  lg: 'w-12 h-12 text-lg',
+  xl: 'w-16 h-16 text-xl'
+};
+---
+
+<div
+  class={[
+    'relative inline-flex items-center justify-center rounded-full bg-[var(--color-azulhorizonte)] text-white font-medium overflow-hidden',
+    sizeClasses[size],
+    className
+  ].join(' ')}
+>
+  {src ? (
+    <img 
+      src={src} 
+      alt={alt}
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+  ) : (
+    <span class="uppercase">
+      {fallback}
+    </span>
+  )}
+</div>

@@ -1,0 +1,48 @@
+---
+export interface FeatureData {
+  title: string;
+  subtitle: string;
+}
+
+export interface Props {
+  feature: FeatureData;
+  icon: 'world' | 'star' | 'checkbox';
+  position: { left: string; top: string };
+  width: string;
+  className?: string;
+}
+
+const { feature, icon, position, width, className = '' } = Astro.props;
+
+import iconWorld from '../../../assest/about/icon-world.svg?url';
+import iconStar from '../../../assest/about/icon-star.svg?url';
+import iconCheckbox from '../../../assest/about/icon-checkbox.svg?url';
+
+const iconSources = {
+  world: { src: iconWorld, inset: 'inset-[12.5%]', size: 'h-[75%] w-[75%]' },
+  star: { src: iconStar, inset: 'inset-[8%]', size: 'h-[84%] w-[84%]' },
+  checkbox: { src: iconCheckbox, inset: 'inset-[16.67%]', size: 'h-[66.66%] w-[66.66%]' }
+};
+
+const currentIcon = iconSources[icon];
+---
+
+<div class={`absolute ${position.left} ${position.top} flex ${width} flex-col items-start p-[10px] ${className}`}>
+  <div class="flex w-full items-center justify-center gap-[10px] p-[10px]">
+    <div class="flex items-center justify-center">
+      <div class="whitespace-nowrap text-right text-2xl leading-[32px]">
+        <p class="mb-0 font-extrabold capitalize tracking-[-1.28px] text-[#0a6de5]">{feature.title}</p>
+        <p class="font-bold text-[var(--color-gray600)]">{feature.subtitle}</p>
+      </div>
+    </div>
+    <div class="flex shrink-0 items-center gap-[10px] rounded-full bg-[var(--color-verdevitalidad)] p-3">
+      <div class="relative h-10 w-10 overflow-hidden">
+        <img 
+          src={currentIcon.src} 
+          alt={icon} 
+          class={`absolute ${currentIcon.inset} ${currentIcon.size}`} 
+        />
+      </div>
+    </div>
+  </div>
+</div>

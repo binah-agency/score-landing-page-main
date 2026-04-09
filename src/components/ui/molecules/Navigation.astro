@@ -1,0 +1,18 @@
+---
+export interface NavigationItem {
+  text: string;
+  href: string;
+}
+
+export interface Props {
+  items: NavigationItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="flex flex-1 items-center justify-end gap-5 p-2">
+  {items.map((item) => (
+    <a href={item.href} class="text-[20px] font-semibold text-[var(--color-gray600)] hover:text-[var(--color-azulhorizonte)]">{item.text}</a>
+  ))}
+</nav>

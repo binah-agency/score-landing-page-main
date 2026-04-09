@@ -1,0 +1,286 @@
+---
+// ThemeProvider - Centralized theme and design tokens
+interface Props {
+  children: any;
+  theme?: 'light' | 'dark';
+}
+
+const { children, theme = 'light' } = Astro.props;
+
+// Design tokens - centralized configuration
+export const tokens = {
+  colors: {
+    primary: 'var(--color-azulhorizonte)',
+    primaryAlt: 'var(--color-azulhorizonte-alt)',
+    secondary: 'var(--color-verdevitalidad)',
+    accent: 'var(--color-amarilloenergia)',
+    gray50: 'var(--color-gray50)',
+    gray100: 'var(--color-gray100)',
+    gray200: 'var(--color-gray200)',
+    gray300: 'var(--color-gray300)',
+    gray400: 'var(--color-gray400)',
+    gray500: 'var(--color-gray500)',
+    gray600: 'var(--color-gray600)',
+    gray700: 'var(--color-gray700)',
+    gray800: 'var(--color-gray800)',
+    gray900: 'var(--color-gray900)',
+    white: '#ffffff',
+    black: '#000000'
+  },
+  spacing: {
+    xs: '0.25rem',    // 4px
+    sm: '0.5rem',     // 8px
+    md: '1rem',       // 16px
+    lg: '1.5rem',     // 24px
+    xl: '2rem',       // 32px
+    '2xl': '3rem',    // 48px
+    '3xl': '4rem',    // 64px
+    '4xl': '6rem',    // 96px
+    '5xl': '8rem',    // 128px
+  },
+  typography: {
+    fontFamily: {
+      sans: ['Inter', 'system-ui', 'sans-serif'],
+      serif: ['Georgia', 'serif'],
+      mono: ['JetBrains Mono', 'monospace']
+    },
+    fontSize: {
+      xs: ['0.75rem', { lineHeight: '1rem' }],      // 12px
+      sm: ['0.875rem', { lineHeight: '1.25rem' }],  // 14px
+      base: ['1rem', { lineHeight: '1.5rem' }],     // 16px
+      lg: ['1.125rem', { lineHeight: '1.75rem' }], // 18px
+      xl: ['1.25rem', { lineHeight: '1.75rem' }],   // 20px
+      '2xl': ['1.5rem', { lineHeight: '2rem' }],    // 24px
+      '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
+      '4xl': ['2.25rem', { lineHeight: '2.5rem' }], // 36px
+      '5xl': ['3rem', { lineHeight: '1' }],          // 48px
+      '6xl': ['3.75rem', { lineHeight: '1' }],        // 60px
+    },
+    fontWeight: {
+      light: '300',
+      normal: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+      extrabold: '800',
+      black: '900'
+    }
+  },
+  borderRadius: {
+    none: '0',
+    sm: '0.125rem',   // 2px
+    base: '0.25rem',  // 4px
+    md: '0.375rem',   // 6px
+    lg: '0.5rem',     // 8px
+    xl: '0.75rem',    // 12px
+    '2xl': '1rem',    // 16px
+    '3xl': '1.5rem',  // 24px
+    full: '9999px'
+  },
+  shadows: {
+    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    base: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)'
+  },
+  transitions: {
+    fast: '150ms ease-in-out',
+    base: '200ms ease-in-out',
+    slow: '300ms ease-in-out'
+  },
+  zIndex: {
+    hide: -1,
+    auto: 'auto',
+    base: 0,
+    docked: 10,
+    dropdown: 1000,
+    sticky: 1100,
+    banner: 1200,
+    overlay: 1300,
+    modal: 1400,
+    popover: 1500,
+    skipLink: 1600,
+    toast: 1700,
+    tooltip: 1800
+  }
+};
+
+// Component variants
+export const variants = {
+  button: {
+    primary: {
+      base: 'font-semibold text-white transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[var(--color-azulhorizonte)]/30 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]',
+      sizes: {
+        sm: 'h-10 px-4 text-sm',
+        md: 'h-14 px-6 text-base',
+        lg: 'h-16 px-8 text-lg'
+      },
+      colors: {
+        base: 'bg-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte-alt)] disabled:hover:bg-[var(--color-azulhorizonte)]'
+      }
+    },
+    secondary: {
+      base: 'font-semibold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[var(--color-azulhorizonte)]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--color-azulhorizonte)] active:scale-[0.98]',
+      sizes: {
+        sm: 'h-10 px-4 text-sm',
+        md: 'h-14 px-6 text-base',
+        lg: 'h-16 px-8 text-lg'
+      },
+      variants: {
+        outline: 'border-2 border-[var(--color-azulhorizonte)] text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)] hover:text-white',
+        ghost: 'border-2 border-transparent text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)]/10'
+      }
+    }
+  },
+  card: {
+    base: 'rounded-xl transition-all duration-200',
+    variants: {
+      default: 'bg-white shadow-sm hover:shadow-md',
+      elevated: 'bg-white shadow-lg hover:shadow-xl',
+      outlined: 'bg-white border border-gray-200 hover:border-gray-300'
+    },
+    padding: {
+      sm: 'p-4',
+      md: 'p-6',
+      lg: 'p-8'
+    }
+  },
+  alert: {
+    base: 'relative rounded-lg border p-4',
+    variants: {
+      info: 'bg-blue-50 border-blue-200 text-blue-800',
+      success: 'bg-green-50 border-green-200 text-green-800',
+      warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+      error: 'bg-red-50 border-red-200 text-red-800'
+    }
+  }
+};
+
+// Utility functions
+export const utils = {
+  // Class name utilities
+  cn: (...classes: (string | undefined | null | false)[]) => {
+    return classes.filter(Boolean).join(' ');
+  },
+  
+  // Responsive utilities
+  responsive: {
+    mobile: 'lg:hidden',
+    desktop: 'hidden lg:block'
+  },
+  
+  // Animation utilities
+  animations: {
+    fadeIn: 'animate-fade-in',
+    slideUp: 'animate-slide-up',
+    scaleIn: 'animate-scale-in'
+  }
+};
+---
+
+<!-- Make theme and utilities available globally -->
+<script define:vars={{ tokens, variants, utils }}>
+  window.designSystem = {
+    tokens,
+    variants,
+    utils
+  };
+</script>
+
+<!-- CSS Custom Properties for theme -->
+<style>
+  :root {
+    /* Color System */
+    --color-azulhorizonte: #3467b0;
+    --color-azulhorizonte-alt: #4585c6;
+    --color-verdevitalidad: #4CAF50;
+    --color-amarilloenergia: #FFC107;
+    
+    /* Gray Scale */
+    --color-gray50: #F9FAFB;
+    --color-gray100: #F3F4F6;
+    --color-gray200: #E5E7EB;
+    --color-gray300: #D1D5DB;
+    --color-gray400: #9CA3AF;
+    --color-gray500: #6B7280;
+    --color-gray600: #4B5563;
+    --color-gray700: #374151;
+    --color-gray800: #1F2937;
+    --color-gray900: #111827;
+    
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    --space-4xl: 6rem;
+    --space-5xl: 8rem;
+    
+    /* Typography */
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Georgia', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    /* Border Radius */
+    --radius-sm: 0.125rem;
+    --radius-base: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-full: 9999px;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-base: 200ms ease-in-out;
+    --transition-slow: 300ms ease-in-out;
+  }
+  
+  /* Dark theme */
+  [data-theme="dark"] {
+    --color-gray50: #111827;
+    --color-gray100: #1F2937;
+    --color-gray900: #F9FAFB;
+  }
+  
+  /* Animations */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slide-up {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes scale-in {
+    from { 
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .animate-fade-in { animation: fade-in var(--transition-base); }
+  .animate-slide-up { animation: slide-up var(--transition-base); }
+  .animate-scale-in { animation: scale-in var(--transition-base); }
+</style>
+
+{children}

@@ -1,0 +1,69 @@
+---
+import CookieIcon from '../atoms/CookieIcon.astro';
+import CookieTitle from '../atoms/CookieTitle.astro';
+import CookieDescription from '../atoms/CookieDescription.astro';
+import CookieActions from './CookieActions.astro';
+
+export interface CookieConsentData {
+  analytics_storage: 'granted' | 'denied';
+  ad_storage: 'granted' | 'denied';
+  ad_user_data: 'granted' | 'denied';
+  ad_personalization: 'granted' | 'denied';
+  functionality_storage: 'granted' | 'denied';
+  personalization_storage: 'granted' | 'denied';
+  security_storage: 'granted' | 'denied';
+}
+
+export interface Props {
+  onConsentUpdate?: (consent: CookieConsentData) => void;
+  onSettingsClick?: () => void;
+  className?: string;
+}
+
+const { onConsentUpdate, onSettingsClick, className = '' } = Astro.props;
+---
+
+<!-- Cookie Banner -->
+<div id="cookie-consent" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-white border border-gray-200 rounded-xl shadow-2xl p-6 max-w-sm z-[9999] hidden transform transition-all duration-300 ease-in-out {className}">
+  <div class="flex items-start gap-3 mb-4">
+    <CookieIcon />
+    <div class="flex-1">
+      <CookieTitle />
+      <CookieDescription />
+    </div>
+  </div>
+  
+  <CookieActions 
+    onAcceptAll={onConsentUpdate ? () => {
+      const consent: CookieConsentData = {
+        analytics_storage: 'granted',
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        functionality_storage: 'granted',
+        personalization_storage: 'granted',
+        security_storage: 'granted'
+      };
+      
+      if (onConsentUpdate) {
+        onConsentUpdate(consent);
+      }
+    }}
+    onAcceptEssential={onConsentUpdate ? () => {
+      const consent: CookieConsentData = {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        functionality_storage: 'granted',
+        personalization_storage: 'granted',
+        security_storage: 'granted'
+      };
+      
+      if (onConsentUpdate) {
+        onConsentUpdate(consent);
+      }
+    }}
+    onSettingsClick={onSettingsClick}
+  />
+</div>

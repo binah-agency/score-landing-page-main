@@ -1,8 +1,13 @@
 ---
 // ValueProposalSection - Sección "Más que un número, es un Sello de Válidez"
+
+// Content Data
+import valueProposalData from '../../data/content.value-proposal.json';
+
+const { section } = valueProposalData;
 ---
 
-<section class="w-full bg-[#eff1f9] px-[197px] py-[39px]" id="value-proposal">
+<section class="w-full bg-[#eff1f9] px-[197px] py-[39px]" id={section.id}>
   <!-- Container principal flex -->
   <div class="mx-auto flex max-w-[1920px] items-center justify-center gap-[54px]">
     
@@ -12,21 +17,45 @@
       <!-- Título h2 headings -->
       <div class="flex w-full flex-col items-start pb-2">
         <p class="w-full font-montserrat text-[48px] font-bold capitalize leading-[64px] tracking-[-0.03em] text-[var(--color-black)]">
-          Más que un número, es un
+          {section.title.line1}
         </p>
         <p class="w-full font-montserrat text-[48px] font-bold capitalize leading-[64px] tracking-[-0.03em] text-[var(--color-azulhorizonte)]">
-          Sello  de Válidez
+          {section.title.line2}
         </p>
       </div>
 
-      <!-- Comment Card con borde azul izquierdo -->
+      <!-- Benefits Section -->
+      <div class="flex w-full flex-col gap-6">
+        <p class="font-montserrat text-[24px] font-semibold text-[var(--color-azulhorizonte)]">
+          {section.subtitle}
+        </p>
+        <div class="grid w-full grid-cols-2 gap-4">
+          {section.benefits.map((benefit, index) => (
+            <div class="flex items-start gap-3">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-azulhorizonte)]">
+                <span class="text-white text-sm font-bold">{index + 1}</span>
+              </div>
+              <div>
+                <p class="font-montserrat text-[18px] font-bold text-[var(--color-black)]">
+                  {benefit.title}
+                </p>
+                <p class="font-montserrat text-[16px] text-[var(--color-gray600)] mt-1">
+                  {benefit.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Testimonial Card -->
       <div class="rounded-[32px] bg-[var(--color-azulhorizonte)] pl-6">
         <div class="flex h-[418px] flex-col items-start rounded-[32px] bg-white">
           <div class="flex flex-col items-start gap-[25px] p-8">
             
-            <!-- 5 Estrellas -->
+            <!-- Rating Stars -->
             <div class="flex items-center gap-[7px]">
-              {Array.from({ length: 5 }).map(() => (
+              {Array.from({ length: section.testimonial.rating }).map(() => (
                 <div class="flex h-6 w-6 items-center justify-center">
                   <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z" fill="#86B545"/>
@@ -35,19 +64,19 @@
               ))}
             </div>
 
-            <!-- Title + Underline -->
+            <!-- Testimonial Content -->
             <div class="flex w-full flex-col gap-4">
               <div class="flex flex-col items-start">
                 <p class="font-montserrat text-[36px] font-bold leading-[64px] tracking-[-0.03em] text-[var(--color-black)]">
-                  TU PASAPORTE AL ÉXITO
+                  TESTIMONIO
                 </p>
                 <div class="h-1 w-[287px] bg-[var(--color-azulhorizonte)]"></div>
               </div>
               
-              <!-- Párrafo -->
+              <!-- Quote -->
               <div class="h-[141px] w-full">
                 <p class="flex h-full flex-col justify-center font-montserrat text-[20px] font-medium leading-7 text-[var(--color-black)]">
-                  Mi Gold no es solo una tarjeta virtual, es el resultado de años de disciplina. Gracias a crediscore hoy mi empresa inmobiliaria es un referente de  confiabilidad en el país
+                  {section.testimonial.quote}
                 </p>
               </div>
             </div>
@@ -55,10 +84,10 @@
             <!-- Author -->
             <div class="flex w-[129px] flex-col items-start">
               <p class="font-montserrat text-[16px] font-bold leading-[21px] tracking-[-0.03em] text-[var(--color-black)]">
-                Alejandro Marín
+                {section.testimonial.author}
               </p>
               <p class="font-montserrat text-[14px] font-semibold italic leading-[19px] tracking-[-0.03em] text-[var(--color-azulhorizonte)]">
-                Gerente de Temex
+                {section.testimonial.role}
               </p>
             </div>
           </div>
@@ -71,7 +100,7 @@
         class="flex h-[87px] w-[763px] items-center justify-center gap-[10px] rounded-[16px] bg-[#4585c6] p-3 transition-all hover:bg-[#3a74ae]"
       >
         <span class="font-montserrat text-[36px] font-semibold text-white">
-          Inicia tu Evolución Financiera
+          {section.cta.text}
         </span>
         <svg width="61" height="60" viewBox="0 0 61 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
           <path d="M12.75 30H48.25M48.25 30L30.5 12.25M48.25 30L30.5 47.75" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>

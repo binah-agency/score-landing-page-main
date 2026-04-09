@@ -1,0 +1,62 @@
+---
+// Container Component - Flexible container with responsive behavior
+import { tokens } from '../ui/design-system/index.js';
+
+interface Props {
+  children: any;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | 'full';
+  fluid?: boolean;
+  centered?: boolean;
+  className?: string;
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  as?: 'div' | 'section' | 'main' | 'article' | 'aside' | 'footer' | 'header' | 'nav';
+}
+
+const { 
+  children, 
+  size = 'lg',
+  fluid = false,
+  centered = true,
+  className = '',
+  padding = 'md',
+  as: Tag = 'div'
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'max-w-sm',
+  md: 'max-w-md',
+  lg: 'max-w-lg',
+  xl: 'max-w-xl',
+  '2xl': 'max-w-2xl',
+  '3xl': 'max-w-3xl',
+  '4xl': 'max-w-4xl',
+  '5xl': 'max-w-5xl',
+  '6xl': 'max-w-6xl',
+  '7xl': 'max-w-7xl',
+  full: 'max-w-full'
+};
+
+const paddingClasses = {
+  none: '',
+  sm: 'px-4 sm:px-6',
+  md: 'px-4 sm:px-6 lg:px-8',
+  lg: 'px-6 sm:px-8 lg:px-12',
+  xl: 'px-8 sm:px-12 lg:px-16'
+};
+
+const centeredClasses = centered ? 'mx-auto' : '';
+const fluidClasses = fluid ? 'w-full' : '';
+---
+
+<Tag
+  class={[
+    'w-full',
+    !fluid && sizeClasses[size],
+    centeredClasses,
+    fluidClasses,
+    paddingClasses[padding],
+    className
+  ].join(' ')}
+>
+  {children}
+</Tag>

@@ -1,0 +1,20 @@
+---
+export interface Props {
+  title: string;
+  subtitle: string;
+  screen: "desktop" | "tablet" | "mobile";
+}
+
+const { 
+  title, 
+  subtitle,
+} = Astro.props;
+---
+
+<div class={"w-full max-w-[1306px] px-[52px] text-center"}>
+  <p class={"font-montserrat text-[32px] font-medium capitalize leading-[64px] text-[var(--color-verdevitalidad)]"}>
+    {title}
+  </p>
+  <p class={"font-montserrat text-[52px] font-bold leading-[64px]"} set:html={subtitle}>
+  </p>
+</div>

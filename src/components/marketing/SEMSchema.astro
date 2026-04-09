@@ -1,0 +1,203 @@
+---
+// SEM Schema Component - Structured Data for Search Engines
+interface Props {
+  type?: string;
+  name?: string;
+  description?: string;
+  url?: string;
+  logo?: string;
+  image?: string;
+  telephone?: string;
+  email?: string;
+  address?: string;
+  foundingDate?: string;
+  numberOfEmployees?: string;
+  areaServed?: string;
+  serviceType?: string;
+  priceRange?: string;
+  openingHours?: string[];
+}
+
+const {
+  type = "Organization",
+  name = "CrediScore",
+  description = "CrediScore es la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial y te abre puertas a oportunidades financieras.",
+  url = "https://crediscore.ve",
+  logo = "https://crediscore.ve/logo.png",
+  image = "https://crediscore.ve/og-image.jpg",
+  telephone = "+58-212-1234567",
+  email = "contacto@crediscore.ve",
+  address = "Caracas, Venezuela",
+  foundingDate = "2023",
+  numberOfEmployees = "11-50",
+  areaServed = "VE",
+  serviceType = "Financial Services",
+  priceRange = "$$",
+  openingHours = ["Mo-Fr 09:00-18:00", "Sa 09:00-13:00"]
+} = Astro.props;
+
+// Organization Schema
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": type,
+  "name": name,
+  "description": description,
+  "url": url,
+  "logo": logo,
+  "image": image,
+  "telephone": telephone,
+  "email": email,
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "VE",
+    "addressLocality": "Caracas",
+    "addressRegion": "Distrito Capital"
+  },
+  "foundingDate": foundingDate,
+  "numberOfEmployees": numberOfEmployees,
+  "areaServed": areaServed,
+  "serviceType": serviceType,
+  "priceRange": priceRange,
+  "openingHours": openingHours,
+  "sameAs": [
+    "https://www.facebook.com/crediscore",
+    "https://www.twitter.com/crediscore",
+    "https://www.instagram.com/crediscore",
+    "https://www.linkedin.com/company/crediscore"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": telephone,
+    "contactType": "customer service",
+    "availableLanguage": ["Spanish"]
+  }
+};
+
+// Website Schema
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": name,
+  "url": url,
+  "description": description,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": `${url}/search?q={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
+};
+
+// Service Schema
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Scoring Crediticio",
+  "description": "Evaluación de confianza técnica y reputación comercial en Venezuela",
+  "provider": {
+    "@type": "Organization",
+    "name": name,
+    "url": url
+  },
+  "serviceType": "Financial Service",
+  "areaServed": areaServed,
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios de CrediScore",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Evaluación de Score",
+          "description": "Análisis completo de tu reputación comercial"
+        }
+      },
+      {
+        "@type": "Offer", 
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Certificación de Confianza",
+          "description": "Pasaporte de confiabilidad técnica"
+        }
+      }
+    ]
+  }
+};
+
+// FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué es exactamente CrediScore?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No somos una entidad financiera tradicional. Somos la primera infraestructura de confianza técnica en Venezuela. Utilizamos un Sistema de Apoyo a Decisiones (DSS) para ofrecerte una radiografía de tu salud económica en tiempo real."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Por qué dicen que es un modelo probado en 170 países?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque la metodología de validación que utilizamos es el estándar global en las economías más avanzadas del mundo. Traemos a Venezuela una tecnología que ya dinamiza el crecimiento en más de 170 países."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿CrediScore me da dinero o préstamos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CrediScore es el engranaje tecnológico que genera la confianza necesaria para que el dinero y los negocios fluyan. Nosotros validamos tu perfil; esa validación es la que te abre las puertas con empresas y proveedores."
+      }
+    }
+  ]
+};
+
+// Local Business Schema
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": name,
+  "description": description,
+  "url": url,
+  "telephone": telephone,
+  "email": email,
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "VE",
+    "addressLocality": "Caracas",
+    "addressRegion": "Distrito Capital",
+    "streetAddress": "Avenida Libertador, Caracas"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "10.4806",
+    "longitude": "-66.9036"
+  },
+  "openingHours": openingHours,
+  "priceRange": priceRange,
+  "paymentAccepted": ["Cash", "Credit Card", "Bank Transfer"],
+  "currenciesAccepted": "VES"
+};
+---
+
+<!-- Organization Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
+
+<!-- Website Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
+
+<!-- Service Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)}></script>
+
+<!-- FAQ Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<!-- Local Business Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)}></script>

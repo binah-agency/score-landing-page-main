@@ -1,0 +1,42 @@
+{
+  "section": {
+    "id": "value-proposal",
+    "title": {
+      "line1": "Más que un número, es un",
+      "line2": "Sello de Validez"
+    },
+    "subtitle": "Tu Score de Oportunidad es tu pasaporte hacia un futuro financiero mejor",
+    "benefits": [
+      {
+        "title": "Acceso Inmediato",
+        "description": "Obtén tu score en minutos sin trámites complicados",
+        "icon": "clock"
+      },
+      {
+        "title": "Seguridad Total",
+        "description": "Tus datos están protegidos con encriptación de nivel bancario",
+        "icon": "shield"
+      },
+      {
+        "title": "Actualización Continua",
+        "description": "Tu score se actualiza en tiempo real con cada acción financiera",
+        "icon": "refresh"
+      },
+      {
+        "title": "Reconocimiento Universal",
+        "description": "Aceptado por más de 100 instituciones financieras en Venezuela",
+        "icon": "award"
+      }
+    ],
+    "testimonial": {
+      "quote": "Gracias a Crediscore, pude obtener el financiamiento para mi negocio en menos de 24 horas. ¡Increíble!",
+      "author": "María González",
+      "role": "Emprendedora",
+      "rating": 5
+    },
+    "cta": {
+      "text": "Comienza tu viaje financiero hoy",
+      "subtext": "Únete a más de 50,000 venezolanos que ya confían en Crediscore"
+    }
+  }
+}

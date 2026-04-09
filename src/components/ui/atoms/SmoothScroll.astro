@@ -1,0 +1,94 @@
+---
+// SmoothScroll Component - Global smooth scroll functionality
+---
+
+<!-- Global smooth scroll styles -->
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Smooth scroll for all anchor links */
+  a[href^="#"] {
+    scroll-margin-top: 100px; /* Account for fixed header */
+  }
+  
+  /* Target elements with smooth scroll offset */
+  [id] {
+    scroll-margin-top: 100px;
+  }
+  
+  /* Disable smooth scroll for users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  // Enhanced smooth scroll functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle all anchor links with smooth scrolling
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    
+    anchorLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        const targetId = href.replace('#', '');
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          e.preventDefault();
+          
+          // Calculate scroll position with header offset
+          const headerHeight = 100; // Approximate header height
+          const targetPosition = targetElement.offsetTop - headerHeight;
+          
+          // Smooth scroll to target
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+          
+          // Update URL without jumping
+          history.pushState(null, null, href);
+          
+          // Add focus to target element for accessibility
+          targetElement.focus({ preventScroll: true });
+        }
+      });
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function() {
+      const hash = window.location.hash;
+      if (hash) {
+        const targetElement = document.querySelector(hash);
+        if (targetElement) {
+          const headerHeight = 100;
+          const targetPosition = targetElement.offsetTop - headerHeight;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+    
+    // Handle page load with hash
+    if (window.location.hash) {
+      setTimeout(() => {
+        const targetElement = document.querySelector(window.location.hash);
+        if (targetElement) {
+          const headerHeight = 100;
+          const targetPosition = targetElement.offsetTop - headerHeight;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    }
+  });
+</script>

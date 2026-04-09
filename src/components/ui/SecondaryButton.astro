@@ -2,18 +2,64 @@
 interface Props {
   label: string;
   href?: string;
+  onClick?: string;
+  disabled?: boolean;
+  loading?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'outline' | 'ghost';
   class?: string;
+  dataTrack?: string;
 }
 
-const { label, href = '#', class: className = '' } = Astro.props;
+const { 
+  label, 
+  href = '#', 
+  onClick, 
+  disabled = false, 
+  loading = false, 
+  size = 'md', 
+  variant = 'outline',
+  class: className = '',
+  dataTrack 
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'h-10 px-4 text-[16px]',
+  md: 'h-14 px-6 text-[20px]', 
+  lg: 'h-16 px-8 text-[22px]'
+};
+
+const variantClasses = {
+  outline: 'border-2 border-[var(--color-azulhorizonte)] text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)] hover:text-white',
+  ghost: 'border-2 border-transparent text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)]/10'
+};
+
+const Tag = href ? 'a' : 'button';
 ---
 
-<a
-  href={href}
+<Tag
+  {href && {href}}
+  {onClick && {onclick: onClick}}
+  {disabled && {disabled}}
+  {dataTrack && {['data-track']: dataTrack}}
   class:list={[
-    'inline-flex h-14 items-center justify-center whitespace-nowrap rounded-lg border-2 border-[var(--color-azulhorizonte,#3467b0)] px-6 text-[20px] font-semibold text-[var(--color-azulhorizonte,#3467b0)] transition-colors hover:bg-[var(--color-azulhorizonte,#3467b0)] hover:text-white',
+    'inline-flex items-center justify-center whitespace-nowrap rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[var(--color-azulhorizonte)]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[var(--color-azulhorizonte)] active:scale-[0.98]',
+    sizeClasses[size],
+    variantClasses[variant],
+    loading && 'opacity-75 cursor-not-allowed',
     className,
   ]}
+  aria-disabled={disabled || loading}
 >
-  {label}
-</a>
+  {loading ? (
+    <>
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Cargando...
+    </>
+  ) : (
+    label
+  )}
+</Tag>
