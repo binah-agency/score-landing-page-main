@@ -1,0 +1,62 @@
+---
+export interface Props {
+  totalCards: number;
+  config?: {
+    gap: string;
+    height: string;
+    width: string;
+    borderRadius: string;
+  };
+}
+
+const { totalCards, config = {
+  gap: "7px",
+  height: "h-4",
+  width: "w-[62px]",
+  borderRadius: "rounded-[24px]"
+} } = Astro.props;
+---
+
+<div class={`flex items-center justify-center gap-[${config.gap}]`}>
+  {Array.from({ length: totalCards }, (_, index) => (
+    <button 
+      class={`promo-dot ${config.height} ${config.width} ${config.borderRadius} bg-[var(--color-azulhorizonte)] transition-colors duration-300`} 
+      data-index={index}
+      aria-label={`Slide ${index + 1}`}
+    />
+  ))}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dots = document.querySelectorAll('.promo-dot') as NodeListOf<HTMLElement>;
+    
+    if (!dots.length) return;
+
+    function updateIndicators(activeIndex: number) {
+      dots.forEach((dot, i) => {
+        if (i === activeIndex) {
+          dot.classList.remove('bg-[var(--color-azulhorizonte)]');
+          dot.classList.add('bg-[var(--color-verdevitalidad)]');
+        } else {
+          dot.classList.remove('bg-[var(--color-verdevitalidad)]');
+          dot.classList.add('bg-[var(--color-azulhorizonte)]');
+        }
+      });
+    }
+
+    // Click en dots
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        if ((window as any).promoCarousel) {
+          (window as any).promoCarousel.goToSlide(index);
+        }
+      });
+    });
+
+    // Exponer función para comunicación externa
+    (window as any).promoIndicators = {
+      updateIndicators
+    };
+  });
+</script>

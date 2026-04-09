@@ -1,0 +1,228 @@
+---
+export interface Props {
+  card: {
+    src: string;
+    alt: string;
+  };
+  index: number;
+  className?: string;
+}
+
+const { card, index, className = "" } = Astro.props;
+---
+
+<div
+  class="promo-card bg-transparent absolute cursor-pointer transition-all duration-700 ease-out"
+  data-index={index}
+>
+  <div class="flip-card w-full relative h-full text-white bg-transparent">
+    <div class="flip-card-inner bg-transparent">
+      <div class="flip-card-front">
+        <div
+          class="relative py-10 gap-4 flex flex-col justify-center items-center w-full h-full bg-gradient-to-br from-[#00a8e8] to-[#006ba5] rounded-2xl"
+        >
+          <div
+            class="absolute -top-4 max-w-[300px] p-2 bg-indigo-800 rounded-full items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex"
+          >
+            <span
+              class="flex rounded-full bg-indigo-500 uppercase px-2 py-1 text-xs font-bold mr-3"
+              >Nuevo</span
+            >
+            <span class="font-semibold mr-2 text-left flex-auto"
+              >Tus Beneficios</span
+            >
+            <svg
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              class="fill-current opacity-75 h-4 w-4"
+              ><path
+                d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z"
+              ></path></svg
+            >
+          </div>
+          
+          <div class="flex flex-col items-center">
+            <p class="text-4xl font-extrabold">ESMERALDA</p>
+            <p
+              class="relative text-sm inline-block after:absolute after:content-[''] after:ml-2 after:top-1/2 after:bg-sky-200 after:w-12 after:h-0.5 before:absolute before:content-[''] before:-ml-14 before:top-1/2 before:bg-sky-200 before:w-12 before:h-0.5"
+            >
+              nivel
+            </p>
+          </div>
+
+          <div
+            class="mx-auto w-full max-w-xs relative flex flex-col items-center justify-center text-center overflow-visible"
+          >
+            <h3 class="text-3xl font-bold">Get Started Now</h3>
+            <div
+              class="w-full relative flex flex-col items-center justify-center"
+            >
+              <div
+                class="absolute inset-x-auto top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-full blur-sm"
+              >
+              </div>
+              <div
+                class="absolute inset-x-auto top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-full"
+              >
+              </div>
+              <div
+                class="absolute inset-x-auto top-0 bg-gradient-to-r from-transparent via-purple-400 to-transparent h-[5px] w-1/2 blur-sm"
+              >
+              </div>
+              <div
+                class="absolute inset-x-auto top-0 bg-gradient-to-r from-transparent via-purple-400 to-transparent h-px w-1/2"
+              >
+              </div>
+              <div
+                style=""
+                class="absolute inset-0 w-full h-full bg-background [mask-image:radial-gradient(50%_200px_at_top,transparent_20%,white)]"
+              >
+              </div>
+            </div>
+            <p class="mt-6 text-sm">
+              Be part of millions people around the world using modern User
+              Interfaces.
+            </p>
+
+            <span
+              class="absolute -z-[1] backdrop-blur-sm inset-0 w-full h-full flex before:content-[''] before:h-3/4 before:w-full before:bg-gradient-to-r before:from-black before:to-purple-600 before:blur-[90px] after:content-[''] after:h-1/2 after:w-full after:bg-gradient-to-br after:from-cyan-400 after:to-sky-300 after:blur-[90px]"
+            ></span>
+          </div>
+          
+        </div>
+      </div>
+      <div class="flip-card-back">
+        <div class="flex flex-col items-center">
+          <p class="text-4xl font-extrabold">ESMERALDA</p>
+          <p
+            class="relative text-sm inline-block after:absolute after:content-[''] after:ml-2 after:top-1/2 after:bg-sky-200 after:w-12 after:h-0.5 before:absolute before:content-[''] before:-ml-14 before:top-1/2 before:bg-sky-200 before:w-12 before:h-0.5"
+          >
+            nivel
+          </p>
+        </div>
+        <div class="strip"></div>
+        <div class="mstrip"></div>
+        <div class="sstrip">
+          <p class="code">***</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* From Uiverse.io by Praashoo7 */
+  .flip-card {
+    perspective: 1000px;
+  }
+
+  .valid_thru {
+    position: absolute;
+    font-weight: bold;
+    top: 635.8em;
+    font-size: 0.01em;
+    left: 140.3em;
+  }
+
+  .date_8264 {
+    position: absolute;
+    font-weight: bold;
+    font-size: 0.5em;
+    top: 13.6em;
+    left: 3.2em;
+  }
+
+  .name {
+    position: absolute;
+    font-weight: bold;
+    font-size: 0.5em;
+    top: 16.1em;
+    left: 2em;
+  }
+
+  .strip {
+    position: absolute;
+    background-color: black;
+    width: 15em;
+    height: 1.5em;
+    top: 2.4em;
+    background: repeating-linear-gradient(
+      45deg,
+      #303030,
+      #303030 10px,
+      #202020 10px,
+      #202020 20px
+    );
+  }
+
+  .mstrip {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 8em;
+    height: 0.8em;
+    top: 5em;
+    left: 0.8em;
+    border-radius: 2.5px;
+  }
+
+  .sstrip {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    width: 4.1em;
+    height: 0.8em;
+    top: 5em;
+    left: 10em;
+    border-radius: 2.5px;
+  }
+
+  .code {
+    font-weight: bold;
+    text-align: center;
+    margin: 0.2em;
+    color: black;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 1rem;
+  }
+
+  .flip-card-front {
+    box-shadow:
+      rgba(0, 0, 0, 0.4) 0px 2px 2px,
+      rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+      rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+    background-color: #171717;
+  }
+
+  .flip-card-back {
+    box-shadow:
+      rgba(0, 0, 0, 0.4) 0px 2px 2px,
+      rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+      rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+    background-color: #171717;
+    transform: rotateY(180deg);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import SectionTitle from '../atoms/SectionTitle.astro';
+import PromoCarouselContainer from './PromoCarouselContainer.astro';
+import PromoIndicators from '../molecules/PromoIndicators.astro';
+import PromoClaim from '../atoms/PromoClaim.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  description: string;
+  cards: Array<{ src: string; alt: string }>;
+
+}
+
+const { title, subtitle, description, cards } = Astro.props;
+---
+
+<div
+  class="w-full flex flex-col justify-center items-center gap-6 hidden lg:flex"
+  id="promo-desktop"
+>
+  <div class="w-full">
+    <!-- Título -->
+    <SectionTitle
+      data={{
+        title: title,
+        subtitle: subtitle,
+        titleColor: "text-[var(--color-black)]",
+        subtitleColor: "text-[var(--color-azulhorizonte)]",
+      }}
+      variant="desktop"
+    />
+  </div>
+
+  <!-- Área del carrusel -->
+  <PromoCarouselContainer
+    cards={cards}
+  />
+
+  <!-- Indicadores -->
+  <PromoIndicators totalCards={cards.length}  />
+
+  <!-- Párrafo descriptivo -->
+  <PromoClaim description={description} screen="desktop" />
+
+  <div class="absolute inset-0 w-full h-full -z-10 bg-white [background:radial-gradient(125%_125%_at_50%_10%,var(--color-azulhorizonte-light)_40%,var(--color-white)_100%)]"></div>
+</div>

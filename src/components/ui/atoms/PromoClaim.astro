@@ -1,0 +1,35 @@
+---
+export interface Props {
+  description: string;
+  screen: "desktop" | "tablet" | "mobile";
+}
+
+const { 
+  description,
+  screen = "desktop"
+} = Astro.props;
+---
+{screen==="desktop" && (
+  <div class={`w-full "max-w-[1043px]" "px-5"`}>
+  <div class="bg-white rounded-2xl p-8 border border-gray-100">
+    <p class="text-center font-montserrat text-[24px] font-medium leading-7 text-[var(--color-black)]" set:html={description}>
+    </p>
+  </div>
+</div>
+)}
+{screen==="tablet" && (
+  <div class={`w-full "max-w-[1043px]" "px-5"`}>
+  <div class="bg-white rounded-2xl p-8 border border-gray-100">
+    <p class="text-center font-montserrat text-[24px] font-medium leading-7 text-[var(--color-black)]" set:html={description}>
+    </p>
+  </div>
+</div>
+)}
+{screen==="mobile" && (
+  <div class={`w-full "max-w-[1043px]" "px-5"`}>
+  <div class="bg-white rounded-2xl p-8 border border-gray-100">
+    <p class="text-center font-montserrat text-[24px] font-medium leading-7 text-[var(--color-black)]" set:html={description}>
+    </p>
+  </div>
+</div>
+)}

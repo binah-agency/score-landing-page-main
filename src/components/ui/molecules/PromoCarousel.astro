@@ -1,0 +1,133 @@
+---
+import PromoCard from '../atoms/PromoCard.astro';
+
+export interface Props {
+  cards: Array<{
+    src: string;
+    alt: string;
+  }>;
+  config?: {
+    totalCards: number;
+    initialIndex: number;
+    autoplayInterval: number;
+    dimensions: {
+      large: { width: number; height: number };
+      small: { width: number; height: number };
+    };
+    positions: {
+      farLeft: { x: number; opacity: number; zIndex: number; top: number };
+      left: { x: number; opacity: number; zIndex: number; top: number };
+      center: { x: number; opacity: number; zIndex: number; top: number };
+      right: { x: number; opacity: number; zIndex: number; top: number };
+      farRight: { x: number; opacity: number; zIndex: number; top: number };
+    };
+  };
+}
+
+const { cards, config = {
+  totalCards: 5,
+  initialIndex: 2,
+  autoplayInterval: 3000,
+  dimensions: {
+    large: { width: 400, height: 340 },
+    small: { width: 340, height: 254 }
+  },
+  positions: {
+    farLeft: { x: -700, opacity: 0, zIndex: 1, top: 70 },
+    left: { x: -420, opacity: 0.7, zIndex: 2, top: 20 },
+    center: { x: 0, opacity: 1, zIndex: 3, top: 0 },
+    right: { x: 420, opacity: 0.7, zIndex: 2, top: 20 },
+    farRight: { x: 700, opacity: 0, zIndex: 1, top: 70 }
+  }
+} } = Astro.props;
+---
+
+<div id="promo-carousel" class="relative flex h-full w-full items-center justify-center">
+  {cards.map((card, index) => (
+    <PromoCard 
+      card={card}
+      index={index}
+    />
+  ))}
+</div>
+
+<script define:vars={{ config }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.promo-card');
+    
+    if (!cards.length) return;
+
+    let currentIndex = config.initialIndex;
+    let autoplayTimer;
+
+    function getPosition(cardIndex, activeIndex) {
+      const diff = (cardIndex - activeIndex + config.totalCards) % config.totalCards;
+      
+      if (diff === 0) return 'center';
+      if (diff === 1) return 'right';
+      if (diff === config.totalCards - 1) return 'left';
+      if (diff === 2) return 'farRight';
+      return 'farLeft';
+    }
+
+    function updateCarousel() {
+      cards.forEach((card, index) => {
+        const posKey = getPosition(index, currentIndex);
+        const pos = config.positions[posKey];
+        const dimensions = posKey === 'center' ? config.dimensions.large : config.dimensions.small;
+        
+        // Aplicar estilos
+        card.style.transform = `translateX(${pos.x}px) translateY(${pos.top}px)`;
+        card.style.filter = `blur(${posKey === 'center' ? 0 : 2}px)`;
+        card.style.transition = 'all 0.5s cubic-bezier(0, 0.55, 0.45, 1)';
+        card.style.boxShadow = '0 0px 100px var(--color-azulhorizonte)';
+        card.style.width = `${dimensions.width}px`;
+        card.style.height = `${dimensions.height}px`;
+        card.style.opacity = String(pos.opacity);
+        card.style.zIndex = String(pos.zIndex);
+      });
+
+      // Actualizar indicadores
+      if (window.promoIndicators) {
+        window.promoIndicators.updateIndicators(currentIndex);
+      }
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % config.totalCards;
+      updateCarousel();
+    }
+
+    function startAutoplay() {
+      autoplayTimer = setInterval(nextSlide, config.autoplayInterval);
+    }
+
+    function resetAutoplay() {
+      clearInterval(autoplayTimer);
+      startAutoplay();
+    }
+
+    // Click en tarjetas
+    cards.forEach((card, index) => {
+      card.addEventListener('click', () => {
+        currentIndex = index;
+        updateCarousel();
+        resetAutoplay();
+      });
+    });
+
+    // Inicializar
+    updateCarousel();
+    startAutoplay();
+
+    // Exponer funciones para comunicación externa
+    window.promoCarousel = {
+      goToSlide: (index) => {
+        currentIndex = index;
+        updateCarousel();
+        resetAutoplay();
+      },
+      updateCarousel
+    };
+  });
+</script>
