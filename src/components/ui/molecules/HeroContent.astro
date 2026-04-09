@@ -1,0 +1,79 @@
+---
+import HeroBanner from '../atoms/HeroBanner.astro';
+import HeroTagline from '../atoms/HeroTagline.astro';
+import Claim from '../atoms/Claim.astro';
+import CTAButton from '../atoms/CTAButton.astro';
+
+export interface Props {
+  bannerText: string;
+  taglineLines: string[];
+  claimText: string;
+  ctaHref: string;
+  ctaText: string;
+  containerClass?: string;
+  screen: "desktop" | "tablet" | "mobile";
+}
+
+const { 
+  bannerText,
+  taglineLines,
+  claimText,
+  ctaHref,
+  ctaText,
+  containerClass = "flex w-[570px] flex-col items-center gap-[72px]",
+  screen
+} = Astro.props;
+---
+
+{screen === "desktop" && (<div class={containerClass}>
+  <!-- Banner -->
+  <HeroBanner text={bannerText} screen="desktop" />
+
+  <!-- Tagline -->
+  <HeroTagline lines={taglineLines} screen="desktop" />
+
+  <!-- Claim -->
+  <div class="h-[113px] w-full">
+    <Claim text={claimText} className="h-6 w-[570px]" />
+  </div>
+
+  <!-- CTA Button -->
+  <CTAButton href={ctaHref} text={ctaText} />
+</div>)}
+{screen === "tablet" && (
+      <div class="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-16">
+
+        <!-- Banner -->
+        <HeroBanner text={bannerText} screen="tablet" />
+
+        <!-- Tagline -->
+        <HeroTagline lines={taglineLines} screen="tablet" />
+
+        <!-- Claim -->
+        <div class="h-[113px] w-[570px]">
+          <Claim text={claimText} className="text-center" />
+        </div>
+
+        <!-- CTA Button -->
+        <CTAButton href={ctaHref} text={ctaText} />
+        
+      </div>
+)}
+{screen === "mobile" && (
+      <div class="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center  gap-10">
+
+        <!-- Tagline -->
+        <HeroTagline lines={taglineLines} screen="mobile" />
+
+
+        <!-- Claim -->
+        <div class="w-full">
+          <Claim text={claimText} className="text-center" />
+        </div>
+
+        <!-- CTA Button -->
+        <CTAButton href={ctaHref} text={ctaText} />
+        
+      </div>
+)}
+

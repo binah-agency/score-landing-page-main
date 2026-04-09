@@ -1,0 +1,69 @@
+---
+import heroImage from '../../../assest/hero/hero-bg.png?url';
+
+export interface Props {
+  containerClass?: string;
+  opacity?: number;
+  showGradient?: boolean;
+  gradientClass?: string;
+  screen?: "desktop" | "tablet" | "mobile";
+}
+
+const { 
+  containerClass = "hero-image-container h-[775px] w-[907px]", 
+  opacity = 1,
+  showGradient = true,
+  gradientClass = "absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent",
+  screen = "desktop"
+} = Astro.props;
+---
+
+<div class={containerClass}>
+  <div 
+    class="absolute top-0 left-0 h-[781px] w-[911px]"
+  >
+    <img 
+      src={heroImage} 
+      alt="CrediScore App" 
+      class={"h-[105%] w-[197%] max-w-none object-cover"} 
+      style={`position: absolute; left: -95.75%; top: -2.32%; opacity: ${opacity};`} 
+    />
+    {showGradient && (
+      <div class="absolute inset-0 bg-gradient-to-r from-white to-white/10"></div>
+    )}
+  </div>
+</div>
+{screen === "tablet" && (
+     
+      <div class="hero-image-container absolute right-0 top-0 h-[775px] w-[907px] overflow-hidden ">
+        <div 
+          class="absolute top-0 left-0 h-[781px] w-[911px]" 
+        >
+          <img 
+            src={heroImage} 
+            alt="CrediScore App" 
+            class="h-[105%] w-[197%] max-w-none object-cover " 
+            style="position: absolute; left: -95.75%; top: -2.32%;" 
+          />
+       
+          <div class="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/70"></div>
+        </div>
+      </div>
+)}
+
+{screen === "mobile" && (
+     
+      <div class="hero-image-container absolute right-0 top-0 h-[775px] w-[907px] overflow-hidden">
+        <div 
+          class="absolute top-0 left-0 h-[781px] w-[911px]" 
+        >
+          <img 
+            src={heroImage} 
+            alt="CrediScore App" 
+            class="h-[105%] w-[197%] max-w-none object-cover" 
+            style="position: absolute; left: -95.75%; top: -2.32%;" 
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-white/75"></div>
+        </div>
+      </div>
+)}
