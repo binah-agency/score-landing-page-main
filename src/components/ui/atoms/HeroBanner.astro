@@ -1,0 +1,24 @@
+---
+export interface Props {
+  text: string;
+  screen?: 'desktop' | 'tablet' | 'mobile';
+}
+
+const { 
+  text, 
+  screen = 'desktop'
+} = Astro.props;
+---
+
+
+{screen === 'desktop' && (
+  <div class="flex h-[51px] w-full items-center justify-center gap-[10px] rounded-[12px] bg-white p-[10px]">
+    <span class="h-10 w-10 rounded bg-[var(--color-verdevitalidad)]"></span>
+    <p class="whitespace-nowrap text-[24px] font-extrabold text-[var(--color-verdevitalidad)]">{text}</p>
+  </div>
+)}{screen === 'tablet' && (
+  <div class="flex h-[51px] items-center justify-center gap-[10px] rounded-[12px] bg-[var(--color-verdevitalidad)] p-[10px]">
+    <span class="h-10 w-10 rounded bg-white"></span>
+    <p class="whitespace-nowrap text-[24px] font-extrabold text-white">{text}</p>
+  </div>
+)}
