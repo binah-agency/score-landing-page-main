@@ -14,9 +14,12 @@ const { section } = aboutData;
 ---
 
 <section class="relative flex align-center mx-auto h-fit w-full max-w-[1920px]" id={section.id}>
-  <div class="relative w-full h-[700px] my-10 sticky top-0 z-10">
+  <div class="relative justify-center items-center w-full h-[700px] my-10 sticky top-0 z-10">
     <!-- Título -->
-    <SectionTitle title={section.title} variant="desktop" />
+    <SectionTitle data={{
+      title: section.title.main,
+      subtitle: section.title.subtitle
+    }} variant="desktop" />
     <div class="relative h-full w-full grid justify-center vertical-center grid-cols-2">
       <!-- Scroll Container (izquierda) -->
       <div class="relative h-fit w-[90%] bg-blue-500 items-center justify-center align-middle justify-items-center rounded-br-[300px] rounded-tr-[300px] bg-[var(--color-azulhorizonte)] p-[10px]" style={{ top: '120px' }}  >
@@ -53,11 +56,11 @@ const { section } = aboutData;
           width="w-[604px]" 
         />
 
-        <!-- Item: Pioneros en Venezuela -->
+        <!-- Item: Somos Pioneros en Venezuela -->
         <FeatureItem 
           feature={section.features[1]} 
           icon="star" 
-          position={{ left: "left-[10px]", top: "top-[185px]" }} 
+          position={{ left: "left-[-40px]", top: "top-[185px]" }} 
           width="w-[379px]" 
         />
 
@@ -77,7 +80,10 @@ const { section } = aboutData;
 <!-- Versión Tablet -->
 <section class="relative mx-auto hidden h-auto min-h-[800px] w-full max-w-[1920px] bg-[var(--color-black)] px-5 py-16 md:block lg:hidden" id="nosotros-tablet">
   <!-- Título -->
-  <SectionTitle title={section.title} variant="tablet" />
+  <SectionTitle data={{
+    title: section.title.main,
+    subtitle: section.title.subtitle
+  }} variant="tablet" />
 
   <!-- Carousel -->
   <AboutCarousel 
@@ -96,13 +102,17 @@ const { section } = aboutData;
     iconWorld={iconWorld}
     iconStar={iconStar}
     iconCheckbox={iconCheckbox}
+    screen="tablet"
   />
 </section>
 
 <!-- Versión Mobile -->
 <section class="relative mx-auto block w-full bg-[var(--color-black)] px-5 py-12 md:hidden" id="nosotros-mobile">
   <!-- Título -->
-  <SectionTitle title={section.title} variant="mobile" />
+  <SectionTitle data={{
+    title: section.title.main,
+    subtitle: section.title.subtitle
+  }} variant="mobile" />
 
   <!-- Carousel -->
   <AboutCarousel 
@@ -121,7 +131,7 @@ const { section } = aboutData;
     iconWorld={iconWorld}
     iconStar={iconStar}
     iconCheckbox={iconCheckbox}
-    className="grid-cols-1 gap-6"
+    screen="mobile"
   />
 </section>
 
