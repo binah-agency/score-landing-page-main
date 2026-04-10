@@ -14,7 +14,7 @@ const { title, variant = 'desktop', className = '' } = Astro.props;
 ---
 
 {variant === 'desktop' ? (
-  <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
+  <div id="section-title" class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
     <p class="mb-2 w-full text-[24px] font-medium text-[var(--color-azulhorizonte)]">
       {title?.subtitle}
     </p>
@@ -23,7 +23,7 @@ const { title, variant = 'desktop', className = '' } = Astro.props;
     </h2>
   </div>
 ) : variant === 'tablet' ? (
-  <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
+  <div id="section-title" class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
     <p class="mb-2 w-full text-[20px] font-medium text-[var(--color-azulhorizonte)]">
       {title?.subtitle}
     </p>
@@ -32,7 +32,7 @@ const { title, variant = 'desktop', className = '' } = Astro.props;
     </h2>
   </div>
 ) : (
-  <div class={`relative left-1/2 w-full -translate-x-1/2 pb-4 text-center capitalize ${className}`}>
+  <div id="section-title" class={`relative left-1/2 w-full -translate-x-1/2 pb-4 text-center capitalize ${className}`}>
     <p class="mb-2 w-full text-[18px] font-medium text-[var(--color-azulhorizonte)]">
       {title?.subtitle}
     </p>
