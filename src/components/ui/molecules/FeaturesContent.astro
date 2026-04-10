@@ -8,23 +8,23 @@ export interface Props {
 const { title, subtitle, description } = Astro.props;
 ---
 
-<div class="flex w-[1125px] flex-col items-center gap-[41px]">
+<div class="flex w-full max-w-4xl flex-col items-center gap-8 sm:gap-10 lg:gap-12 px-4">
   <!-- Título principal -->
-  <div class="relative h-[110px] w-[918px]">
-    <p class="absolute left-[84.5px] top-[23px] font-montserrat text-[64px] font-bold leading-[64px] text-white">
+  <div class="relative w-full text-center">
+    <p class="font-montserrat text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight sm:leading-tight lg:leading-tight text-white">
       {title}
     </p>
   </div>
   
   <!-- Subtítulo y párrafo -->
-  <div class="flex w-full flex-col items-start gap-[41px]">
+  <div class="flex w-full flex-col items-center gap-6 sm:gap-8 lg:gap-10 text-center">
     <div class="flex flex-col items-center justify-center">
-      <p class="font-montserrat text-[32px] font-normal leading-8 text-[var(--color-verdevitalidad)]">
+      <p class="font-montserrat text-xl sm:text-2xl lg:text-3xl font-normal leading-relaxed text-[var(--color-verdevitalidad)]">
         {subtitle}
       </p>
     </div>
-    <div class="relative h-[112px] w-full">
-      <p class="absolute left-0 top-6 font-montserrat text-[24px] font-medium leading-8 text-[var(--color-azulhorizonte40)]">
+    <div class="w-full">
+      <p class="font-montserrat text-lg sm:text-xl lg:text-2xl font-medium leading-relaxed text-[var(--color-azulhorizonte40)]">
         {description}
       </p>
     </div>
