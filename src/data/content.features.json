@@ -7,7 +7,7 @@
       {
         "title": "Perfil Inicial",
         "range": "300-480",
-        "iconColor": "#f57c00",
+        "iconColor": "#FF9800",
 "description": "Comienza tu viaje financiero construyendo tu historial de confianza",
         "benefits": [
           "Acceso básico a servicios",
@@ -18,7 +18,7 @@
       {
         "title": "Perfil en Avance",
         "range": "481-599",
-        "iconColor": "#2196f3",
+        "iconColor": "#2196F3",
         "description": "Demuestra consistencia y responsabilidad financiera",
         "benefits": [
           "Mejores tasas de interés",
@@ -29,7 +29,7 @@
       {
         "title": "Perfil Aceptable",
         "range": "600-699",
-        "iconColor": "#4caf50",
+        "iconColor": "#4CAF50",
         "description": "Alto nivel de confiabilidad y experiencia financiera",
         "benefits": [
           "Tasas preferenciales",
@@ -40,7 +40,7 @@
       {
         "title": "Perfil Confiable",
         "range": "700-800",
-        "iconColor": "#9c27b0",
+        "iconColor": "#673AB7",
         "description": "Máxima confianza y excelencia financiera",
         "benefits": [
           "Condiciones especiales",

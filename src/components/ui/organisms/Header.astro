@@ -9,16 +9,17 @@ import heroData from '../../../data/content.hero.json';
 const { header } = heroData;
 ---
 
-<header class="mx-auto w-full max-w-[1682px]">
+<header class="fixed top-10 left-0 right-0 z-50 mx-auto w-full max-w-[1682px] bg-white/40 backdrop-blur-xl border-b border-white/18 shadow-2xl shadow-slate-900/20 rounded-full" 
+>
   <!-- Desktop Header -->
-  <div class="hidden h-24 items-center rounded-full bg-white p-2 lg:flex">
+  <div class="hidden h-20 items-center rounded-full bg-transparent/10 backdrop-blur-sm p-2 lg:flex">
     <Logo size="desktop" />
     <Navigation items={header.navigation} />
     <HeaderActions actions={header.actions} />
   </div>
 
   <!-- Tablet Header (md screens) -->
-  <div class="hidden h-24 items-center justify-between rounded-full bg-white px-5 py-[10px] md:flex lg:hidden">
+  <div class="hidden h-24 items-center justify-between rounded-full bg-transparent/10 backdrop-blur-sm px-5 py-[10px] md:flex lg:hidden">
     <Logo size="tablet" />
     <div class="flex h-[72px] w-[100px] items-center px-[30px]">
       <img src={menuIcon} alt="Menu" class="h-10 w-10 cursor-pointer" />
@@ -26,7 +27,7 @@ const { header } = heroData;
   </div>
 
   <!-- Mobile Header -->
-  <div class="flex h-[80px] items-center justify-between rounded-[60px] bg-white px-5 py-[10px] md:hidden">
+  <div class="flex h-[80px] items-center justify-between rounded-[60px] bg-transparent/10 backdrop-blur-sm px-5 py-[10px] md:hidden">
     <Logo size="mobile" />
     <div class="flex h-[72px] items-center px-2">
       <img src={menuIcon} alt="Menu" class="h-10 w-10 cursor-pointer" />
