@@ -22,8 +22,10 @@ export interface Props {
   };
 }
 
-const { cards, config = {
-  totalCards: cards.length,
+const { cards, config = {} } = Astro.props;
+
+const defaultConfig = {
+  totalCards: 5,
   initialIndex: 2,
   autoplayInterval: 3000,
   dimensions: {
@@ -37,7 +39,9 @@ const { cards, config = {
     right: { x: 420, opacity: 0.5, zIndex: 2, top: 20 },
     farRight: { x: 700, opacity: 0, zIndex: 1, top: 70 }
   }
-} } = Astro.props;
+};
+
+const finalConfig = { ...defaultConfig, ...config };
 ---
 
 <div id="promo-carousel" class="relative flex h-full w-full items-center justify-center">
@@ -49,21 +53,21 @@ const { cards, config = {
   ))}
 </div>
 
-<script define:vars={{ config }}>
+<script define:vars={{ finalConfig }}>
   document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.promo-card');
     
     if (!cards.length) return;
 
-    let currentIndex = config.initialIndex;
+    let currentIndex = finalConfig.initialIndex;
     let autoplayTimer;
 
     function getPosition(cardIndex, activeIndex) {
-      const diff = (cardIndex - activeIndex + config.totalCards) % config.totalCards;
+      const diff = (cardIndex - activeIndex + finalConfig.totalCards) % finalConfig.totalCards;
       
       if (diff === 0) return 'center';
       if (diff === 1) return 'right';
-      if (diff === config.totalCards - 1) return 'left';
+      if (diff === finalConfig.totalCards - 1) return 'left';
       if (diff === 2) return 'farRight';
       return 'farLeft';
     }
@@ -71,8 +75,8 @@ const { cards, config = {
     function updateCarousel() {
       cards.forEach((card, index) => {
         const posKey = getPosition(index, currentIndex);
-        const pos = config.positions[posKey];
-        const dimensions = posKey === 'center' ? config.dimensions.large : config.dimensions.small;
+        const pos = finalConfig.positions[posKey];
+        const dimensions = posKey === 'center' ? finalConfig.dimensions.large : finalConfig.dimensions.small;
         
         // Aplicar estilos
         card.style.transform = `translateX(${pos.x}px) translateY(${pos.top}px)`;
@@ -92,12 +96,12 @@ const { cards, config = {
     }
 
     function nextSlide() {
-      currentIndex = (currentIndex + 1) % config.totalCards;
+      currentIndex = (currentIndex + 1) % finalConfig.totalCards;
       updateCarousel();
     }
 
     function startAutoplay() {
-      autoplayTimer = setInterval(nextSlide, config.autoplayInterval);
+      autoplayTimer = setInterval(nextSlide, finalConfig.autoplayInterval);
     }
 
     function resetAutoplay() {

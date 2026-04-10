@@ -1,83 +1,43 @@
 ---
 export interface TitleData {
-<<<<<<< HEAD
-  title: string;
-  titleColor?: string;
-  subtitleColor?: string;
-  subtitle: string;
-} 
-
-export interface Props {
-  data: TitleData;
-=======
   main: string;
   subtitle: string;
 }
 
 export interface Props {
   title: TitleData;
->>>>>>> 61b8518 (update 080426)
   variant?: 'desktop' | 'tablet' | 'mobile';
   className?: string;
 }
 
-<<<<<<< HEAD
-const { data, variant = 'desktop', className = '' } = Astro.props;
-=======
 const { title, variant = 'desktop', className = '' } = Astro.props;
->>>>>>> 61b8518 (update 080426)
 ---
 
 {variant === 'desktop' ? (
   <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
-<<<<<<< HEAD
-    <p class={`mb-2 w-full text-[24px] font-medium ${data?.subtitleColor || 'text-[var(--color-azulhorizonte)]'}`}>
-      {data?.subtitle}
-    </p>
-    <h2 class={`w-full text-[36px] font-bold leading-tight tracking-[-1.44px] ${data?.titleColor || 'text-[var(--color-black)]'}`}>
-      {data?.title}
-=======
     <p class="mb-2 w-full text-[24px] font-medium text-[var(--color-azulhorizonte)]">
-      {title.subtitle}
+      {title?.subtitle}
     </p>
     <h2 class="w-full whitespace-pre-wrap text-[36px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-black)]">
-      {title.main}
->>>>>>> 61b8518 (update 080426)
+      {title?.main}
     </h2>
   </div>
 ) : variant === 'tablet' ? (
   <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
-<<<<<<< HEAD
-    <p class={`mb-2 w-full text-[20px] font-medium ${data?.subtitleColor || 'text-[var(--color-white)]'}`}>
-      {data?.subtitle}
-    </p>
-    <h2 class={`w-full whitespace-nowrap text-[30px] font-bold leading-tight tracking-[-1.44px] ${data?.titleColor || 'text-[var(--color-white)]'}`}>
-      {data?.title}
-    </h2>
-  </div>  
-) : (
-  <div class={`relative left-1/2 w-full -translate-x-1/2 pb-4 text-center capitalize ${className}`}>
-    <p class={`whitespace-nowrap mb-2 w-full text-[18px] font-medium ${data?.subtitleColor || 'text-[var(--color-white)]'}`}>
-      {data?.subtitle}
-    </p>
-    <h2 class={`whitespace-wrap w-full text-[28px] font-bold leading-tight ${data?.titleColor || 'text-[var(--color-white)]'}`}>
-      {data?.title}
-=======
     <p class="mb-2 w-full text-[20px] font-medium text-[var(--color-azulhorizonte)]">
-      {title.subtitle}
+      {title?.subtitle}
     </p>
     <h2 class="w-full whitespace-pre-wrap text-[30px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-white)]">
-      {title.main}
+      {title?.main}
     </h2>
   </div>
 ) : (
-  <div class={`relative left-1/2 w-[1306px] -translate-x-1/2 px-[52px] pb-4 text-center capitalize ${className}`}>
+  <div class={`relative left-1/2 w-full -translate-x-1/2 pb-4 text-center capitalize ${className}`}>
     <p class="mb-2 w-full text-[18px] font-medium text-[var(--color-azulhorizonte)]">
-      {title.subtitle}
+      {title?.subtitle}
     </p>
-    <h2 class="w-full whitespace-pre-wrap text-[32px] font-bold leading-tight tracking-[-1.44px] text-[var(--color-white)]">
-      {title.main}
->>>>>>> 61b8518 (update 080426)
+    <h2 class="w-full whitespace-pre-wrap text-[28px] font-bold leading-tight text-[var(--color-white)]">
+      {title?.main}
     </h2>
   </div>
 )}

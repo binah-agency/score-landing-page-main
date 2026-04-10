@@ -1,17 +1,10 @@
 ---
 export interface Props {
-<<<<<<< HEAD
-  screen?: 'desktop' | 'tablet' | 'mobile';
+  size?: 'desktop' | 'tablet' | 'mobile';
   variant?: 'compact' | 'full';
 }
 
-const { screen = 'desktop', variant = 'full' } = Astro.props;
-=======
-  size?: 'desktop' | 'tablet' | 'mobile';
-}
-
-const { size = 'desktop' } = Astro.props;
->>>>>>> 61b8518 (update 080426)
+const { size = 'desktop', variant = 'full' } = Astro.props;
 
 import logoIcon from '../../../assest/ddb6da78-cb69-4dc6-b81e-c8e7de675d82.svg?url';
 
@@ -33,8 +26,7 @@ const sizeClasses = {
   }
 };
 
-<<<<<<< HEAD
-const currentSize = sizeClasses[screen];
+const currentSize = sizeClasses[size];
 ---
 
 <div class="flex items-center px-10 py-[10px] w-fit h-fit">
@@ -45,17 +37,4 @@ const currentSize = sizeClasses[screen];
     <span class={currentSize.textContainer}>Credi</span>
     <span class={currentSize.subtext}>score</span>
   </div>}
-=======
-const currentSize = sizeClasses[size];
----
-
-<div class="flex items-center px-10 py-[10px]">
-  <div class="flex {currentSize.container} items-center justify-center px-2 py-5">
-    <img src={logoIcon} alt="Crediscore" class="h-12 w-20 object-contain" />
-  </div>
-  <div class="flex items-end text-[var(--color-azulhorizonte-alt)]">
-    <span class={currentSize.textContainer}>Credi</span>
-    <span class={currentSize.subtext}>score</span>
-  </div>
->>>>>>> 61b8518 (update 080426)
 </div>

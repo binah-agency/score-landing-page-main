@@ -8,11 +8,7 @@
         "title": "Perfil Inicial",
         "range": "300-480",
         "iconColor": "#f57c00",
-<<<<<<< HEAD
-        "description": "Comienza tu viaje financiero construye tu historial",
-=======
-        "description": "Comienza tu viaje financiero construyendo tu historial de confianza",
->>>>>>> 61b8518 (update 080426)
+"description": "Comienza tu viaje financiero construyendo tu historial de confianza",
         "benefits": [
           "Acceso básico a servicios",
           "Reportes mensuales",

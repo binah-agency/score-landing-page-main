@@ -31,15 +31,12 @@
     ],
     "actions": [
       {
-<<<<<<< HEAD
-=======
         "text": "Quiero saber más",
         "href": "#faq",
         "primary": false,
         "icon": "info"
       },
       {
->>>>>>> 61b8518 (update 080426)
         "text": "Descargar App",
         "href": "#download",
         "primary": true,

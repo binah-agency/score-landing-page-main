@@ -2,6 +2,11 @@
   "title": "Cada nivel desbloquea nuevas oportunidades",
   "subtitle": "EVOLUCIONA TU ID DE CONFIANZA",
   "description": "Desde tu ID Zafiro hasta convertirte en un miembro Élite.",
+  "config": {
+    "layout": {
+      "gradientWidth": "w-[200px]"
+    }
+  },
   "cards": [
     {
       "id": "zafiro",

@@ -23,12 +23,6 @@ const { section } = featuresData;
       <div class="absolute inset-0 z-10 flex h-full w-full flex-col items-center justify-between py-8 sm:py-12 lg:py-16">
         
         <!-- CardsContainer - 4 tarjetas -->
-<<<<<<< HEAD
-        <div class="flex w-full items-start justify-center gap-2 sm:gap-3 lg:gap-4 flex-wrap lg:flex-nowrap">
-          
-          {section.cards.map((card, index) => (
-            <FeatureCard card={card} isActive={index === 0} />
-=======
         <div class="flex w-full items-start justify-center gap-4">
           
           {section.cards.map((card, index) => (
@@ -81,19 +75,10 @@ const { section } = featuresData;
                 </div>
               </div>
             </div>
->>>>>>> 61b8518 (update 080426)
           ))}
         </div>
 
         <!-- Content inferior (título y descripción) -->
-<<<<<<< HEAD
-        <div class="w-full max-w-4xl mx-auto">
-          <FeaturesContent 
-            title={section.title}
-            subtitle={section.subtitle}
-            description={section.description}
-          />
-=======
         <div class="flex w-[1125px] flex-col items-center gap-[41px]">
           <!-- Título principal -->
           <div class="relative h-[110px] w-[918px]">
@@ -115,7 +100,6 @@ const { section } = featuresData;
               </p>
             </div>
           </div>
->>>>>>> 61b8518 (update 080426)
         </div>
 
       </div>
