@@ -1,11 +1,9 @@
 ---
 import PromoCarousel from '../molecules/PromoCarousel.astro';
+import type { CardData } from '../atoms/PromoCard.astro';
 
 export interface Props {
-  cards: Array<{
-    src: string;
-    alt: string;
-  }>;
+  cards: Array<CardData>;
   config?: {
     carouselHeight: string;
     carousel?: any;

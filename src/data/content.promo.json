@@ -1,27 +1,77 @@
 {
-  "title": "TU NIVEL DE CONFIANZA",
+  "title": "Cada nivel desbloquea nuevas oportunidades",
   "subtitle": "EVOLUCIONA TU ID DE CONFIANZA",
-  "description": "Desde tu ID Zafiro hasta convertirte en un miembro Élite. Cada nivel<br/>desbloquea nuevas ofertas financieras verificadas por el sistema DSS de Crediscore",
+  "description": "Desde tu ID Zafiro hasta convertirte en un miembro Élite.",
   "cards": [
     {
-      "src": "/src/assest/promo/card-zafiro.png",
-      "alt": "Tarjeta Zafiro - Nivel inicial de confianza"
+      "id": "zafiro",
+      "name": "ZAFIRO",
+      "level": "nivel",
+      "src": "/images/cards/zafiro-card.png",
+      "alt": "Tarjeta Zafiro - Nivel inicial de confianza",
+      "badge": {
+        "text": "Nuevo",
+        "label": "Tus Beneficios"
+      },
+      "title": "Comienza ahora mismo",
+      "description": "Llegó el momento de validar tu confianza",
+      "theme": "blue"
     },
     {
-      "src": "/src/assest/promo/card-esmeralda.png",
-      "alt": "Tarjeta Esmeralda - Nivel intermedio de confianza"
+      "id": "esmeralda",
+      "name": "ESMERALDA",
+      "level": "nivel",
+      "src": "/images/cards/esmeralda-card.png",
+      "alt": "Tarjeta Esmeralda - Nivel intermedio de confianza",
+      "badge": {
+        "text": "Nuevo",
+        "label": "Tus Beneficios"
+      },
+      "title": "Comienza ahora mismo",
+      "description": "Llegó el momento de validar tu confianza",
+      "theme": "teal"
     },
     {
-      "src": "/src/assest/promo/card-silver.png",
-      "alt": "Tarjeta Silver - Nivel avanzado de confianza"
+      "id": "silver",
+      "name": "SILVER",
+      "level": "nivel",
+      "src": "/images/cards/silver-card.png",
+      "alt": "Tarjeta Silver - Nivel avanzado de confianza",
+      "badge": {
+        "text": "Nuevo",
+        "label": "Tus Beneficios"
+      },
+      "title": "Comienza ahora mismo",
+      "description": "Llegó el momento de validar tu confianza",
+      "theme": "gray"
     },
     {
-      "src": "/src/assest/promo/card-gold.png",
-      "alt": "Tarjeta Gold - Nivel alto de confianza"
+      "id": "gold",
+      "name": "GOLD",
+      "level": "nivel",
+      "src": "/images/cards/gold-card.png",
+      "alt": "Tarjeta Gold - Nivel alto de confianza",
+      "badge": {
+        "text": "Nuevo",
+        "label": "Tus Beneficios"
+      },
+      "title": "Comienza ahora mismo",
+      "description": "Llegó el momento de validar tu confianza",
+      "theme": "yellow"
     },
     {
-      "src": "/src/assest/promo/card-elite.png",
-      "alt": "Tarjeta Elite - Nivel máximo de confianza"
+      "id": "elite",
+      "name": "ÉLITE",
+      "level": "nivel",
+      "src": "/images/cards/elite-card.png",
+      "alt": "Tarjeta Elite - Nivel máximo de confianza",
+      "badge": {
+        "text": "Nuevo",
+        "label": "Tus Beneficios"
+      },
+      "title": "Comienza ahora mismo",
+      "description": "Llegó el momento de validar tu confianza",
+      "theme": "dark"
     }
   ]
 }

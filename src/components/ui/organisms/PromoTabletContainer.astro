@@ -3,12 +3,13 @@ import SectionTitle from '../atoms/SectionTitle.astro';
 import PromoCarouselContainer from './PromoCarouselContainer.astro';
 import PromoIndicators from '../molecules/PromoIndicators.astro';
 import PromoClaim from '../atoms/PromoClaim.astro';
+import type { CardData } from '../atoms/PromoCard.astro';
 
 interface Props {
   title: string;
   subtitle: string;
   description: string;
-  cards: Array<{ src: string; alt: string }>;
+  cards: Array<CardData>;
 
 }
 
