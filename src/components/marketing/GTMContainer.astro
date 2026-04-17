@@ -1,305 +1,295 @@
 ---
-// GTM Container Component - Google Tag Manager
-interface Props {
-  gtmId?: string;
-  enableDataLayer?: boolean;
-  enablePreview?: boolean;
-  customDataLayer?: Record<string, any>;
-  consentMode?: boolean;
-  regions?: string[];
+// src/components/GTM.astro
+import gtmContainerConfig from '../../data/marketing/gtm-container-config.json';
+import CookieBanner from '../ui/molecules/CookieBanner.astro';
+
+// Extend Window interface for consent handler
+declare global {
+  interface Window {
+    handleConsentUpdate: (consent: unknown) => void;
+  }
 }
 
+interface Props {
+  id: string;
+  config?: GTMConfig;
+  autoTrack?: AutoTrackConfig;
+  dataLayer?: DataLayerDefaults;
+  consent?: ConsentConfig;
+}
+
+// Declarative configuration types
+type GTMConfig = {
+  enablePreview?: boolean;
+  cookieFlags?: string;
+  [key: string]: unknown;
+};
+
+type AutoTrackConfig = {
+  pageView?: boolean;
+  scroll?: boolean | { milestones: number[] };
+  timeOnPage?: boolean | { intervals: number[] };
+  errors?: boolean;
+  performance?: boolean;
+  spaNavigation?: boolean;
+};
+
+type DataLayerDefaults = {
+  page?: Record<string, string>;
+  user?: Record<string, unknown>;
+  product?: Record<string, string>;
+  campaign?: Record<string, string | null>;
+  technology?: Record<string, string>;
+  business?: Record<string, string>;
+  [key: string]: Record<string, unknown> | undefined;
+};
+
+type ConsentConfig = {
+  enabled?: boolean;
+  regions?: string[];
+  defaults?: Record<string, 'granted' | 'denied'>;
+};
+
+// Merge props with sensible defaults loaded from JSON (declarative, not imperative)
 const {
-  gtmId = "GTM-NKMKSDN5", // Replace with actual GTM ID
-  enableDataLayer = true,
-  enablePreview = false,
-  customDataLayer = {},
-  consentMode = true,
-  regions = ["VE", "CO", "MX", "AR", "PE", "CL"]
+  id = "GTM-NKMKSDN5",
+  config = {},
+  autoTrack = gtmContainerConfig.defaultAutoTrack,
+  dataLayer = gtmContainerConfig.defaultDataLayer,
+  consent = gtmContainerConfig.defaultConsent
 } = Astro.props;
 
-// Initialize dataLayer
-const initialDataLayer = {
-  page: {
-    title: "CrediScore | Tu Puntaje, Tu Futuro Económico",
-    url: "https://crediscore.ve",
-    path: "/",
-    language: "es",
-    country: "VE",
-    category: "landing-page",
-    subcategory: "fintech"
-  },
-  user: {
-    id: null, // Will be populated dynamically
-    type: "anonymous",
-    segment: "prospect",
-    login_status: false
-  },
-  product: {
-    name: "CrediScore",
-    category: "financial-technology",
-    type: "scoring-platform",
-    version: "1.0"
-  },
-  campaign: {
-    source: null, // Will be populated from URL params
-    medium: null,
-    campaign: null,
-    term: null,
-    content: null
-  },
-  technology: {
-    platform: "web",
-    framework: "astro",
-    browser: null, // Will be detected dynamically
-    device: null, // Will be detected dynamically
-    screen_resolution: null // Will be detected dynamically
-  },
-  business: {
-    region: "LATAM",
-    country: "VE",
-    currency: "VES",
-    timezone: "America/Caracas"
-  },
-  ...customDataLayer
+// Build initial dataLayer declaratively
+const dlBase = {
+  ...gtmContainerConfig.defaultDataLayer,
+  ...dataLayer
 };
 ---
 
-<!-- Google Tag Manager -->
-<script is:inline>
-  // Initialize dataLayer
+<!-- Google Tag Manager - Declarative Injection -->
+<script is:inline define:vars={{ id, config, autoTrack, dlBase, consent }}>
+  // ─────────────────────────────────────────────────────────────
+  // 1. INIT (Declarative bootstrap)
+  // ─────────────────────────────────────────────────────────────
   window.dataLayer = window.dataLayer || [];
-  
-  // Initial dataLayer push
-  window.dataLayer.push({
-    'event': 'dataLayer-initialized',
-    'page': {
-      'title': document.title,
-      'url': window.location.href,
-      'path': window.location.pathname,
-      'language': 'es',
-      'country': 'VE',
-      'category': 'landing-page',
-      'subcategory': 'fintech'
+  const push = (obj) => dataLayer.push(obj);
+
+  // ─────────────────────────────────────────────────────────────
+  // 2. DATA LAYER (Declarative initial state)
+  // ─────────────────────────────────────────────────────────────
+  const buildInitialDL = () => ({
+    event: 'dataLayer-initialized',
+    page: {
+      ...dlBase.page,
+      title: document.title,
+      url: location.href,
+      path: location.pathname
     },
-    'user': {
-      'id': null,
-      'type': 'anonymous',
-      'segment': 'prospect',
-      'login_status': false
+    user: { ...dlBase.user },
+    product: { ...dlBase.product },
+    campaign: Object.fromEntries(
+      Object.entries(dlBase.campaign || {}).map(([k]) => [k, new URLSearchParams(location.search).get(`utm_${k}`)])
+    ),
+    technology: {
+      ...dlBase.technology,
+      browser: navigator.userAgent.split(' ')[0],
+      device: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+      screen_resolution: `${screen.width}x${screen.height}`
     },
-    'product': {
-      'name': 'CrediScore',
-      'category': 'financial-technology',
-      'type': 'scoring-platform',
-      'version': '1.0'
+    business: {
+      ...dlBase.business,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     },
-    'campaign': {
-      'source': new URLSearchParams(window.location.search).get('utm_source'),
-      'medium': new URLSearchParams(window.location.search).get('utm_medium'),
-      'campaign': new URLSearchParams(window.location.search).get('utm_campaign'),
-      'term': new URLSearchParams(window.location.search).get('utm_term'),
-      'content': new URLSearchParams(window.location.search).get('utm_content')
-    },
-    'technology': {
-      'platform': 'web',
-      'framework': 'astro',
-      'browser': navigator.userAgent.split(' ')[0],
-      'device': /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
-      'screen_resolution': `${screen.width}x${screen.height}`
-    },
-    'business': {
-      'region': 'LATAM',
-      'country': 'VE',
-      'currency': 'VES',
-      'timezone': Intl.DateTimeFormat().resolvedOptions().timeZone
-    },
-    'timestamp': new Date().toISOString()
+    timestamp: new Date().toISOString()
   });
 
-  // Consent Mode Configuration
-  {consentMode.toString() && `
-  window.dataLayer.push({
-    'event': 'consent_mode',
-    'consent': {
-      'analytics_storage': 'granted',
-      'ad_storage': 'granted',
-      'ad_user_data': 'granted',
-      'ad_personalization': 'granted',
-      'functionality_storage': 'granted',
-      'personalization_storage': 'granted',
-      'security_storage': 'granted'
-    }
-  });
-  `}
+  push(buildInitialDL());
 
-  // GTM Script
-  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  // ─────────────────────────────────────────────────────────────
+  // 3. CONSENT MODE (Declarative toggle)
+  // ─────────────────────────────────────────────────────────────
+  if (consent.enabled) {
+    push({
+      event: 'consent_mode',
+      consent: consent.defaults,
+      regions: consent.regions
+    });
+  }
 
-    // Track form submissions
-    trackForm: function(formId, formData = {}) {
-      window.dataLayer.push({
-        'event': 'form_submit',
-        'form': {
-          'id': formId,
-          'data': formData
-        },
-        'timestamp': new Date().toISOString()
+  // ─────────────────────────────────────────────────────────────
+  // 4. TRACKING API (Declarative, chainable, extensible)
+  // ─────────────────────────────────────────────────────────────
+  const utils = {
+    // Core push wrapper
+    _push: (event, payload = {}) => push({ event, ...payload, timestamp: new Date().toISOString() }),
+
+    // Page view
+    pageView: (p = {}) => push({
+      event: 'page_view',
+      page: {
+        title: p.title || document.title,
+        url: p.url || location.href,
+        path: p.path || location.pathname,
+        ...p
+      }
+    }),
+
+    // Form submission
+    trackForm: (formId, formData = {}) => 
+      utils._push('form_submit', { form: { id: formId, data: formData } }),
+
+    // Conversion
+    trackConversion: (type, value = 0, currency = 'VES') => 
+      utils._push('conversion', { conversion: { type, value, currency } }),
+
+    // User update
+    updateUser: (userData = {}) => 
+      utils._push('user_update', { user: userData }),
+
+    // E-commerce
+    trackEcommerce: (eventType, ecommerceData) => 
+      utils._push(eventType, { ecommerce: ecommerceData }),
+
+    // Scroll depth
+    trackScroll: (depth) => {
+      utils._push('scroll_tracking', { 
+        scroll: { depth, max_depth: Math.max(depth, utils._maxScroll || 0) } 
       });
+      utils._maxScroll = Math.max(depth, utils._maxScroll || 0);
     },
 
-    // Track conversions
-    trackConversion: function(conversionType, conversionValue = 0, currency = 'VES') {
-      window.dataLayer.push({
-        'event': 'conversion',
-        'conversion': {
-          'type': conversionType,
-          'value': conversionValue,
-          'currency': currency
-        },
-        'timestamp': new Date().toISOString()
-      });
-    },
+    // Time on page
+    trackTimeOnPage: (seconds) => 
+      utils._push('time_on_page', { 
+        timing: { value: seconds, category: 'engagement', label: 'time_on_page' } 
+      }),
 
-    // Update user data
-    updateUser: function(userData = {}) {
-      window.dataLayer.push({
-        'event': 'user_update',
-        'user': userData,
-        'timestamp': new Date().toISOString()
-      });
-    },
+    // Error tracking
+    trackError: (type, message, url = null, line = null) => 
+      utils._push('error_tracking', { 
+        error: { type, message, url: url || location.href, line, user_agent: navigator.userAgent } 
+      }),
 
-    // E-commerce tracking
-    trackEcommerce: function(eventType, ecommerceData) {
-      window.dataLayer.push({
-        'event': eventType,
-        'ecommerce': ecommerceData,
-        'timestamp': new Date().toISOString()
-      });
-    },
+    // Performance metrics
+    trackPerformance: (metrics = {}) => 
+      utils._push('performance_tracking', { 
+        performance: {
+          load_time: metrics.loadTime || 0,
+          dom_interactive: metrics.domInteractive || 0,
+          first_contentful_paint: metrics.firstContentfulPaint || 0,
+          largest_contentful_paint: metrics.largestContentfulPaint || 0
+        } 
+      }),
 
-    // Track scroll depth
-    trackScroll: function(scrollDepth) {
-      window.dataLayer.push({
-        'event': 'scroll_tracking',
-        'scroll': {
-          'depth': scrollDepth,
-          'max_depth': Math.max(scrollDepth, window.gtmUtils.maxScrollDepth || 0)
-        },
-        'timestamp': new Date().toISOString()
-      });
-      
-      window.gtmUtils.maxScrollDepth = Math.max(scrollDepth, window.gtmUtils.maxScrollDepth || 0);
-    },
+    // Debug helper
+    debug: (msg, data) => config.enablePreview && push({ event: 'debug', message: msg, ...data }),
 
-    // Track time on page
-    trackTimeOnPage: function(timeInSeconds) {
-      window.dataLayer.push({
-        'event': 'time_on_page',
-        'timing': {
-          'value': timeInSeconds,
-          'category': 'engagement',
-          'label': 'time_on_page'
-        },
-        'timestamp': new Date().toISOString()
-      });
-    },
-
-    // Track errors
-    trackError: function(errorType, errorMessage, errorUrl = null, errorLine = null) {
-      window.dataLayer.push({
-        'event': 'error_tracking',
-        'error': {
-          'type': errorType,
-          'message': errorMessage,
-          'url': errorUrl || window.location.href,
-          'line': errorLine,
-          'user_agent': navigator.userAgent
-        },
-        'timestamp': new Date().toISOString()
-      });
-    },
-
-    // Track performance
-    trackPerformance: function(metrics = {}) {
-      window.dataLayer.push({
-        'event': 'performance_tracking',
-        'performance': {
-          'load_time': metrics.loadTime || 0,
-          'dom_interactive': metrics.domInteractive || 0,
-          'first_contentful_paint': metrics.firstContentfulPaint || 0,
-          'largest_contentful_paint': metrics.largestContentfulPaint || 0
-        },
-        'timestamp': new Date().toISOString()
-      });
-    }
+    // Internal state
+    _maxScroll: 0,
+    _timeElapsed: 0
   };
 
-  // Auto-track page views on SPA navigation
-  let currentPath = window.location.pathname;
-  const observer = new MutationObserver(() => {
-    if (window.location.pathname !== currentPath) {
-      currentPath = window.location.pathname;
-      window.gtmUtils.pageView();
-    }
-  });
-  observer.observe(document, { subtree: true, childList: true });
+  // Expose API globally (same as original)
+  window.gtmUtils = utils;
 
-  // Track scroll depth automatically
-  let maxScrollDepth = 0;
-  window.addEventListener('scroll', function() {
-    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const currentScroll = window.pageYOffset;
-    const scrollPercentage = Math.round((currentScroll / scrollHeight) * 100);
-    
-    if (scrollPercentage > maxScrollDepth) {
-      maxScrollDepth = scrollPercentage;
-      window.gtmUtils.trackScroll(scrollPercentage);
-    }
-  });
+  // ─────────────────────────────────────────────────────────────
+  // 5. AUTO-TRACKERS (Declarative registry pattern)
+  // ─────────────────────────────────────────────────────────────
+  const trackers = {
+    pageView: () => { /* Initial push already sent */ },
 
-  // Track time on page milestones
-  let timeOnPage = 0;
-  setInterval(() => {
-    timeOnPage++;
-    if (timeOnPage === 30 || timeOnPage === 60 || timeOnPage === 180) {
-      window.gtmUtils.trackTimeOnPage(timeOnPage);
-    }
-  }, 1000);
+    scroll: (cfg) => {
+      const milestones = cfg?.milestones || [25, 50, 75, 90, 100];
+      let max = 0;
+      window.addEventListener('scroll', () => {
+        const maxScroll = document.documentElement.scrollHeight - innerHeight;
+        const pct = Math.round((pageYOffset / maxScroll) * 100);
+        if (pct > max) {
+          max = pct;
+          if (milestones.some(m => pct >= m && max >= m)) {
+            utils.trackScroll(pct);
+          }
+        }
+      });
+    },
 
-  // Track JavaScript errors
-  window.addEventListener('error', function(e) {
-    window.gtmUtils.trackError('javascript', e.message, e.filename, e.lineno);
-  });
+    timeOnPage: (cfg) => {
+      const intervals = cfg?.intervals || [30, 60, 180];
+      const tracked = new Set();
+      setInterval(() => {
+        utils._timeElapsed++;
+        if (intervals.includes(utils._timeElapsed) && !tracked.has(utils._timeElapsed)) {
+          utils.trackTimeOnPage(utils._timeElapsed);
+          tracked.add(utils._timeElapsed);
+        }
+      }, 1000);
+    },
 
-  // Track performance metrics
-  window.addEventListener('load', function() {
-    if ('performance' in window && 'getEntriesByType' in performance) {
-      const navigationEntries = performance.getEntriesByType('navigation');
-      if (navigationEntries.length > 0) {
-        const navEntry = navigationEntries[0];
-        window.gtmUtils.trackPerformance({
+    errors: () => {
+      window.addEventListener('error', (e) => 
+        utils.trackError('javascript', e.message, e.filename, e.lineno)
+      );
+    },
+
+    performance: () => {
+      window.addEventListener('load', () => {
+        if (!performance?.getEntriesByType) return;
+        const [nav] = performance.getEntriesByType('navigation') || [];
+        if (!nav) return;
+        utils.trackPerformance({
           loadTime: navEntry.loadEventEnd - navEntry.loadEventStart,
           domInteractive: navEntry.domInteractive - navEntry.navigationStart,
           firstContentfulPaint: navEntry.domContentLoadedEventStart - navEntry.navigationStart,
           largestContentfulPaint: navEntry.loadEventEnd - navEntry.navigationStart
         });
-      }
+      });
+    },
+
+    spaNavigation: () => {
+      let currentPath = location.pathname;
+      const observer = new MutationObserver(() => {
+        if (location.pathname !== currentPath) {
+          currentPath = location.pathname;
+          utils.pageView();
+        }
+      });
+      observer.observe(document, { subtree: true, childList: true });
+    }
+  };
+
+  // ─────────────────────────────────────────────────────────────
+  // 6. ACTIVATE AUTO-TRACKERS (Declarative, opt-in)
+  // ─────────────────────────────────────────────────────────────
+  Object.entries(autoTrack).forEach(([key, enabled]) => {
+    if (enabled && trackers[key]) {
+      trackers[key](enabled === true ? undefined : enabled);
     }
   });
 
-  // Debug mode for development
-  {enablePreview.toString() && `
-  window.dataLayer.push({
-    'event': 'gtm.debug',
-    'debug_mode': true
-  });
-  `
+  // ─────────────────────────────────────────────────────────────
+  // 7. GTM LOADER (Declarative script injection)
+  // ─────────────────────────────────────────────────────────────
+  (function(w,d,s,l,i){
+    w[l]=w[l]||[];
+    w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+    const f=d.getElementsByTagName(s)[0], j=d.createElement(s);
+    j.async=true; j.src=`https://www.googletagmanager.com/gtm.js?id=${i}${config.enablePreview ? '&gtm_debug=x' : ''}`;
+    f.parentNode.insertBefore(j,f);
+  })(window, document, 'script', 'dataLayer', id);
+
+  // Debug mode event
+  if (config.enablePreview) {
+    push({ event: 'gtm.debug', debug_mode: true });
+  }
+
+  // Consent update handler (exposed for template)
+  window.handleConsentUpdate = (consentData) => push({ event: 'consent_update', consent: consentData });
+</script>
+
 <!-- GTM NoScript Fallback -->
 <noscript>
   <iframe 
-    src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+    src={`https://www.googletagmanager.com/ns.html?id=${id}`}
     height="0" 
     width="0" 
     style="display:none;visibility:hidden"
@@ -307,18 +297,10 @@ const initialDataLayer = {
   ></iframe>
 </noscript>
 
-import CookieBanner from '../ui/molecules/CookieBanner.astro';
-
-// Cookie Consent Banner
-{consentMode.toString() && <CookieBanner 
-  onConsentUpdate={(consent) => {
-    window.dataLayer.push({
-      'event': 'consent_update',
-      'consent': consent
-    });
-  }}
-  onSettingsClick={() => {
-    // Placeholder for detailed cookie settings modal
-    alert('Configuración detallada de cookies próximamente disponible');
-  }}
-/>}
+<!-- Cookie Consent Banner (Declarative integration) -->
+{consent.enabled && (
+  <CookieBanner 
+    onConsentUpdate={(consent) => window.handleConsentUpdate(consent)}
+    onSettingsClick={() => alert('Configuración detallada de cookies próximamente disponible')}
+  />
+)}

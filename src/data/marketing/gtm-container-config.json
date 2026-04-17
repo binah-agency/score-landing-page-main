@@ -1,0 +1,74 @@
+{
+  "defaultConfig": {
+    "enablePreview": false,
+    "cookieFlags": "SameSite=Lax;Secure"
+  },
+  "defaultAutoTrack": {
+    "pageView": true,
+    "scroll": {
+      "milestones": [25, 50, 75, 90, 100]
+    },
+    "timeOnPage": {
+      "intervals": [30, 60, 180]
+    },
+    "errors": true,
+    "performance": true,
+    "spaNavigation": true
+  },
+  "defaultDataLayer": {
+    "page": {
+      "title": "CrediScore | Tu Puntaje, Tu Futuro Económico",
+      "url": "https://crediscore.ve",
+      "path": "/",
+      "language": "es",
+      "country": "VE",
+      "category": "landing-page",
+      "subcategory": "fintech"
+    },
+    "user": {
+      "id": null,
+      "type": "anonymous",
+      "segment": "prospect",
+      "login_status": false
+    },
+    "product": {
+      "name": "CrediScore",
+      "category": "financial-technology",
+      "type": "scoring-platform",
+      "version": "1.0"
+    },
+    "campaign": {
+      "source": null,
+      "medium": null,
+      "campaign": null,
+      "term": null,
+      "content": null
+    },
+    "technology": {
+      "platform": "web",
+      "framework": "astro",
+      "browser": null,
+      "device": null,
+      "screen_resolution": null
+    },
+    "business": {
+      "region": "LATAM",
+      "country": "VE",
+      "currency": "VES",
+      "timezone": "America/Caracas"
+    }
+  },
+  "defaultConsent": {
+    "enabled": true,
+    "regions": ["VE", "CO", "MX", "AR", "PE", "CL"],
+    "defaults": {
+      "analytics_storage": "granted",
+      "ad_storage": "granted",
+      "ad_user_data": "granted",
+      "ad_personalization": "granted",
+      "functionality_storage": "granted",
+      "personalization_storage": "granted",
+      "security_storage": "granted"
+    }
+  }
+}

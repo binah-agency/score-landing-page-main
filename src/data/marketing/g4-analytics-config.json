@@ -1,0 +1,48 @@
+{
+  "defaultConfig": {
+    "send_page_view": true,
+    "cookie_domain": "auto",
+    "cookie_flags": "SameSite=Lax;Secure",
+    "first_party_collection": true,
+    "transport_type": "beacon",
+    "enhanced_measurement": {
+      "page_visibility": true,
+      "scrolls": true,
+      "outbound_clicks": true,
+      "page_changes": true,
+      "searches": true,
+      "video_engagement": true,
+      "file_downloads": true,
+      "form_interactions": true
+    },
+    "link_attribution": true,
+    "debug_mode": false,
+    "sample_rate": 100,
+    "site_speed_sample_rate": 1,
+    "allow_google_signals": true,
+    "allow_ad_personalization_signals": false
+  },
+  "defaultAutoTrack": {
+    "visibility": true,
+    "scroll": {
+      "milestones": [25, 50, 75, 90, 100]
+    },
+    "outboundLinks": true,
+    "downloads": {
+      "extensions": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".zip", ".jpg", ".png"]
+    },
+    "forms": true,
+    "videos": true,
+    "errors": true,
+    "performance": true,
+    "coreWebVitals": true
+  },
+  "defaultUserProperties": {
+    "page_type": "landing_page",
+    "industry": "fintech",
+    "country": "venezuela",
+    "language": "spanish"
+  },
+  "defaultCustomDimensions": {},
+  "defaultCustomMetrics": {}
+}

@@ -1,203 +1,432 @@
 ---
-// SEM Schema Component - Structured Data for Search Engines
+// src/components/SEMSchema.astro
+import semSchemaConfig from '../../data/marketing/sem-schema-config.json';
+
 interface Props {
-  type?: string;
-  name?: string;
-  description?: string;
+  entity?: EntityConfig;
+  schemas?: SchemaConfig;
+  output?: OutputConfig;
+}
+
+// ───────── Declarative Type Definitions ─────────
+type EntityConfig = {
+  // Core identity
+  name: string;
+  description: string;
+  url: string;
+  
+  // Branding
+  logo?: string;
+  image?: string;
+  
+  // Contact
+  telephone?: string;
+  email?: string;
+  address?: string | PostalAddressConfig;
+  
+  // Business details
+  foundingDate?: string;
+  numberOfEmployees?: string;  // schema.org range: "1-10", "11-50", etc.
+  areaServed?: string | string[];  // ISO code or array: "VE" | ["VE", "CO"]
+  priceRange?: string;  // "$", "$$", "$$$"
+  
+  // Service specifics
+  serviceType?: string;
+  serviceDescription?: string;
+  serviceOffers?: ServiceOffer[];
+  
+  // Social & discovery
+  sameAs?: string[];  // Social/profile URLs
+  keywords?: string[];
+  
+  // Local business
+  geo?: GeoCoordinatesConfig;
+  openingHours?: string[];  // schema.org format: "Mo-Fr 09:00-18:00"
+  paymentAccepted?: string[];
+  currenciesAccepted?: string;
+  
+  // FAQ content
+  faq?: FAQItem[];
+};
+
+type PostalAddressConfig = {
+  "@type"?: string;
+  streetAddress?: string;
+  addressLocality?: string;
+  addressRegion?: string;
+  postalCode?: string;
+  addressCountry?: string;  // ISO code
+};
+
+type GeoCoordinatesConfig = {
+  "@type"?: string;
+  latitude: string;
+  longitude: string;
+};
+
+type ServiceOffer = {
+  name: string;
+  description: string;
   url?: string;
+  price?: string;
+  priceCurrency?: string;
+};
+
+type FAQItem = {
+  question: string;
+  answer: string;
+  answerHtml?: string;  // For rich HTML answers
+};
+
+type SchemaConfig = {
+  // Toggle individual schema types
+  includeOrganization?: boolean;
+  includeWebsite?: boolean;
+  includeService?: boolean;
+  includeFAQ?: boolean;
+  includeLocalBusiness?: boolean;
+  
+  // Extend/override schema properties
+  organization?: Partial<OrganizationSchema>;
+  website?: Partial<WebsiteSchema>;
+  service?: Partial<ServiceSchema>;
+  faq?: Partial<FAQSchema>;
+  localBusiness?: Partial<LocalBusinessSchema>;
+  
+  // Custom schema additions
+  additionalSchemas?: Record<string, unknown>[];
+};
+
+type OutputConfig = {
+  emitJSONLD?: boolean;
+  prettyPrint?: boolean;
+  minify?: boolean;
+  commentLabels?: boolean;  // Add HTML comments for debugging
+};
+
+// ───────── Schema Type Interfaces (for extensions) ─────────
+type OrganizationSchema = {
+  "@type": string;
+  name: string;
+  description: string;
+  url: string;
   logo?: string;
   image?: string;
   telephone?: string;
   email?: string;
-  address?: string;
+  address?: PostalAddressConfig;
   foundingDate?: string;
   numberOfEmployees?: string;
-  areaServed?: string;
-  serviceType?: string;
+  areaServed?: string | string[];
   priceRange?: string;
   openingHours?: string[];
-}
-
-const {
-  type = "Organization",
-  name = "CrediScore",
-  description = "CrediScore es la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial y te abre puertas a oportunidades financieras.",
-  url = "https://crediscore.ve",
-  logo = "https://crediscore.ve/logo.png",
-  image = "https://crediscore.ve/og-image.jpg",
-  telephone = "+58-212-1234567",
-  email = "contacto@crediscore.ve",
-  address = "Caracas, Venezuela",
-  foundingDate = "2023",
-  numberOfEmployees = "11-50",
-  areaServed = "VE",
-  serviceType = "Financial Services",
-  priceRange = "$$",
-  openingHours = ["Mo-Fr 09:00-18:00", "Sa 09:00-13:00"]
-} = Astro.props;
-
-// Organization Schema
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": type,
-  "name": name,
-  "description": description,
-  "url": url,
-  "logo": logo,
-  "image": image,
-  "telephone": telephone,
-  "email": email,
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "VE",
-    "addressLocality": "Caracas",
-    "addressRegion": "Distrito Capital"
-  },
-  "foundingDate": foundingDate,
-  "numberOfEmployees": numberOfEmployees,
-  "areaServed": areaServed,
-  "serviceType": serviceType,
-  "priceRange": priceRange,
-  "openingHours": openingHours,
-  "sameAs": [
-    "https://www.facebook.com/crediscore",
-    "https://www.twitter.com/crediscore",
-    "https://www.instagram.com/crediscore",
-    "https://www.linkedin.com/company/crediscore"
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": telephone,
-    "contactType": "customer service",
-    "availableLanguage": ["Spanish"]
-  }
+  sameAs?: string[];
+  contactPoint?: ContactPointConfig;
+  [key: string]: unknown;
 };
 
-// Website Schema
-const websiteSchema = {
+type WebsiteSchema = {
+  "@type": "WebSite";
+  name: string;
+  url: string;
+  description?: string;
+  potentialAction?: SearchActionConfig;
+  [key: string]: unknown;
+};
+
+type ServiceSchema = {
+  "@type": "Service";
+  name: string;
+  description: string;
+  provider: { "@type": string; name: string; url: string };
+  serviceType: string;
+  areaServed?: string | string[];
+  hasOfferCatalog?: OfferCatalogConfig;
+  [key: string]: unknown;
+};
+
+type FAQSchema = {
+  "@context": string;
+  "@type": "FAQPage";
+  mainEntity: Array<{
+    "@type": "Question";
+    name: string;
+    acceptedAnswer: {
+      "@type": "Answer";
+      text: string;
+      [key: string]: unknown;
+    };
+  }>;
+};
+
+type LocalBusinessSchema = {
+  "@type": string;  // "FinancialService", "LocalBusiness", etc.
+  name: string;
+  description: string;
+  url: string;
+  telephone?: string;
+  email?: string;
+  address: PostalAddressConfig;
+  geo?: GeoCoordinatesConfig;
+  openingHours?: string[];
+  priceRange?: string;
+  paymentAccepted?: string[];
+  currenciesAccepted?: string;
+  [key: string]: unknown;
+};
+
+type ContactPointConfig = {
+  "@type": "ContactPoint";
+  telephone: string;
+  contactType: string;
+  availableLanguage?: string[];
+  areaServed?: string[];
+};
+
+type SearchActionConfig = {
+  "@type": "SearchAction";
+  target: {
+    "@type": "EntryPoint";
+    urlTemplate: string;
+  };
+  "query-input": string;
+};
+
+type OfferCatalogConfig = {
+  "@type": "OfferCatalog";
+  name: string;
+  itemListElement: Array<{
+    "@type": "Offer";
+    itemOffered: {
+      "@type": "Service";
+      name: string;
+      description: string;
+      url?: string;
+    };
+  }>;
+};
+
+// ───────── Default Configuration Loaded from JSON (Declarative Source of Truth) ─────────
+const defaultEntity: EntityConfig = semSchemaConfig.defaultEntity as EntityConfig;
+
+const defaultSchemas: SchemaConfig = semSchemaConfig.defaultSchemas as SchemaConfig;
+
+const defaultOutput: OutputConfig = {
+  ...semSchemaConfig.defaultOutput as OutputConfig,
+  commentLabels: import.meta.env.DEV
+};
+
+// ───────── Merge Props with Defaults (Immutable) ─────────
+const {
+  entity = {},
+  schemas = {},
+  output = {}
+} = Astro.props;
+
+const cfg = {
+  entity: { ...defaultEntity, ...entity },
+  schemas: { ...defaultSchemas, ...schemas },
+  output: { ...defaultOutput, ...output }
+};
+
+// ───────── Pure Schema Generators (Declarative, Testable) ─────────
+const generateOrganizationSchema = (e: EntityConfig, overrides?: Partial<OrganizationSchema>): OrganizationSchema => ({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": e.name,
+  "description": e.description,
+  "url": e.url,
+  ...(e.logo && { "logo": e.logo }),
+  ...(e.image && { "image": e.image }),
+  ...(e.telephone && { "telephone": e.telephone }),
+  ...(e.email && { "email": e.email }),
+  ...(e.address && {
+    "address": typeof e.address === 'string' 
+      ? { "@type": "PostalAddress", "addressCountry": "VE", "addressLocality": e.address }
+      : { "@type": "PostalAddress", ...e.address }
+  }),
+  ...(e.foundingDate && { "foundingDate": e.foundingDate }),
+  ...(e.numberOfEmployees && { "numberOfEmployees": e.numberOfEmployees }),
+  ...(e.areaServed && { "areaServed": e.areaServed }),
+  ...(e.serviceType && { "serviceType": e.serviceType }),
+  ...(e.priceRange && { "priceRange": e.priceRange }),
+  ...(e.openingHours?.length && { "openingHours": e.openingHours }),
+  ...(e.sameAs?.length && { "sameAs": e.sameAs }),
+  ...(e.telephone && {
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": e.telephone,
+      "contactType": "customer service",
+      "availableLanguage": ["Spanish"]
+    }
+  }),
+  ...overrides
+});
+
+const generateWebsiteSchema = (e: EntityConfig, overrides?: Partial<WebsiteSchema>): WebsiteSchema => ({
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": name,
-  "url": url,
-  "description": description,
+  "name": e.name,
+  "url": e.url,
+  ...(e.description && { "description": e.description }),
   "potentialAction": {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": `${url}/search?q={search_term_string}`
+      "urlTemplate": `${e.url}/search?q={search_term_string}`
     },
     "query-input": "required name=search_term_string"
-  }
-};
+  },
+  ...overrides
+});
 
-// Service Schema
-const serviceSchema = {
+const generateServiceSchema = (e: EntityConfig, overrides?: Partial<ServiceSchema>): ServiceSchema => ({
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "Scoring Crediticio",
-  "description": "Evaluación de confianza técnica y reputación comercial en Venezuela",
+  "name": e.serviceType || "Scoring Crediticio",
+  "description": e.serviceDescription || "Evaluación de confianza técnica y reputación comercial en Venezuela",
   "provider": {
     "@type": "Organization",
-    "name": name,
-    "url": url
+    "name": e.name,
+    "url": e.url
   },
-  "serviceType": "Financial Service",
-  "areaServed": areaServed,
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Servicios de CrediScore",
-    "itemListElement": [
-      {
+  "serviceType": e.serviceType || "Financial Service",
+  ...(e.areaServed && { "areaServed": e.areaServed }),
+  ...(e.serviceOffers?.length && {
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": `Servicios de ${e.name}`,
+      "itemListElement": e.serviceOffers.map(offer => ({
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "Evaluación de Score",
-          "description": "Análisis completo de tu reputación comercial"
+          "name": offer.name,
+          "description": offer.description,
+          ...(offer.url && { "url": offer.url })
         }
-      },
-      {
-        "@type": "Offer", 
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Certificación de Confianza",
-          "description": "Pasaporte de confiabilidad técnica"
-        }
-      }
-    ]
-  }
-};
+      }))
+    }
+  }),
+  ...overrides
+});
 
-// FAQ Schema
-const faqSchema = {
+const generateFAQSchema = (items: FAQItem[], overrides?: Partial<FAQSchema>): FAQSchema => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "¿Qué es exactamente CrediScore?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No somos una entidad financiera tradicional. Somos la primera infraestructura de confianza técnica en Venezuela. Utilizamos un Sistema de Apoyo a Decisiones (DSS) para ofrecerte una radiografía de tu salud económica en tiempo real."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Por qué dicen que es un modelo probado en 170 países?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Porque la metodología de validación que utilizamos es el estándar global en las economías más avanzadas del mundo. Traemos a Venezuela una tecnología que ya dinamiza el crecimiento en más de 170 países."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "¿CrediScore me da dinero o préstamos?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "CrediScore es el engranaje tecnológico que genera la confianza necesaria para que el dinero y los negocios fluyan. Nosotros validamos tu perfil; esa validación es la que te abre las puertas con empresas y proveedores."
-      }
+  "mainEntity": items.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer,
+      ...(faq.answerHtml && { "text": faq.answerHtml })
     }
-  ]
-};
+  })),
+  ...overrides
+});
 
-// Local Business Schema
-const localBusinessSchema = {
+const generateLocalBusinessSchema = (e: EntityConfig, overrides?: Partial<LocalBusinessSchema>): LocalBusinessSchema => ({
   "@context": "https://schema.org",
   "@type": "FinancialService",
-  "name": name,
-  "description": description,
-  "url": url,
-  "telephone": telephone,
-  "email": email,
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "VE",
-    "addressLocality": "Caracas",
-    "addressRegion": "Distrito Capital",
-    "streetAddress": "Avenida Libertador, Caracas"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "10.4806",
-    "longitude": "-66.9036"
-  },
-  "openingHours": openingHours,
-  "priceRange": priceRange,
-  "paymentAccepted": ["Cash", "Credit Card", "Bank Transfer"],
-  "currenciesAccepted": "VES"
-};
+  "name": e.name,
+  "description": e.description,
+  "url": e.url,
+  ...(e.telephone && { "telephone": e.telephone }),
+  ...(e.email && { "email": e.email }),
+  "address": typeof e.address === 'string'
+    ? {
+        "@type": "PostalAddress",
+        "addressCountry": "VE",
+        "addressLocality": e.address,
+        "streetAddress": "Avenida Libertador, Caracas"
+      }
+    : { "@type": "PostalAddress", ...e.address },
+  ...(e.geo && {
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": e.geo.latitude,
+      "longitude": e.geo.longitude
+    }
+  }),
+  ...(e.openingHours?.length && { "openingHours": e.openingHours }),
+  ...(e.priceRange && { "priceRange": e.priceRange }),
+  ...(e.paymentAccepted?.length && { "paymentAccepted": e.paymentAccepted }),
+  ...(e.currenciesAccepted && { "currenciesAccepted": e.currenciesAccepted }),
+  ...overrides
+});
 ---
 
-<!-- Organization Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
+<!-- SEM Structured Data - Declarative JSON-LD Injection -->
+{cfg.output.emitJSONLD && cfg.schemas.includeOrganization && (
+  <>
+    {cfg.output.commentLabels && <!-- Organization Schema -->}
+    <script 
+      type="application/ld+json" 
+      set:html={JSON.stringify(
+        generateOrganizationSchema(cfg.entity, cfg.schemas.organization), 
+        null, 
+        cfg.output.prettyPrint ? 2 : 0
+      )} 
+    />
+  </>
+)}
 
-<!-- Website Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
+{cfg.output.emitJSONLD && cfg.schemas.includeWebsite && (
+  <>
+    {cfg.output.commentLabels && <!-- Website Schema -->}
+    <script 
+      type="application/ld+json" 
+      set:html={JSON.stringify(
+        generateWebsiteSchema(cfg.entity, cfg.schemas.website), 
+        null, 
+        cfg.output.prettyPrint ? 2 : 0
+      )} 
+    />
+  </>
+)}
 
-<!-- Service Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)}></script>
+{cfg.output.emitJSONLD && cfg.schemas.includeService && (
+  <>
+    {cfg.output.commentLabels && <!-- Service Schema -->}
+    <script 
+      type="application/ld+json" 
+      set:html={JSON.stringify(
+        generateServiceSchema(cfg.entity, cfg.schemas.service), 
+        null, 
+        cfg.output.prettyPrint ? 2 : 0
+      )} 
+    />
+  </>
+)}
 
-<!-- FAQ Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+{cfg.output.emitJSONLD && cfg.schemas.includeFAQ && cfg.entity.faq?.length && (
+  <>
+    {cfg.output.commentLabels && <!-- FAQ Schema -->}
+    <script 
+      type="application/ld+json" 
+      set:html={JSON.stringify(
+        generateFAQSchema(cfg.entity.faq, cfg.schemas.faq), 
+        null, 
+        cfg.output.prettyPrint ? 2 : 0
+      )} 
+    />
+  </>
+)}
 
-<!-- Local Business Schema -->
-<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)}></script>
+{cfg.output.emitJSONLD && cfg.schemas.includeLocalBusiness && (
+  <>
+    {cfg.output.commentLabels && <!-- Local Business Schema -->}
+    <script 
+      type="application/ld+json" 
+      set:html={JSON.stringify(
+        generateLocalBusinessSchema(cfg.entity, cfg.schemas.localBusiness), 
+        null, 
+        cfg.output.prettyPrint ? 2 : 0
+      )} 
+    />
+  </>
+)}
+
+{cfg.output.emitJSONLD && cfg.schemas.additionalSchemas?.map(schema => (
+  <script type="application/ld+json" set:html={JSON.stringify(schema, null, cfg.output.prettyPrint ? 2 : 0)} />
+))}

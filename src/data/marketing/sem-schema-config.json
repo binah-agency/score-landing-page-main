@@ -1,0 +1,80 @@
+{
+  "defaultEntity": {
+    "name": "CrediScore",
+    "description": "CrediScore es la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial y te abre puertas a oportunidades financieras.",
+    "url": "https://crediscore.ve",
+    "logo": "https://crediscore.ve/logo.png",
+    "image": "https://crediscore.ve/og-image.jpg",
+    "telephone": "+58-212-1234567",
+    "email": "contacto@crediscore.ve",
+    "address": {
+      "streetAddress": "Avenida Libertador, Caracas",
+      "addressLocality": "Caracas",
+      "addressRegion": "Distrito Capital",
+      "addressCountry": "VE"
+    },
+    "foundingDate": "2023",
+    "numberOfEmployees": "11-50",
+    "areaServed": "VE",
+    "priceRange": "$$",
+    "serviceType": "Financial Services",
+    "serviceDescription": "Evaluación de confianza técnica y reputación comercial en Venezuela",
+    "serviceOffers": [
+      {
+        "name": "Evaluación de Score",
+        "description": "Análisis completo de tu reputación comercial"
+      },
+      {
+        "name": "Certificación de Confianza",
+        "description": "Pasaporte de confiabilidad técnica"
+      }
+    ],
+    "sameAs": [
+      "https://www.facebook.com/crediscore",
+      "https://www.twitter.com/crediscore",
+      "https://www.instagram.com/crediscore",
+      "https://www.linkedin.com/company/crediscore"
+    ],
+    "geo": {
+      "latitude": "10.4806",
+      "longitude": "-66.9036"
+    },
+    "openingHours": [
+      "Mo-Fr 09:00-18:00",
+      "Sa 09:00-13:00"
+    ],
+    "paymentAccepted": [
+      "Cash",
+      "Credit Card",
+      "Bank Transfer"
+    ],
+    "currenciesAccepted": "VES",
+    "faq": [
+      {
+        "question": "¿Qué es exactamente CrediScore?",
+        "answer": "No somos una entidad financiera tradicional. Somos la primera infraestructura de confianza técnica en Venezuela. Utilizamos un Sistema de Apoyo a Decisiones (DSS) para ofrecerte una radiografía de tu salud económica en tiempo real."
+      },
+      {
+        "question": "¿Por qué dicen que es un modelo probado en 170 países?",
+        "answer": "Porque la metodología de validación que utilizamos es el estándar global en las economías más avanzadas del mundo. Traemos a Venezuela una tecnología que ya dinamiza el crecimiento en más de 170 países."
+      },
+      {
+        "question": "¿CrediScore me da dinero o préstamos?",
+        "answer": "CrediScore es el engranaje tecnológico que genera la confianza necesaria para que el dinero y los negocios fluyan. Nosotros validamos tu perfil; esa validación es la que te abre las puertas con empresas y proveedores."
+      }
+    ]
+  },
+  "defaultSchemas": {
+    "includeOrganization": true,
+    "includeWebsite": true,
+    "includeService": true,
+    "includeFAQ": true,
+    "includeLocalBusiness": true
+  },
+  "defaultOutput": {
+    "emitJSONLD": true,
+    "prettyPrint": false,
+    "minify": true,
+    "commentLabels": false
+  }
+}

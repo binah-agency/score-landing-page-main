@@ -1,0 +1,9 @@
+{
+  "defaultConfig": {
+    "trackScroll": true,
+    "trackTime": true,
+    "trackClicks": true,
+    "trackVisibility": true,
+    "debug": false
+  }
+}

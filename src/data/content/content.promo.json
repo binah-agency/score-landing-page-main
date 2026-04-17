@@ -12,7 +12,6 @@
       "id": "zafiro",
       "name": "ZAFIRO",
       "level": "nivel",
-      "src": "/images/cards/zafiro-card.png",
       "alt": "Tarjeta Zafiro - Nivel inicial de confianza",
       "badge": {
         "text": "Nuevo",
@@ -26,7 +25,6 @@
       "id": "esmeralda",
       "name": "ESMERALDA",
       "level": "nivel",
-      "src": "/images/cards/esmeralda-card.png",
       "alt": "Tarjeta Esmeralda - Nivel intermedio de confianza",
       "badge": {
         "text": "Nuevo",
@@ -40,7 +38,6 @@
       "id": "silver",
       "name": "SILVER",
       "level": "nivel",
-      "src": "/images/cards/silver-card.png",
       "alt": "Tarjeta Silver - Nivel avanzado de confianza",
       "badge": {
         "text": "Nuevo",
@@ -54,7 +51,6 @@
       "id": "gold",
       "name": "GOLD",
       "level": "nivel",
-      "src": "/images/cards/gold-card.png",
       "alt": "Tarjeta Gold - Nivel alto de confianza",
       "badge": {
         "text": "Nuevo",
@@ -68,7 +64,6 @@
       "id": "elite",
       "name": "ÉLITE",
       "level": "nivel",
-      "src": "/images/cards/elite-card.png",
       "alt": "Tarjeta Elite - Nivel máximo de confianza",
       "badge": {
         "text": "Nuevo",

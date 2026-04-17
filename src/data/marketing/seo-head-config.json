@@ -1,0 +1,89 @@
+{
+  "defaultPage": {
+    "title": "CrediScore | Tu Puntaje, Tu Futuro Económico",
+    "description": "CrediScore es la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial y te abre puertas a oportunidades financieras.",
+    "keywords": [
+      "CrediScore",
+      "scoring crediticio",
+      "confianza comercial",
+      "Venezuela",
+      "fintech",
+      "reputación"
+    ],
+    "author": "CrediScore",
+    "url": "https://crediscore.ve",
+    "type": "website",
+    "locale": "es_VE",
+    "robots": {
+      "index": true,
+      "follow": true,
+      "maxImagePreview": "large"
+    }
+  },
+  "defaultOG": {
+    "enabled": true,
+    "siteName": "CrediScore",
+    "image": {
+      "url": "https://crediscore.ve/og-image.jpg",
+      "alt": "CrediScore - Plataforma de Scoring Crediticio",
+      "width": 1200,
+      "height": 630,
+      "type": "image/jpeg"
+    }
+  },
+  "defaultTwitter": {
+    "enabled": true,
+    "card": "summary_large_image",
+    "site": "@crediscore_ve",
+    "image": {
+      "url": "https://crediscore.ve/twitter-image.jpg",
+      "alt": "CrediScore - Plataforma de Scoring Crediticio",
+      "width": 1200,
+      "height": 630
+    }
+  },
+  "defaultAdditional": {
+    "enabled": true,
+    "geo": {
+      "region": "VE",
+      "placename": "Caracas",
+      "position": {
+        "lat": "10.4806",
+        "long": "-66.9036"
+      }
+    },
+    "language": "es",
+    "distribution": "global",
+    "rating": "general",
+    "revisitAfter": "7 days"
+  },
+  "defaultPerformance": {
+    "dnsPrefetch": [
+      "https://fonts.googleapis.com",
+      "https://analytics.crediscore.ve"
+    ],
+    "preconnect": [
+      {
+        "href": "https://fonts.gstatic.com",
+        "crossorigin": true
+      },
+      {
+        "href": "https://cdn.crediscore.ve"
+      }
+    ]
+  },
+  "defaultFavicons": {
+    "svg": "/favicon.svg",
+    "ico": "/favicon.ico",
+    "appleTouchIcon": "/apple-touch-icon.png",
+    "png32": "/favicon-32x32.png",
+    "png16": "/favicon-16x16.png",
+    "manifest": "/site.webmanifest"
+  },
+  "defaultOutput": {
+    "emitCharset": true,
+    "emitViewport": true,
+    "emitGenerator": true,
+    "emitFavicons": true
+  }
+}

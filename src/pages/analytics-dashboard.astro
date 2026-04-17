@@ -1,0 +1,195 @@
+---
+// Analytics Dashboard
+import Layout from '../layouts/Layout.astro';
+
+// Type definitions for analytics data
+interface AnalyticsEvent {
+  sessionId: string;
+  responseTime: number;
+  timestamp: string;
+  url: string;
+  statusCode: number;
+  method: string;
+  userAgent: string;
+}
+
+// Fetch analytics data from API
+async function getAnalyticsData(): Promise<AnalyticsEvent[]> {
+  try {
+    const response = await fetch(`${import.meta.env.SITE_URL}/api/analytics?type=server&limit=100`);
+    const data = await response.json();
+    return data.success ? data.data : [];
+  } catch (error) {
+    console.error('Failed to fetch analytics:', error);
+    return [];
+  }
+}
+
+const analyticsData = await getAnalyticsData();
+---
+
+<Layout title="Analytics Dashboard">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Analytics Dashboard</h1>
+    
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-600 mb-2">Total Sessions</h3>
+        <p class="text-3xl font-bold text-blue-600">{new Set(analyticsData.map(d => d.sessionId)).size}</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-600 mb-2">Page Views</h3>
+        <p class="text-3xl font-bold text-green-600">{analyticsData.length}</p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-600 mb-2">Avg Response Time</h3>
+        <p class="text-3xl font-bold text-purple-600">
+          {analyticsData.length > 0 ? Math.round(analyticsData.reduce((sum, d) => sum + d.responseTime, 0) / analyticsData.length) : 0}ms
+        </p>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-600 mb-2">Success Rate</h3>
+        <p class="text-3xl font-bold text-orange-600">
+          {analyticsData.length > 0 ? Math.round((analyticsData.filter(d => d.statusCode < 400).length / analyticsData.length) * 100) : 0}%
+        </p>
+      </div>
+    </div>
+    
+    <!-- Recent Activity Table -->
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-xl font-semibold">Recent Activity</h2>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Session ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Page</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Response Time</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Agent</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {analyticsData.slice(-20).reverse().map((event, index) => (
+              <tr data-key={index} class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {new Date(event.timestamp).toLocaleString()}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {event.sessionId.slice(0, 8)}...
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {new URL(event.url).pathname}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                    {event.method}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <span class={`px-2 py-1 text-xs rounded-full ${
+                    event.statusCode < 300 ? 'bg-green-100 text-green-800' :
+                    event.statusCode < 400 ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {event.statusCode}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  {event.responseTime}ms
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                  {event.userAgent}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        
+        {analyticsData.length === 0 && (
+          <div class="text-center py-8 text-gray-500">
+            No analytics data available yet. Visit some pages to start tracking.
+          </div>
+        )}
+      </div>
+    </div>
+    
+    <!-- Session Details -->
+    <div class="mt-8 bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-xl font-semibold">Session Details</h2>
+      </div>
+      
+      <div class="p-6">
+        {(() => {
+          const sessions = new Map();
+          analyticsData.forEach(event => {
+            if (!sessions.has(event.sessionId)) {
+              sessions.set(event.sessionId, {
+                sessionId: event.sessionId,
+                pageViews: 0,
+                totalTime: 0,
+                firstVisit: event.timestamp,
+                lastVisit: event.timestamp,
+                pages: new Set(),
+                avgResponseTime: 0
+              });
+            }
+            const session = sessions.get(event.sessionId);
+            session.pageViews++;
+            session.totalTime += event.responseTime;
+            session.lastVisit = event.timestamp;
+            session.pages.add(new URL(event.url).pathname);
+          });
+          
+          return Array.from(sessions.values()).slice(-10).reverse();
+        })().map((session, index) => (
+          <div class="border-b last:border-b-0 py-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold">Session {session.sessionId.slice(0, 8)}...</h3>
+                <p class="text-sm text-gray-600">
+                  First visit: {new Date(session.firstVisit).toLocaleString()}
+                </p>
+                <p class="text-sm text-gray-600">
+                  Pages visited: {session.pages.size}
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm font-semibold">{session.pageViews} page views</p>
+                <p class="text-sm text-gray-600">
+                  {Math.round(session.totalTime / session.pageViews)}ms avg response
+                </p>
+              </div>
+            </div>
+            <div class="mt-2">
+              <p class="text-xs text-gray-500">Pages:</p>
+              <div class="flex flex-wrap gap-1 mt-1">
+                {Array.from(session.pages).map((page) => (
+                  <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    {page}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+  }
+</style>

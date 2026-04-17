@@ -1,20 +1,15 @@
 ---
 
-import heroData from '../../data/content.hero.json';
+import heroData from '../../data/content/content.hero.json';
 import SmoothScroll from '../ui/atoms/SmoothScroll.astro';
-import Claim from '../ui/atoms/Claim.astro';
-import CTAButton from '../ui/atoms/CTAButton.astro';
 import Header from '../ui/organisms/Header.astro';
 import HeroImage from '../ui/atoms/HeroImage.astro';
 import BadgeRotado from '../ui/atoms/BadgeRotado.astro';
-import HeroBanner from '../ui/atoms/HeroBanner.astro';
-import HeroTagline from '../ui/atoms/HeroTagline.astro';
 import HeroContent from '../ui/molecules/HeroContent.astro';
 const { content } = heroData;
 ---
 <section class="hero-section mx-auto flex w-full max-w-[1920px] flex-col items-center gap-16 px-5 pb-[11px] pt-40 ">
   <!-- Background Pattern -->
-  <div class="absolute inset-0 -z-10 h-full w-full bg-gradient-to-bl from-[#ffe4e6] via-white to-[#ccfbf1] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
   <!-- ========== HEADER ========== -->
   <Header />

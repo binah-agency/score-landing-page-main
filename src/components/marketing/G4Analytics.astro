@@ -1,463 +1,332 @@
 ---
-// G4 Analytics Component - Google Analytics 4
+// src/components/GA4.astro
+import g4AnalyticsConfig from '../../data/marketing/g4-analytics-config.json';
+
 interface Props {
-  measurementId?: string;
-  enableEcommerce?: boolean;
-  enableEnhancedMeasurement?: boolean;
-  enableLinkAttribution?: boolean;
-  allowAdFeatures?: boolean;
-  allowAdPersonalizationSignals?: boolean;
+  id: string;
+  config?: GA4Config;
+  autoTrack?: AutoTrackConfig;
+  userProperties?: Record<string, string>;
   customDimensions?: Record<string, string>;
   customMetrics?: Record<string, number>;
-  debugMode?: boolean;
-  sendPageView?: boolean;
-  sampleRate?: number;
-  siteSpeedSampleRate?: number;
 }
 
+// Declarative configuration types
+type GA4Config = {
+  send_page_view?: boolean;
+  ecommerce?: { enabled: boolean; currency?: string };
+  enhanced_measurement?: boolean | EnhancedMeasurementConfig;
+  link_attribution?: boolean;
+  debug_mode?: boolean;
+  sample_rate?: number;
+  site_speed_sample_rate?: number;
+  allow_google_signals?: boolean;
+  allow_ad_personalization_signals?: boolean;
+  cookie_flags?: string;
+  [key: string]: unknown;
+};
+
+type EnhancedMeasurementConfig = {
+  page_visibility?: boolean;
+  scrolls?: boolean;
+  outbound_clicks?: boolean;
+  page_changes?: boolean;
+  searches?: boolean;
+  video_engagement?: boolean;
+  file_downloads?: boolean;
+  form_interactions?: boolean;
+};
+
+type AutoTrackConfig = {
+  visibility?: boolean;
+  scroll?: boolean | { milestones: number[] };
+  outboundLinks?: boolean;
+  downloads?: boolean | { extensions: string[] };
+  forms?: boolean;
+  videos?: boolean;
+  errors?: boolean;
+  performance?: boolean;
+  coreWebVitals?: boolean;
+};
+
+// Merge props with sensible defaults loaded from JSON (declarative, not imperative)
 const {
-  measurementId = "G-XXXXXXXXXX", // Replace with actual GA4 Measurement ID
-  enableEcommerce = true,
-  enableEnhancedMeasurement = true,
-  enableLinkAttribution = true,
-  allowAdFeatures = true,
-  allowAdPersonalizationSignals = true,
-  customDimensions = {},
-  customMetrics = {},
-  debugMode = false,
-  sendPageView = true,
-  sampleRate = 100,
-  siteSpeedSampleRate = 1
+  id,
+  config = {},
+  autoTrack = g4AnalyticsConfig.defaultAutoTrack,
+  userProperties = g4AnalyticsConfig.defaultUserProperties,
+  customDimensions = g4AnalyticsConfig.defaultCustomDimensions,
+  customMetrics = g4AnalyticsConfig.defaultCustomMetrics
 } = Astro.props;
+
+// Build final config declaratively
+const gaConfig = {
+  ...g4AnalyticsConfig.defaultConfig,
+  custom_map: { ...customDimensions, ...customMetrics },
+  ...config,
+  ...(config.ecommerce && { currency: config.ecommerce.currency || 'VES' })
+};
 ---
 
-<!-- Google Analytics 4 -->
-<script is:inline>
-  // Google Analytics 4 Configuration
+<!-- Google Analytics 4 - Declarative Injection -->
+<script is:inline define:vars={{ id, gaConfig, autoTrack, userProperties }}>
+  // ─────────────────────────────────────────────────────────────
+  // 1. INIT (Declarative bootstrap)
+  // ─────────────────────────────────────────────────────────────
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  const gtag = (...args) => dataLayer.push(args);
   
-  // Initialize gtag
   gtag('js', new Date());
-  
-  // GA4 Configuration
-  gtag('config', '{measurementId}', {
-    'send_page_view': {sendPageView.toString()},
-    'allow_google_signals': {allowAdFeatures.toString()},
-    'allow_ad_personalization_signals': {allowAdPersonalizationSignals.toString()},
-    'custom_map': {JSON.stringify({...customDimensions, ...customMetrics})},
-    'sample_rate': {sampleRate},
-    'site_speed_sample_rate': {siteSpeedSampleRate},
-    'cookie_domain': 'auto',
-    'cookie_flags': 'SameSite=Lax;Secure',
-    'cookie_update': true,
-    'cookie_expires': 63072000, // 2 years
-    'first_party_collection': true,
-    'anonymize_ip': false,
-    'send_beacon': true,
-    'transport_type': 'beacon',
-    'groups': 'default',
-    'event_parameters': {
-      'custom_parameter_1': 'landing_page',
-      'custom_parameter_2': 'fintech',
-      'custom_parameter_3': 'venezuela'
-    }
+  gtag('config', id, gaConfig);
+
+  // ─────────────────────────────────────────────────────────────
+  // 2. FEATURE TOGGLES (Declarative feature activation)
+  // ─────────────────────────────────────────────────────────────
+  const features = {
+    enhanced_measurement: gaConfig.enhanced_measurement,
+    link_attribution: gaConfig.link_attribution,
+    ecommerce: gaConfig.ecommerce?.enabled,
+    debug_mode: gaConfig.debug_mode
+  };
+
+  Object.entries(features).forEach(([feature, enabled]) => {
+    if (enabled) gtag('config', id, { [feature]: enabled === true ? {} : enabled });
   });
 
-  // Enhanced Measurement Configuration
-  {enableEnhancedMeasurement.toString() && `
-  gtag('config', '{measurementId}', {
-    'enhanced_measurement': {
-      'page_visibility': true,
-      'scrolls': true,
-      'outbound_clicks': true,
-      'page_changes': true,
-      'searches': true,
-      'video_engagement': true,
-      'file_downloads': true,
-      'form_interactions': true
-    }
-  });
-  `}
+  // ─────────────────────────────────────────────────────────────
+  // 3. TRACKING API (Declarative, chainable, extensible)
+  // ─────────────────────────────────────────────────────────────
+  const track = {
+    base: (name, params = {}) => gtag('event', name, { 
+      event_category: params.category || 'engagement',
+      event_label: params.label || '',
+      value: params.value || 0,
+      non_interaction: params.nonInteraction ?? false,
+      ...params 
+    }),
 
-  // Link Attribution
-  {enableLinkAttribution.toString() && `
-  gtag('config', '{measurementId}', {
-    'link_attribution': {
-      'cookie_name': '_gali',
-      'cookie_expires': 30,
-      'cookie_flags': 'SameSite=Lax;Secure',
-      'cookie_domain': 'auto'
-    }
-  });
-  `}
+    pageView: (p = {}) => gtag('config', id, {
+      page_title: p.title || document.title,
+      page_location: p.location || location.href,
+      page_referrer: p.referrer || document.referrer
+    }),
 
-  // E-commerce Configuration
-  {enableEcommerce.toString() && `
-  gtag('config', '{measurementId}', {
-    'currency': 'VES',
-    'ecommerce': {
-      'enabled': true
-    }
-  });
-  `}
+    userProp: (name, value) => gtag('config', id, { custom_map: { [name]: value } }),
 
-  // Debug Mode
-  {debugMode.toString() && `
-  gtag('config', '{measurementId}', {
-    'debug_mode': true
-  });
-  `}
+    ecommerce: (event, data) => gtag('event', event, { 
+      ecommerce: data, 
+      currency: gaConfig.ecommerce?.currency || 'VES' 
+    }),
 
-  // Custom GA4 Functions
-  window.g4a = {
-    // Track page views
-    pageView: function(pageTitle, pageLocation, pageReferrer) {
-      gtag('config', '{measurementId}', {
-        'page_title': pageTitle || document.title,
-        'page_location': pageLocation || window.location.href,
-        'page_referrer': pageReferrer || document.referrer
-      });
-    },
+    conversion: (id, value = 0, currency = 'VES') => 
+      gtag('event', 'conversion', { 
+        send_to: id, value, currency, transaction_id: id 
+      }),
 
-    // Track custom events
-    event: function(eventName, eventParameters = {}) {
-      gtag('event', eventName, {
-        'event_category': eventParameters.category || 'engagement',
-        'event_label': eventParameters.label || '',
-        'value': eventParameters.value || 0,
-        'non_interaction': eventParameters.nonInteraction || false,
-        ...eventParameters
-      });
-    },
+    timing: (cat, name, val, label = '') => 
+      gtag('event', 'timing_complete', { 
+        event_category: cat, name, value: Math.round(val), event_label: label 
+      }),
 
-    // Track user engagement
-    engagement: function(action, category, label, value = 0) {
-      gtag('event', 'engagement', {
-        'event_category': category || 'user_engagement',
-        'event_label': label || '',
-        'value': value,
-        'custom_parameter_1': action
-      });
-    },
+    exception: (desc, fatal = false) => 
+      gtag('event', 'exception', { description: desc, fatal }),
 
-    // Track conversions
-    conversion: function(conversionId, conversionValue = 0, currency = 'VES') {
-      gtag('event', 'conversion', {
-        'send_to': '{measurementId}',
-        'value': conversionValue,
-        'currency': currency,
-        'transaction_id': conversionId
-      });
-    },
+    social: (network, action, target) => 
+      gtag('event', 'social_share', { 
+        social_network: network, social_action: action, social_target: target 
+      }),
 
-    // Track e-commerce events
-    ecommerce: function(eventName, ecommerceData) {
-      gtag('event', eventName, {
-        'ecommerce': ecommerceData,
-        'currency': 'VES'
-      });
-    },
+    search: (term, cat = 'site_search') => 
+      gtag('event', 'search', { search_term: term, event_category: cat }),
 
-    // Track user properties
-    userProperty: function(propertyName, propertyValue) {
-      gtag('config', '{measurementId}', {
-        'custom_map': {
-          [propertyName]: propertyValue
-        }
-      });
-    },
+    video: (action, url, title, percent = 0) => 
+      gtag('event', `video_${action}`, {
+        video_url: url, video_title: title, video_percent: percent,
+        video_provider: 'CrediScore', event_category: 'video_engagement'
+      }),
 
-    // Track timing events
-    timing: function(category, variable, value, label) {
-      gtag('event', 'timing_complete', {
-        'event_category': category || 'performance',
-        'name': variable || 'load_time',
-        'value': value || 0,
-        'event_label': label || ''
-      });
-    },
-
-    // Track exceptions
-    exception: function(description, fatal = false) {
-      gtag('event', 'exception', {
-        'description': description,
-        'fatal': fatal
-      });
-    },
-
-    // Track social interactions
-    social: function(network, action, target) {
-      gtag('event', 'social_share', {
-        'social_network': network || 'unknown',
-        'social_action': action || 'share',
-        'social_target': target || window.location.href
-      });
-    },
-
-    // Track search events
-    search: function(searchTerm, category = 'site_search') {
-      gtag('event', 'search', {
-        'search_term': searchTerm,
-        'event_category': category
-      });
-    },
-
-    // Track video events
-    video: function(action, videoUrl, videoTitle, percent = 0) {
-      gtag('event', 'video_' + action, {
-        'video_url': videoUrl,
-        'video_title': videoTitle,
-        'video_percent': percent,
-        'video_provider': 'CrediScore',
-        'event_category': 'video_engagement'
-      });
-    },
-
-    // Track file downloads
-    download: function(fileUrl, fileName, fileExtension) {
+    download: (url, name, ext) => 
       gtag('event', 'file_download', {
-        'file_url': fileUrl,
-        'file_name': fileName,
-        'file_extension': fileExtension,
-        'link_url': fileUrl,
-        'link_text': fileName,
-        'event_category': 'engagement'
-      });
-    },
+        file_url: url, file_name: name, file_extension: ext,
+        link_url: url, link_text: name, event_category: 'engagement'
+      }),
 
-    // Track form interactions
-    form: function(formName, formId, action = 'submit') {
-      gtag('event', 'form_' + action, {
-        'form_name': formName,
-        'form_id': formId,
-        'form_destination': window.location.href,
-        'event_category': 'form_engagement'
-      });
-    },
+    form: (name, formId, action = 'submit') => 
+      gtag('event', `form_${action}`, {
+        form_name: name, form_id: formId, 
+        form_destination: location.href, event_category: 'form_engagement'
+      }),
 
-    // Track scroll depth
-    scrollDepth: function(scrollPercentage) {
-      gtag('event', 'scroll', {
-        'percent_scrolled': scrollPercentage,
-        'event_category': 'engagement'
-      });
-    },
+    scroll: (pct) => gtag('event', 'scroll', { 
+      percent_scrolled: pct, event_category: 'engagement' 
+    }),
 
-    // Track page visibility
-    visibility: function(visibilityState) {
-      gtag('event', 'page_view', {
-        'page_location': window.location.href,
-        'visibility_state': visibilityState,
-        'event_category': 'engagement'
-      });
-    },
+    visibility: (state) => gtag('event', 'page_view', {
+      page_location: location.href, visibility_state: state, 
+      event_category: 'engagement'
+    }),
 
-    // Track outbound links
-    outboundLink: function(linkUrl, linkText, linkDomain) {
+    outbound: (url, text, domain) => 
       gtag('event', 'click', {
-        'link_url': linkUrl,
-        'link_text': linkText,
-        'link_domain': linkDomain,
-        'outbound': true,
-        'event_category': 'outbound'
+        link_url: url, link_text: text, link_domain: domain,
+        outbound: true, event_category: 'outbound'
+      }),
+
+    // Aliases for backward compatibility
+    event: function(name, p) { return this.base(name, p); },
+    engagement: function(action, cat, label, val = 0) { 
+      return this.base('engagement', { category: cat, label, value: val, custom_parameter_1: action }); 
+    },
+    setCustomDimension: function(n, v) { this.userProp(n, v); },
+    setCustomMetric: function(n, v) { this.userProp(n, v); }
+  };
+
+  // Expose API globally (same as original)
+  window.g4a = track;
+
+  // ─────────────────────────────────────────────────────────────
+  // 4. AUTO-TRACKERS (Declarative registration pattern)
+  // ─────────────────────────────────────────────────────────────
+  const autoTrackers = {
+    visibility: () => {
+      document.addEventListener('visibilitychange', () => 
+        track.visibility(document.hidden ? 'hidden' : 'visible')
+      );
+    },
+
+    scroll: (cfg) => {
+      let max = 0;
+      const milestones = cfg?.milestones || [25, 50, 75, 90, 100];
+      window.addEventListener('scroll', () => {
+        const maxScroll = document.documentElement.scrollHeight - innerHeight;
+        const pct = Math.round((pageYOffset / maxScroll) * 100);
+        milestones.forEach(m => {
+          if (pct >= m && max < m) { track.scroll(m); max = m; }
+        });
       });
     },
 
-    // Track custom dimensions
-    setCustomDimension: function(dimensionName, dimensionValue) {
-      gtag('config', '{measurementId}', {
-        'custom_map': {
-          [dimensionName]: dimensionValue
+    outboundLinks: () => {
+      document.addEventListener('click', (e) => {
+        const a = e.target?.closest('a');
+        if (!a?.href) return;
+        const [cur, tgt] = [location.hostname, new URL(a.href).hostname];
+        if (cur !== tgt) track.outbound(a.href, a.textContent?.trim() || '', tgt);
+      });
+    },
+
+    downloads: (cfg) => {
+      const exts = cfg?.extensions || [];
+      document.addEventListener('click', (e) => {
+        const a = e.target?.closest('a');
+        if (!a?.href) return;
+        const href = a.href.toLowerCase();
+        const hasExt = exts.some(ext => href.includes(ext));
+        const hasAttr = a.hasAttribute('download');
+        if (hasExt || hasAttr) {
+          const name = a.getAttribute('download') || a.textContent?.trim() || '';
+          const ext = href.split('.').pop() || '';
+          track.download(a.href, name, ext);
         }
       });
     },
 
-    // Track custom metrics
-    setCustomMetric: function(metricName, metricValue) {
-      gtag('config', '{measurementId}', {
-        'custom_map': {
-          [metricName]: metricValue
-        }
+    forms: () => {
+      document.addEventListener('submit', (e) => {
+        const f = e.target;
+        track.form(
+          f.getAttribute('data-name') || f.name || 'unnamed_form',
+          f.id || '', 'submit'
+        );
       });
+    },
+
+    videos: () => {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('video').forEach(video => {
+          let played = false, quartiles = [false, false, false, false];
+          const onQuartile = (p, idx) => {
+            if (!quartiles[idx]) {
+              track.video(`quartile_${idx+1}`, video.currentSrc, video.title || 'Untitled', p);
+              quartiles[idx] = true;
+            }
+          };
+          video.addEventListener('play', () => {
+            if (!played) { track.video('start', video.currentSrc, video.title || 'Untitled'); played = true; }
+          });
+          video.addEventListener('timeupdate', () => {
+            const pct = Math.round((video.currentTime / video.duration) * 100);
+            if (pct >= 25) onQuartile(25, 0);
+            if (pct >= 50) onQuartile(50, 1);
+            if (pct >= 75) onQuartile(75, 2);
+            if (pct >= 100) onQuartile(100, 3);
+          });
+          video.addEventListener('pause', () => {
+            if (video.currentTime > 0 && !video.ended) 
+              track.video('pause', video.currentSrc, video.title || 'Untitled');
+          });
+          video.addEventListener('ended', () => 
+            track.video('complete', video.currentSrc, video.title || 'Untitled', 100)
+          );
+        });
+      });
+    },
+
+    errors: () => {
+      window.addEventListener('error', (e) => track.exception(e.message, false));
+    },
+
+    performance: () => {
+      window.addEventListener('load', () => {
+        if (!performance?.getEntriesByType) return;
+        const [nav] = performance.getEntriesByType('navigation') || [];
+        if (!nav) return;
+        track.timing('page_load', 'load_time', nav.loadEventEnd - nav.navigationStart);
+        track.timing('dom_interactive', 'dom_interactive', nav.domInteractive - nav.navigationStart);
+        const [fcp] = performance.getEntriesByType('paint')
+          .filter(e => e.name === 'first-contentful-paint') || [];
+        if (fcp) track.timing('first_contentful_paint', 'fcp', fcp.startTime);
+      });
+    },
+
+    coreWebVitals: () => {
+      if (!('PerformanceObserver' in window)) return;
+      
+      // LCP
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const last = entries[entries.length - 1];
+        if (last) track.timing('lcp', 'largest_contentful_paint', last.startTime);
+      }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+      // FID
+      new PerformanceObserver((list) => {
+        const [entry] = list.getEntries();
+        if (entry) track.timing('fid', 'first_input_delay', entry.processingStart - entry.startTime);
+      }).observe({ entryTypes: ['first-input'] });
+
+      // CLS
+      let cls = 0;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) cls += entry.value;
+        }
+        track.timing('cls', 'cumulative_layout_shift', Math.round(cls * 1000));
+      }).observe({ entryTypes: ['layout-shift'] });
     }
   };
 
-  // Auto-track page visibility changes
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      window.g4a.visibility('hidden');
-    } else {
-      window.g4a.visibility('visible');
+  // ─────────────────────────────────────────────────────────────
+  // 5. ACTIVATE AUTO-TRACKERS (Declarative, opt-in)
+  // ─────────────────────────────────────────────────────────────
+  Object.entries(autoTrack).forEach(([key, enabled]) => {
+    if (enabled && autoTrackers[key]) {
+      autoTrackers[key](enabled === true ? undefined : enabled);
     }
   });
 
-  // Auto-track scroll depth milestones
-  let maxScrollDepth = 0;
-  window.addEventListener('scroll', function() {
-    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const currentScroll = window.pageYOffset;
-    const scrollPercentage = Math.round((currentScroll / scrollHeight) * 100);
-    
-    // Track milestones: 25%, 50%, 75%, 90%, 100%
-    const milestones = [25, 50, 75, 90, 100];
-    milestones.forEach(milestone => {
-      if (scrollPercentage >= milestone && maxScrollDepth < milestone) {
-        window.g4a.scrollDepth(milestone);
-        maxScrollDepth = milestone;
-      }
-    });
-  });
-
-  // Auto-track outbound links
-  document.addEventListener('click', function(e) {
-    const target = e.target.closest('a');
-    if (target && target.href) {
-      const currentDomain = window.location.hostname;
-      const targetDomain = new URL(target.href).hostname;
-      
-      if (currentDomain !== targetDomain) {
-        window.g4a.outboundLink(
-          target.href,
-          target.textContent?.trim() || '',
-          targetDomain
-        );
-      }
-    }
-  });
-
-  // Auto-track file downloads
-  document.addEventListener('click', function(e) {
-    const target = e.target.closest('a');
-    if (target && target.href) {
-      const fileExtensions = ['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.zip', '.rar', '.jpg', '.png', '.gif'];
-      const href = target.href.toLowerCase();
-      
-      const hasFileExtension = fileExtensions.some(ext => href.includes(ext));
-      const hasDownloadAttribute = target.hasAttribute('download');
-      
-      if (hasFileExtension || hasDownloadAttribute) {
-        const fileName = target.getAttribute('download') || target.textContent?.trim() || '';
-        const fileExtension = href.split('.').pop() || '';
-        
-        window.g4a.download(target.href, fileName, fileExtension);
-      }
-    }
-  });
-
-  // Auto-track form submissions
-  document.addEventListener('submit', function(e) {
-    const form = e.target;
-    const formName = form.getAttribute('data-name') || form.name || 'unnamed_form';
-    const formId = form.id || '';
-    
-    window.g4a.form(formName, formId, 'submit');
-  });
-
-  // Auto-track video events (HTML5 videos)
-  document.addEventListener('DOMContentLoaded', function() {
-    const videos = document.querySelectorAll('video');
-    
-    videos.forEach(video => {
-      let playTracked = false;
-      let quartilesTracked = [false, false, false, false]; // 25%, 50%, 75%, 100%
-      
-      video.addEventListener('play', function() {
-        if (!playTracked) {
-          window.g4a.video('start', video.currentSrc, video.title || 'Untitled Video');
-          playTracked = true;
-        }
-      });
-      
-      video.addEventListener('timeupdate', function() {
-        const percentage = Math.round((video.currentTime / video.duration) * 100);
-        
-        // Track quartiles
-        if (percentage >= 25 && !quartilesTracked[0]) {
-          window.g4a.video('quartile_1', video.currentSrc, video.title || 'Untitled Video', 25);
-          quartilesTracked[0] = true;
-        } else if (percentage >= 50 && !quartilesTracked[1]) {
-          window.g4a.video('quartile_2', video.currentSrc, video.title || 'Untitled Video', 50);
-          quartilesTracked[1] = true;
-        } else if (percentage >= 75 && !quartilesTracked[2]) {
-          window.g4a.video('quartile_3', video.currentSrc, video.title || 'Untitled Video', 75);
-          quartilesTracked[2] = true;
-        } else if (percentage >= 100 && !quartilesTracked[3]) {
-          window.g4a.video('complete', video.currentSrc, video.title || 'Untitled Video', 100);
-          quartilesTracked[3] = true;
-        }
-      });
-      
-      video.addEventListener('pause', function() {
-        if (video.currentTime > 0 && !video.ended) {
-          window.g4a.video('pause', video.currentSrc, video.title || 'Untitled Video');
-        }
-      });
-      
-      video.addEventListener('ended', function() {
-        window.g4a.video('complete', video.currentSrc, video.title || 'Untitled Video', 100);
-      });
-    });
-  });
-
-  // Track JavaScript errors
-  window.addEventListener('error', function(e) {
-    window.g4a.exception(e.message, false);
-  });
-
-  // Track performance metrics
-  window.addEventListener('load', function() {
-    if ('performance' in window && 'getEntriesByType' in performance) {
-      const navigationEntries = performance.getEntriesByType('navigation');
-      if (navigationEntries.length > 0) {
-        const navEntry = navigationEntries[0];
-        
-        // Track page load time
-        window.g4a.timing('page_load', 'load_time', Math.round(navEntry.loadEventEnd - navEntry.navigationStart));
-        
-        // Track DOM interactive time
-        window.g4a.timing('dom_interactive', 'dom_interactive', Math.round(navEntry.domInteractive - navEntry.navigationStart));
-        
-        // Track first contentful paint
-        const paintEntries = performance.getEntriesByType('paint');
-        const fcpEntry = paintEntries.find(entry => entry.name === 'first-contentful-paint');
-        if (fcpEntry) {
-          window.g4a.timing('first_contentful_paint', 'fcp', Math.round(fcpEntry.startTime));
-        }
-      }
-    }
-  });
-
-  // Track Core Web Vitals
-  if ('PerformanceObserver' in window) {
-    // Largest Contentful Paint (LCP)
-    new PerformanceObserver((entryList) => {
-      const entries = entryList.getEntries();
-      const lastEntry = entries[entries.length - 1];
-      window.g4a.timing('lcp', 'largest_contentful_paint', Math.round(lastEntry.startTime));
-    }).observe({ entryTypes: ['largest-contentful-paint'] });
-
-    // First Input Delay (FID)
-    new PerformanceObserver((entryList) => {
-      const entries = entryList.getEntries();
-      window.g4a.timing('fid', 'first_input_delay', Math.round(entries[0].processingStart - entries[0].startTime));
-    }).observe({ entryTypes: ['first-input'] });
-
-    // Cumulative Layout Shift (CLS)
-    let clsValue = 0;
-    new PerformanceObserver((entryList) => {
-      for (const entry of entryList.getEntries()) {
-        if (!entry.hadRecentInput) {
-          clsValue += entry.value;
-        }
-      }
-      window.g4a.timing('cls', 'cumulative_layout_shift', Math.round(clsValue * 1000));
-    }).observe({ entryTypes: ['layout-shift'] });
-  }
-
-  // Set initial user properties
-  window.g4a.userProperty('page_type', 'landing_page');
-  window.g4a.userProperty('industry', 'fintech');
-  window.g4a.userProperty('country', 'venezuela');
-  window.g4a.userProperty('language', 'spanish');
+  // ─────────────────────────────────────────────────────────────
+  // 6. SET USER PROPERTIES (Declarative batch set)
+  // ─────────────────────────────────────────────────────────────
+  Object.entries(userProperties).forEach(([k, v]) => track.userProp(k, v));
 </script>

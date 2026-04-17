@@ -1,430 +1,713 @@
 ---
-// AEM Tracking Component - Audience Engagement Measurement
+// src/components/AEMTracking.astro
+import aemTrackingConfig from '../../data/marketing/aem-tracking-config.json';
+
 interface Props {
-  enableScrollTracking?: boolean;
-  enableClickTracking?: boolean;
-  enableFormTracking?: boolean;
-  enableVideoTracking?: boolean;
-  enableDownloadTracking?: boolean;
-  customEvents?: Array<{
-    name: string;
-    selector: string;
-    category?: string;
-    action?: string;
-    label?: string;
-  }>;
+  config?: AEMConfig;
+  trackers?: TrackerConfig;
+  endpoints?: EndpointConfig;
+  privacy?: PrivacyConfig;
 }
 
+// Declarative configuration types
+type AEMConfig = {
+  sessionId?: string;
+  sessionTimeout?: number;      // ms before session expires
+  debounceMs?: number;          // event debounce for performance
+  batchEvents?: boolean;        // batch events before sending
+  batchInterval?: number;       // ms between batch sends
+  debug?: boolean;              // console.log events
+};
+
+type TrackerConfig = {
+  pageView?: boolean | PageViewConfig;
+  timeOnPage?: boolean | TimeConfig;
+  scroll?: boolean | ScrollConfig;
+  clicks?: boolean | ClickConfig;
+  forms?: boolean | FormConfig;
+  videos?: boolean | VideoConfig;
+  downloads?: boolean | DownloadConfig;
+  visibility?: boolean;
+  custom?: CustomEventConfig[];
+};
+
+type PageViewConfig = {
+  captureReferrer?: boolean;
+  captureViewport?: boolean;
+  captureUserAgent?: boolean;
+};
+
+type TimeConfig = {
+  milestones?: number[];        // [30, 60, 180] seconds
+  interval?: number;            // check interval in ms
+};
+
+type ScrollConfig = {
+  thresholds?: number[];        // [25, 50, 75, 90, 100]
+  trackFirstScroll?: boolean;
+  trackMaxDepth?: boolean;
+};
+
+type ClickConfig = {
+  selectors?: string[];         // elements to track: ['a', 'button', '[role="button"]']
+  captureCoordinates?: boolean;
+  captureElementData?: boolean;
+  excludeSelectors?: string[];  // elements to ignore
+};
+
+type FormConfig = {
+  trackStart?: boolean;
+  trackSubmit?: boolean;
+  trackFields?: boolean;
+  excludeFields?: string[];     // ['password', 'credit_card', etc]
+  maxLength?: number;           // truncate field values
+};
+
+type VideoConfig = {
+  selectors?: string[];         // ['video', 'iframe[src*="youtube"]']
+  trackPlay?: boolean;
+  trackPause?: boolean;
+  trackComplete?: boolean;
+  trackProgress?: boolean | { intervals: number[] }; // [25, 50, 75, 100]%
+};
+
+type DownloadConfig = {
+  extensions?: string[];        // ['.pdf', '.zip', '.docx']
+  trackClicks?: boolean;
+  captureFileName?: boolean;
+};
+
+type CustomEventConfig = {
+  name: string;
+  selector: string;
+  event?: string;               // 'click' | 'focus' | 'submit' (default: 'click')
+  category?: string;
+  action?: string;
+  label?: string;
+  extraData?: Record<string, unknown>;
+};
+
+type EndpointConfig = {
+  dataLayer?: boolean;          // push to window.dataLayer (GTM)
+  analyticsUrl?: string;        // POST endpoint for raw events
+  batchUrl?: string;            // POST endpoint for batched events
+  headers?: Record<string, string>;
+};
+
+type PrivacyConfig = {
+  anonymizeIP?: boolean;
+  excludeSensitiveFields?: string[];  // auto-exclude from form tracking
+  respectDoNotTrack?: boolean;
+  consentRequired?: boolean;
+  consentCategories?: string[];       // ['analytics', 'marketing']
+};
+
+// Default configuration loaded from JSON (declarative, deeply mergeable)
+const defaultConfig: AEMConfig = {
+  ...aemTrackingConfig.defaultConfig,
+  debug: import.meta.env.DEV // Override debug based on environment
+};
+
+const defaultTrackers: TrackerConfig = aemTrackingConfig.defaultTrackers;
+
+const defaultEndpoints: EndpointConfig = aemTrackingConfig.defaultEndpoints;
+
+const defaultPrivacy: PrivacyConfig = aemTrackingConfig.defaultPrivacy;
+
+// Merge props with defaults (deep merge for nested configs)
 const {
-  enableScrollTracking = true,
-  enableClickTracking = true,
-  enableFormTracking = true,
-  enableVideoTracking = true,
-  enableDownloadTracking = true,
-  customEvents = [
-    {
-      name: "cta_download",
-      selector: "[data-track='download']",
-      category: "engagement",
-      action: "click",
-      label: "download_app"
-    },
-    {
-      name: "cta_faq",
-      selector: "[data-track='faq']",
-      category: "engagement", 
-      action: "click",
-      label: "view_faq"
-    },
-    {
-      name: "cta_contact",
-      selector: "[data-track='contact']",
-      category: "engagement",
-      action: "click", 
-      label: "contact_us"
-    },
-    {
-      name: "navigation_click",
-      selector: "nav a",
-      category: "navigation",
-      action: "click",
-      label: "main_nav"
-    },
-    {
-      name: "social_click",
-      selector: "[data-track='social']",
-      category: "social",
-      action: "click",
-      label: "social_share"
-    }
-  ]
+  config = {},
+  trackers = {},
+  endpoints = {},
+  privacy = {}
 } = Astro.props;
+
+const cfg = {
+  config: { ...defaultConfig, ...config },
+  trackers: { ...defaultTrackers, ...trackers, custom: [...(defaultTrackers.custom || []), ...(trackers.custom || [])] },
+  endpoints: { ...defaultEndpoints, ...endpoints },
+  privacy: { ...defaultPrivacy, ...privacy }
+};
 ---
 
-<!-- AEM Tracking Script -->
-<script is:inline>
-  // Audience Engagement Measurement System
+<!-- AEM Tracking - Declarative Class-Based Tracker -->
+<script is:inline define:vars={{ cfg }}>
+  // ─────────────────────────────────────────────────────────────
+  // AEMTracker Class (Declarative, Config-Driven)
+  // ─────────────────────────────────────────────────────────────
   class AEMTracker {
-    constructor() {
+    constructor(config) {
+      this.cfg = config;
       this.events = [];
-      this.scrollThresholds = [25, 50, 75, 90, 100];
-      this.timeOnPage = 0;
+      this.eventBuffer = [];
+      this.sessionId = this._initSession();
       this.sessionStart = Date.now();
+      this.timeOnPage = 0;
+      this.maxScroll = 0;
+      this.trackedThresholds = new Set();
       this.hasScrolled = false;
       this.hasEngaged = false;
       
-      this.init();
+      // Debounce helper
+      this._debounceTimers = new Map();
+      
+      if (this.cfg.config.debug) {
+        console.log('🎯 AEMTracker initialized', { session: this.sessionId });
+      }
+      
+      this._init();
     }
 
-    init() {
-      // Page view tracking
-      this.trackEvent('page_view', {
-        page: window.location.pathname,
-        title: document.title,
-        referrer: document.referrer,
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        viewport: {
-          width: window.innerWidth,
-          height: window.innerHeight
+    // ───────── Session Management ─────────
+    _initSession() {
+      const key = 'aem_session_id';
+      let id = sessionStorage.getItem(key);
+      
+      if (!id || this._sessionExpired()) {
+        id = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+        sessionStorage.setItem(key, id);
+        sessionStorage.setItem('aem_session_start', Date.now().toString());
+      }
+      return id;
+    }
+
+    _sessionExpired() {
+      const start = sessionStorage.getItem('aem_session_start');
+      if (!start) return true;
+      return Date.now() - parseInt(start) > this.cfg.config.sessionTimeout;
+    }
+
+    // ───────── Core Initialization ─────────
+    _init() {
+      // Respect Do Not Track
+      if (this.cfg.privacy.respectDoNotTrack && navigator.doNotTrack === '1') {
+        if (this.cfg.config.debug) console.log('🚫 AEM: DoNotTrack enabled, skipping');
+        return;
+      }
+
+      // Consent check
+      if (this.cfg.privacy.consentRequired && !this._hasConsent()) {
+        if (this.cfg.config.debug) console.log('⏳ AEM: Waiting for consent');
+        document.addEventListener('aem:consent:granted', () => this._init(), { once: true });
+        return;
+      }
+
+      // Register trackers declaratively
+      const registry = {
+        pageView: () => this._trackPageView(),
+        timeOnPage: () => this._initTimeTracking(),
+        scroll: () => this._initScrollTracking(),
+        clicks: () => this._initClickTracking(),
+        forms: () => this._initFormTracking(),
+        videos: () => this._initVideoTracking(),
+        downloads: () => this._initDownloadTracking(),
+        visibility: () => this._initVisibilityTracking(),
+        custom: () => this._initCustomEvents(),
+        unload: () => this._initUnloadTracking()
+      };
+
+      Object.entries(this.cfg.trackers).forEach(([key, enabled]) => {
+        if (enabled && registry[key]) {
+          registry[key](enabled === true ? {} : enabled);
         }
       });
 
-      // Time on page tracking
-      this.startTimeTracking();
-
-      // Scroll tracking
-      if ({enableScrollTracking.toString()}) {
-        this.initScrollTracking();
-      }
-
-      // Click tracking
-      if ({enableClickTracking.toString()}) {
-        this.initClickTracking();
-      }
-
-      // Form tracking
-      if ({enableFormTracking.toString()}) {
-        this.initFormTracking();
-      }
-
-      // Download tracking
-      if ({enableDownloadTracking.toString()}) {
-        this.initDownloadTracking();
-      }
-
-      // Video tracking
-      if ({enableVideoTracking.toString()}) {
-        this.initVideoTracking();
-      }
-
-      // Custom events
-      this.initCustomEvents();
-
-      // Page unload tracking
-      this.initUnloadTracking();
+      // Always track unload for session summary
+      registry.unload();
     }
 
-    startTimeTracking() {
+    _hasConsent() {
+      // Override this based on your CMP
+      return !this.cfg.privacy.consentRequired || 
+             document.cookie.includes('aem_consent=granted') ||
+             (window.aemConsent?.granted ?? true);
+    }
+
+    // ───────── Event Dispatch ─────────
+    _dispatch(name, payload = {}) {
+      const event = {
+        event: name,
+        timestamp: new Date().toISOString(),
+        session_id: this.sessionId,
+        page: location.pathname,
+        url: location.href,
+        referrer: document.referrer,
+        user_agent: navigator.userAgent,
+        viewport: { w: window.innerWidth, h: window.innerHeight },
+        ...payload
+      };
+
+      // Privacy: anonymize IP if enabled
+      if (this.cfg.privacy.anonymizeIP && event.ip) {
+        event.ip = event.ip.replace(/\.\d+$/, '.0');
+      }
+
+      // Store locally
+      this.events.push(name);
+      
+      // Debug output
+      if (this.cfg.config.debug) {
+        console.log(`📊 AEM:${name}`, event);
+      }
+
+      // Send to endpoints
+      this._send(event);
+    }
+
+    _send(event) {
+      // DataLayer (GTM)
+      if (this.cfg.endpoints.dataLayer && window.dataLayer) {
+        window.dataLayer.push(event);
+      }
+
+      // Analytics endpoint (batched or immediate)
+      if (this.cfg.endpoints.analyticsUrl) {
+        if (this.cfg.config.batchEvents) {
+          this.eventBuffer.push(event);
+          this._scheduleBatchSend();
+        } else {
+          this._postEvent(event);
+        }
+      }
+    }
+
+    _scheduleBatchSend() {
+      if (this._debounceTimers.has('batch')) return;
+      this._debounceTimers.set('batch', setTimeout(() => {
+        if (this.eventBuffer.length) {
+          this._postBatch([...this.eventBuffer]);
+          this.eventBuffer = [];
+        }
+        this._debounceTimers.delete('batch');
+      }, this.cfg.config.batchInterval));
+    }
+
+    async _postEvent(data) {
+      try {
+        await fetch(this.cfg.endpoints.analyticsUrl, {
+          method: 'POST',
+          headers: this.cfg.endpoints.headers,
+          body: JSON.stringify(data),
+          keepalive: true
+        });
+      } catch (e) {
+        if (this.cfg.config.debug) console.error('📡 AEM send error:', e);
+      }
+    }
+
+    async _postBatch(events) {
+      try {
+        await fetch(this.cfg.endpoints.batchUrl || this.cfg.endpoints.analyticsUrl, {
+          method: 'POST',
+          headers: this.cfg.endpoints.headers,
+          body: JSON.stringify({ batch: events, session: this.sessionId }),
+          keepalive: true
+        });
+      } catch (e) {
+        if (this.cfg.config.debug) console.error('📦 AEM batch error:', e);
+      }
+    }
+
+    // ───────── Tracker: Page View ─────────
+    _trackPageView(opts = {}) {
+      if (!this.cfg.trackers.pageView) return;
+      const c = { ...this.cfg.trackers.pageView, ...opts };
+      
+      this._dispatch('page_view', {
+        ...(c.captureReferrer && { referrer: document.referrer }),
+        ...(c.captureViewport && { viewport: { w: innerWidth, h: innerHeight } }),
+        ...(c.captureUserAgent && { user_agent: navigator.userAgent }),
+        title: document.title
+      });
+    }
+
+    // ───────── Tracker: Time on Page ─────────
+    _initTimeTracking(opts = {}) {
+      const c = { ...this.cfg.trackers.timeOnPage, ...opts };
+      if (!c) return;
+
+      const milestones = new Set(c.milestones || [30, 60, 180]);
+      const tracked = new Set();
+
       setInterval(() => {
         this.timeOnPage = Math.floor((Date.now() - this.sessionStart) / 1000);
         
-        // Track engagement milestones
-        if (this.timeOnPage === 30 && !this.hasEngaged) {
-          this.hasEngaged = true;
-          this.trackEvent('engagement_30s', {
+        if (milestones.has(this.timeOnPage) && !tracked.has(this.timeOnPage)) {
+          tracked.add(this.timeOnPage);
+          this._dispatch(`engagement_${this.timeOnPage}s`, {
             time_on_page: this.timeOnPage,
             engagement_type: 'time_milestone'
           });
+          if (this.timeOnPage >= 30 && !this.hasEngaged) {
+            this.hasEngaged = true;
+          }
         }
-        
-        if (this.timeOnPage === 60) {
-          this.trackEvent('engagement_60s', {
-            time_on_page: this.timeOnPage,
-            engagement_type: 'time_milestone'
-          });
-        }
-        
-        if (this.timeOnPage === 180) {
-          this.trackEvent('engagement_3m', {
-            time_on_page: this.timeOnPage,
-            engagement_type: 'time_milestone'
-          });
-        }
-      }, 1000);
+      }, c.interval || 1000);
     }
 
-    initScrollTracking() {
-      let maxScroll = 0;
-      
-      window.addEventListener('scroll', () => {
-        if (!this.hasScrolled) {
+    // ───────── Tracker: Scroll ─────────
+    _initScrollTracking(opts = {}) {
+      const c = { ...this.cfg.trackers.scroll, ...opts };
+      if (!c) return;
+
+      const thresholds = new Set(c.thresholds || [25, 50, 75, 90, 100]);
+
+      const onScroll = () => {
+        const pct = this._getScrollPercent();
+        
+        // First scroll
+        if (c.trackFirstScroll && !this.hasScrolled) {
           this.hasScrolled = true;
-          this.trackEvent('first_scroll', {
-            scroll_depth: this.getScrollPercentage(),
+          this._dispatch('first_scroll', {
+            scroll_depth: pct,
             engagement_type: 'scroll_milestone'
           });
         }
 
-        const currentScroll = this.getScrollPercentage();
-        if (currentScroll > maxScroll) {
-          maxScroll = currentScroll;
+        // Max depth
+        if (c.trackMaxDepth && pct > this.maxScroll) {
+          this.maxScroll = pct;
         }
 
-        // Track scroll thresholds
-        this.scrollThresholds.forEach(threshold => {
-          if (currentScroll >= threshold && !this.events.includes(`scroll_${threshold}`)) {
-            this.events.push(`scroll_${threshold}`);
-            this.trackEvent(`scroll_${threshold}`, {
-              scroll_depth: threshold,
-              engagement_type: 'scroll_milestone'
+        // Thresholds
+        for (const t of thresholds) {
+          if (pct >= t && !this.trackedThresholds.has(t)) {
+            this.trackedThresholds.add(t);
+            this._dispatch(`scroll_${t}`, {
+              scroll_depth: t,
+              engagement_type: 'scroll_milestone',
+              max_depth: this.maxScroll
             });
           }
-        });
-      });
+        }
+      };
+
+      // Debounced scroll listener
+      window.addEventListener('scroll', () => {
+        if (this.cfg.config.debounceMs) {
+          this._debounce('scroll', onScroll, this.cfg.config.debounceMs);
+        } else {
+          onScroll();
+        }
+      }, { passive: true });
     }
 
-    initClickTracking() {
+    _getScrollPercent() {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop / (h.scrollHeight - innerHeight)) * 100;
+      return Math.min(100, Math.round(scrolled));
+    }
+
+    // ───────── Tracker: Clicks ─────────
+    _initClickTracking(opts = {}) {
+      const c = { ...this.cfg.trackers.clicks, ...opts };
+      if (!c) return;
+
+      const selectors = c.selectors || ['a', 'button', '[role="button"]'];
+      const exclude = c.excludeSelectors || [];
+
       document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button, [role="button"]');
-        if (target) {
-          const clickData = {
-            element_type: target.tagName.toLowerCase(),
-            element_text: target.textContent?.trim() || '',
-            element_id: target.id || '',
-            element_class: target.className || '',
-            href: target.href || '',
-            coordinates: {
-              x: e.clientX,
-              y: e.clientY
-            },
-            viewport_position: {
-              x: window.scrollX + e.clientX,
-              y: window.scrollY + e.clientY
-            }
-          };
+        const target = e.target.closest(selectors.join(','));
+        if (!target || exclude.some(s => target.closest(s))) return;
 
-          this.trackEvent('click', clickData);
+        const data = {};
+        
+        if (c.captureElementData) {
+          Object.assign(data, {
+            element_type: target.tagName.toLowerCase(),
+            element_text: target.textContent?.trim().slice(0, 100) || '',
+            element_id: target.id || '',
+            element_class: target.className?.toString().split(' ')[0] || '',
+            href: target.href || target.getAttribute('href') || ''
+          });
         }
-      });
+
+        if (c.captureCoordinates) {
+          Object.assign(data, {
+            click_coords: { x: e.clientX, y: e.clientY },
+            page_coords: { x: scrollX + e.clientX, y: scrollY + e.clientY }
+          });
+        }
+
+        this._dispatch('click', data);
+      }, true);
     }
 
-    initFormTracking() {
-      const forms = document.querySelectorAll('form');
-      
-      forms.forEach(form => {
-        // Form start
-        form.addEventListener('focus', (e) => {
-          if (!form.dataset.trackingStarted) {
-            form.dataset.trackingStarted = 'true';
-            this.trackEvent('form_start', {
+    // ───────── Tracker: Forms ─────────
+    _initFormTracking(opts = {}) {
+      const c = { ...this.cfg.trackers.forms, ...opts };
+      if (!c) return;
+
+      const excludeFields = new Set([...(this.cfg.privacy.excludeSensitiveFields || []), ...(c.excludeFields || [])]);
+
+      document.querySelectorAll('form').forEach(form => {
+        // Form start (first focus)
+        if (c.trackStart) {
+          form.addEventListener('focus', (e) => {
+            if (form.dataset.aemTracked) return;
+            form.dataset.aemTracked = 'true';
+            this._dispatch('form_start', {
               form_id: form.id || '',
-              form_class: form.className || '',
               form_action: form.action || '',
-              trigger_element: e.target.tagName.toLowerCase()
+              trigger: e.target.name || e.target.type || e.target.tagName.toLowerCase()
             });
-          }
-        }, true);
+          }, true);
+        }
 
         // Form submit
-        form.addEventListener('submit', (e) => {
-          this.trackEvent('form_submit', {
-            form_id: form.id || '',
-            form_class: form.className || '',
-            form_action: form.action || '',
-            form_fields: this.getFormData(form)
-          });
-        });
-
-        // Form field interactions
-        const fields = form.querySelectorAll('input, select, textarea');
-        fields.forEach(field => {
-          field.addEventListener('blur', () => {
-            this.trackEvent('field_blur', {
-              field_name: field.name || '',
-              field_type: field.type || field.tagName.toLowerCase(),
-              field_id: field.id || '',
-              form_id: form.id || ''
+        if (c.trackSubmit) {
+          form.addEventListener('submit', () => {
+            this._dispatch('form_submit', {
+              form_id: form.id || '',
+              form_action: form.action || '',
+              fields: c.trackFields ? this._serializeForm(form, excludeFields, c.maxLength || 50) : undefined
             });
           });
-        });
-      });
-    }
+        }
 
-    initDownloadTracking() {
-      document.addEventListener('click', (e) => {
-        const target = e.target.closest('a[href*="download"], a[href*=".pdf"], a[href*=".zip"], a[download]');
-        if (target) {
-          this.trackEvent('download', {
-            file_url: target.href || '',
-            file_name: target.download || target.textContent?.trim() || '',
-            file_type: this.getFileType(target.href || ''),
-            trigger_element: target.textContent?.trim() || ''
+        // Field blur
+        if (c.trackFields) {
+          form.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('blur', () => {
+              if (excludeFields.has(field.name?.toLowerCase())) return;
+              this._dispatch('field_blur', {
+                field_name: field.name || '',
+                field_type: field.type || field.tagName.toLowerCase(),
+                form_id: form.id || ''
+              });
+            });
           });
         }
       });
     }
 
-    initVideoTracking() {
-      const videos = document.querySelectorAll('video, iframe[src*="youtube"], iframe[src*="vimeo"]');
-      
-      videos.forEach(video => {
-        // Video play
-        video.addEventListener('play', () => {
-          this.trackEvent('video_play', {
-            video_id: video.id || '',
-            video_src: video.src || video.src || '',
-            video_title: video.title || ''
-          });
-        });
-
-        // Video pause
-        video.addEventListener('pause', () => {
-          this.trackEvent('video_pause', {
-            video_id: video.id || '',
-            video_src: video.src || '',
-            current_time: video.currentTime || 0
-          });
-        });
-
-        // Video complete
-        video.addEventListener('ended', () => {
-          this.trackEvent('video_complete', {
-            video_id: video.id || '',
-            video_src: video.src || '',
-            total_duration: video.duration || 0
-          });
-        });
-      });
-    }
-
-    initCustomEvents() {
-      const customEventsConfig = {JSON.stringify(customEvents)};
-      
-      customEventsConfig.forEach(event => {
-        const elements = document.querySelectorAll(event.selector);
-        elements.forEach(element => {
-          element.addEventListener('click', () => {
-            this.trackEvent(event.name, {
-              category: event.category || 'custom',
-              action: event.action || 'click',
-              label: event.label || '',
-              element_text: element.textContent?.trim() || '',
-              element_id: element.id || ''
-            });
-          });
-        });
-      });
-    }
-
-    initUnloadTracking() {
-      window.addEventListener('beforeunload', () => {
-        this.trackEvent('page_unload', {
-          time_on_page: this.timeOnPage,
-          max_scroll_depth: this.getMaxScrollDepth(),
-          total_events: this.events.length,
-          session_duration: Date.now() - this.sessionStart
-        });
-      });
-
-      // Track page visibility changes
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          this.trackEvent('page_hidden', {
-            time_on_page: this.timeOnPage,
-            engagement_type: 'visibility_change'
-          });
-        } else {
-          this.trackEvent('page_visible', {
-            time_on_page: this.timeOnPage,
-            engagement_type: 'visibility_change'
-          });
-        }
-      });
-    }
-
-    getScrollPercentage() {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      return Math.round(((scrollTop + windowHeight) / documentHeight) * 100);
-    }
-
-    getMaxScrollDepth() {
-      return Math.max(...this.events
-        .filter(event => event.startsWith('scroll_'))
-        .map(event => parseInt(event.replace('scroll_', ''))), 0);
-    }
-
-    getFormData(form) {
-      const formData = new FormData(form);
+    _serializeForm(form, exclude, maxLength) {
       const data = {};
-      
-      for (let [key, value] of formData.entries()) {
-        // Don't track sensitive data
-        if (!key.toLowerCase().includes('password') && 
-            !key.toLowerCase().includes('credit') && 
-            !key.toLowerCase().includes('card')) {
-          data[key] = typeof value === 'string' ? value.substring(0, 50) : value;
-        }
+      for (const [k, v] of new FormData(form)) {
+        const key = k.toLowerCase();
+        if (exclude.some(ex => key.includes(ex))) continue;
+        data[k] = typeof v === 'string' ? v.slice(0, maxLength) : v;
       }
-      
       return data;
     }
 
-    getFileType(url) {
-      const extension = url.split('.').pop()?.toLowerCase();
-      return extension || 'unknown';
+    // ───────── Tracker: Videos ─────────
+    _initVideoTracking(opts = {}) {
+      const c = { ...this.cfg.trackers.videos, ...opts };
+      if (!c) return;
+
+      const selectors = c.selectors || ['video', 'iframe[src*="youtube"]', 'iframe[src*="vimeo"]'];
+      const progressIntervals = c.trackProgress === true ? [25, 50, 75, 100] : (c.trackProgress?.intervals || []);
+
+      document.querySelectorAll(selectors.join(',')).forEach(media => {
+        const isEmbed = media.tagName === 'IFRAME';
+        const getSrc = () => isEmbed ? media.src : media.currentSrc || media.src;
+        const getId = () => media.id || getSrc().split('/').pop()?.split('?')[0] || '';
+        const getTitle = () => media.title || media.getAttribute('title') || '';
+
+        if (c.trackPlay) {
+          media.addEventListener('play', () => {
+            this._dispatch('video_play', {
+              video_id: getId(),
+              video_src: getSrc(),
+              video_title: getTitle()
+            });
+          });
+        }
+
+        if (c.trackPause) {
+          media.addEventListener('pause', () => {
+            this._dispatch('video_pause', {
+              video_id: getId(),
+              video_src: getSrc(),
+              current_time: media.currentTime || 0
+            });
+          });
+        }
+
+        if (c.trackComplete) {
+          media.addEventListener('ended', () => {
+            this._dispatch('video_complete', {
+              video_id: getId(),
+              video_src: getSrc(),
+              duration: media.duration || 0
+            });
+          });
+        }
+
+        if (progressIntervals.length) {
+          const tracked = new Set();
+          media.addEventListener('timeupdate', () => {
+            if (!media.duration) return;
+            const pct = Math.round((media.currentTime / media.duration) * 100);
+            for (const interval of progressIntervals) {
+              if (pct >= interval && !tracked.has(interval)) {
+                tracked.add(interval);
+                this._dispatch('video_progress', {
+                  video_id: getId(),
+                  percent: interval,
+                  current_time: media.currentTime
+                });
+              }
+            }
+          });
+        }
+      });
     }
 
-    trackEvent(eventName, data) {
-      const eventData = {
-        event: eventName,
-        timestamp: new Date().toISOString(),
-        page: window.location.pathname,
-        session_id: this.getSessionId(),
-        user_agent: navigator.userAgent,
-        ...data
+    // ───────── Tracker: Downloads ─────────
+    _initDownloadTracking(opts = {}) {
+      const c = { ...this.cfg.trackers.downloads, ...opts };
+      if (!c) return;
+
+      const extensions = new Set((c.extensions || []).map(e => e.toLowerCase()));
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.href || '';
+        const hasDownloadAttr = link.hasAttribute('download');
+        const ext = (href.split('.').pop()?.toLowerCase() || '').split('?')[0];
+        const isDownload = hasDownloadAttr || extensions.has(`.${ext}`);
+
+        if (!isDownload) return;
+
+        const data = {
+          file_url: href,
+          trigger_text: link.textContent?.trim().slice(0, 100) || ''
+        };
+
+        if (c.captureFileName) {
+          data.file_name = link.download || href.split('/').pop()?.split('?')[0] || '';
+          data.file_type = ext || 'unknown';
+        }
+
+        this._dispatch('download', data);
+      });
+    }
+
+    // ───────── Tracker: Visibility ─────────
+    _initVisibilityTracking() {
+      if (!this.cfg.trackers.visibility) return;
+
+      document.addEventListener('visibilitychange', () => {
+        this._dispatch(document.hidden ? 'page_hidden' : 'page_visible', {
+          time_on_page: this.timeOnPage,
+          engagement_type: 'visibility_change'
+        });
+      });
+    }
+
+    // ───────── Tracker: Custom Events ─────────
+    _initCustomEvents() {
+      const customs = this.cfg.trackers.custom || [];
+      
+      customs.forEach(evt => {
+        const elements = document.querySelectorAll(evt.selector);
+        const eventType = evt.event || 'click';
+        
+        elements.forEach(el => {
+          el.addEventListener(eventType, () => {
+            this._dispatch(evt.name, {
+              category: evt.category || 'custom',
+              action: evt.action || eventType,
+              label: evt.label || '',
+              element_text: el.textContent?.trim().slice(0, 100) || '',
+              element_id: el.id || '',
+              ...evt.extraData
+            });
+          });
+        });
+      });
+    }
+
+    // ───────── Tracker: Unload (Session Summary) ─────────
+    _initUnloadTracking() {
+      const onUnload = () => {
+        this._dispatch('page_unload', {
+          time_on_page: this.timeOnPage,
+          max_scroll_depth: this.maxScroll,
+          total_events: this.events.length,
+          session_duration: Date.now() - this.sessionStart,
+          engagement_score: this._calculateEngagement()
+        });
       };
 
-      // Store in events array
-      this.events.push(eventName);
+      window.addEventListener('beforeunload', onUnload, { capture: true });
+      // Also try pagehide for better mobile support
+      window.addEventListener('pagehide', onUnload, { capture: true });
+    }
 
-      // Send to data layer (for GTM)
-      if (typeof window !== 'undefined' && window.dataLayer) {
-        window.dataLayer.push(eventData);
+    _calculateEngagement() {
+      let score = 0;
+      if (this.timeOnPage >= 30) score += 25;
+      if (this.timeOnPage >= 60) score += 25;
+      if (this.maxScroll >= 50) score += 25;
+      if (this.maxScroll >= 90) score += 25;
+      if (this.events.length > 5) score = Math.min(100, score + 10);
+      return Math.min(100, score);
+    }
+
+    // ───────── Utilities ─────────
+    _debounce(key, fn, ms) {
+      if (this._debounceTimers.has(key)) {
+        clearTimeout(this._debounceTimers.get(key));
       }
+      this._debounceTimers.set(key, setTimeout(() => {
+        fn();
+        this._debounceTimers.delete(key);
+      }, ms));
+    }
 
-      // Send to analytics endpoint
-      this.sendToAnalytics(eventData);
-
-      // Console log for debugging
-      console.log('AEM Event:', eventData);
+    // Public API for manual tracking
+    track(name, payload) {
+      this._dispatch(name, payload);
     }
 
     getSessionId() {
-      let sessionId = sessionStorage.getItem('aem_session_id');
-      if (!sessionId) {
-        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        sessionStorage.setItem('aem_session_id', sessionId);
-      }
-      return sessionId;
+      return this.sessionId;
     }
 
-    sendToAnalytics(data) {
-      // Send to your analytics endpoint
-      // This is a placeholder - implement your actual analytics endpoint
-      try {
-        // Example: fetch('/api/analytics', { method: 'POST', body: JSON.stringify(data) });
-      } catch (error) {
-        console.error('Analytics tracking error:', error);
-      }
+    getMetrics() {
+      return {
+        session_id: this.sessionId,
+        time_on_page: this.timeOnPage,
+        max_scroll: this.maxScroll,
+        event_count: this.events.length,
+        engagement_score: this._calculateEngagement()
+      };
     }
   }
 
-  // Initialize AEM Tracker when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
-    new AEMTracker();
-  });
+  // ───────── Global Initialization ─────────
+  let aemTracker;
+  
+  const init = () => {
+    if (aemTracker) return;
+    aemTracker = new AEMTracker(cfg);
+    window.aemTracker = aemTracker; // Expose for manual tracking
+  };
+
+  // Init on DOM ready or immediately if already loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+
+  // Expose consent API for CMP integration
+  window.aemConsent = {
+    grant: (categories = []) => {
+      document.cookie = 'aem_consent=granted; path=/; max-age=31536000';
+      document.dispatchEvent(new CustomEvent('aem:consent:granted', { detail: { categories } }));
+    },
+    revoke: () => {
+      document.cookie = 'aem_consent=; path=/; max-age=0';
+      if (aemTracker) {
+        console.log('🔒 AEM: Consent revoked, stopping tracking');
+        // Could add stop() method to halt further events
+      }
+    }
+  };
 </script>

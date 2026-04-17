@@ -1,0 +1,105 @@
+{
+  "defaultContent": {
+    "faq": [
+      {
+        "question": "¿Qué es CrediScore?",
+        "answer": "CrediScore es la primera infraestructura de confianza técnica en Venezuela que utiliza un Sistema de Apoyo a Decisiones (DSS) para evaluar tu salud económica y reputación comercial.",
+        "category": "general",
+        "keywords": ["crediscore", "infraestructura", "confianza", "venezuela"]
+      },
+      {
+        "question": "¿Cómo funciona CrediScore?",
+        "answer": "CrediScore analiza tus comportamientos de pago y cumplimiento de palabra para generar un puntaje de confianza que te abre puertas a oportunidades financieras y comerciales.",
+        "category": "funcionamiento",
+        "keywords": ["funcionamiento", "puntaje", "confianza", "oportunidades"]
+      },
+      {
+        "question": "¿Qué es un Sistema de Apoyo a Decisiones (DSS)?",
+        "answer": "Un DSS es un sistema informático que ayuda a tomar decisiones basadas en datos análisis y algoritmos, proporcionando recomendaciones objetivas.",
+        "category": "tecnología",
+        "keywords": ["dss", "sistema", "decisiones", "algoritmos"]
+      },
+      {
+        "question": "¿Es seguro usar CrediScore?",
+        "answer": "Sí, CrediScore utiliza tecnología de encriptación avanzada y sigue las mejores prácticas de seguridad para proteger tu información.",
+        "category": "seguridad",
+        "keywords": ["seguridad", "encriptación", "protección", "datos"]
+      },
+      {
+        "question": "¿Cómo puedo mejorar mi puntaje CrediScore?",
+        "answer": "Puedes mejorar tu puntaje manteniendo buenos hábitos de pago, cumpliendo tus compromisos financieros y manteniendo un historial comercial positivo.",
+        "category": "mejora",
+        "keywords": ["mejorar", "puntaje", "hábitos", "pago"]
+      }
+    ],
+    "howTo": [
+      {
+        "name": "Cómo obtener tu CrediScore",
+        "description": "Aprende el proceso paso a paso para obtener tu evaluación de confianza CrediScore",
+        "estimatedTime": "PT10M",
+        "supplies": ["Documento de identidad", "Información financiera básica"],
+        "steps": [
+          "Regístrate en la plataforma CrediScore",
+          "Completa tu perfil con información veraz",
+          "Conecta tus cuentas financieras (opcional)",
+          "Espera la evaluación del sistema",
+          "Recibe tu puntaje y recomendaciones"
+        ]
+      },
+      {
+        "name": "Cómo interpretar tu puntaje",
+        "description": "Entiende qué significa tu puntaje y cómo usarlo a tu favor",
+        "estimatedTime": "PT5M",
+        "steps": [
+          "Revisa tu puntaje actual",
+          "Compara con rangos de referencia",
+          "Analiza factores que influyen en tu score",
+          "Sigue las recomendaciones personalizadas",
+          "Monitorea tu progreso mensualmente"
+        ]
+      }
+    ],
+    "definitions": [
+      {
+        "term": "CrediScore",
+        "definition": "Infraestructura de confianza técnica que evalúa la salud económica y reputación comercial mediante un Sistema de Apoyo a Decisiones (DSS).",
+        "alternateNames": ["Score de crédito", "Puntaje de confianza", "Evaluación financiera"],
+        "url": "/que-es-crediscore"
+      },
+      {
+        "term": "DSS (Sistema de Apoyo a Decisiones)",
+        "definition": "Sistema informático que ayuda a tomar decisiones basadas en análisis de datos y algoritmos, proporcionando recomendaciones objetivas.",
+        "alternateNames": ["Decision Support System", "Sistema de decisión", "Asistente de decisiones"],
+        "url": "/tecnologia-dss"
+      },
+      {
+        "term": "Salud económica",
+        "definition": "Estado financiero general de una persona o empresa, incluyendo ingresos, deudas, hábitos de pago y capacidad de cumplimiento.",
+        "alternateNames": ["Estado financiero", "Salud financiera", "Situación económica"],
+        "url": "/salud-economica"
+      },
+      {
+        "term": "Reputación comercial",
+        "definition": "Percepción y evaluación del comportamiento comercial de una persona o empresa basada en su historial de transacciones y cumplimiento.",
+        "alternateNames": ["Reputación financiera", "Historial comercial", "Confianza comercial"],
+        "url": "/reputacion-comercial"
+      }
+    ]
+  },
+  "defaultMetadata": {
+    "headline": "¿Qué es CrediScore y cómo funciona?",
+    "description": "CrediScore es la primera infraestructura de confianza técnica en Venezuela que utiliza un Sistema de Apoyo a Decisiones (DSS) para evaluar tu salud económica y reputación comercial.",
+    "articleBody": "CrediScore es la primera infraestructura de confianza técnica en Venezuela que utiliza un Sistema de Apoyo a Decisiones (DSS) para evaluar tu salud económica y reputación comercial. La plataforma analiza tus comportamientos de pago y cumplimiento de palabra para generar un puntaje de confianza que te abre puertas a oportunidades financieras y comerciales.\n\nCon CrediScore, puedes:\n\n- Obtener una evaluación objetiva de tu perfil económico\n- Acceder a mejores condiciones financieras\n- Mejorar tu reputación comercial\n- Tomar decisiones informadas basadas en datos\n\nNuestro sistema utiliza tecnología avanzada y algoritmos de machine learning para proporcionar evaluaciones justas y transparentes, ayudando a construir un ecosistema de confianza en Venezuela.",
+    "author": "CrediScore Team",
+    "publisher": "CrediScore Venezuela",
+    "datePublished": "2024-01-15",
+    "keywords": ["crediscore", "dss", "sistema de apoyo a decisiones", "salud económica", "reputación comercial", "venezuela", "finanzas", "confianza"]
+  },
+  "defaultOutput": {
+    "emitFAQ": true,
+    "emitHowTo": true,
+    "emitDefinitions": true,
+    "emitArticle": true,
+    "prettyPrint": true
+  }
+}

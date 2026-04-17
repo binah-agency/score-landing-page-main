@@ -1,0 +1,99 @@
+{
+  "defaultConfig": {
+    "sessionTimeout": 1800000,
+    "debounceMs": 100,
+    "batchEvents": false,
+    "batchInterval": 5000,
+    "debug": true
+  },
+  "defaultTrackers": {
+    "pageView": {
+      "captureReferrer": true,
+      "captureViewport": true,
+      "captureUserAgent": true
+    },
+    "timeOnPage": {
+      "milestones": [30, 60, 180],
+      "interval": 1000
+    },
+    "scroll": {
+      "thresholds": [25, 50, 75, 90, 100],
+      "trackFirstScroll": true,
+      "trackMaxDepth": true
+    },
+    "clicks": {
+      "selectors": ["a", "button", "[role=\"button\"]"],
+      "captureCoordinates": true,
+      "captureElementData": true
+    },
+    "forms": {
+      "trackStart": true,
+      "trackSubmit": true,
+      "trackFields": true,
+      "excludeFields": ["password", "credit", "card"],
+      "maxLength": 50
+    },
+    "videos": {
+      "selectors": ["video", "iframe[src*=\"youtube\"]", "iframe[src*=\"vimeo\"]"],
+      "trackPlay": true,
+      "trackPause": true,
+      "trackComplete": true
+    },
+    "downloads": {
+      "extensions": [".pdf", ".zip", ".doc", ".docx", ".xls", ".xlsx"],
+      "trackClicks": true,
+      "captureFileName": true
+    },
+    "visibility": true,
+    "custom": [
+      {
+        "name": "cta_download",
+        "selector": "[data-track='download']",
+        "category": "engagement",
+        "action": "click",
+        "label": "download_app"
+      },
+      {
+        "name": "cta_faq",
+        "selector": "[data-track='faq']",
+        "category": "engagement",
+        "action": "click",
+        "label": "view_faq"
+      },
+      {
+        "name": "cta_contact",
+        "selector": "[data-track='contact']",
+        "category": "engagement",
+        "action": "click",
+        "label": "contact_us"
+      },
+      {
+        "name": "navigation_click",
+        "selector": "nav a",
+        "category": "navigation",
+        "action": "click",
+        "label": "main_nav"
+      },
+      {
+        "name": "social_click",
+        "selector": "[data-track='social']",
+        "category": "social",
+        "action": "click",
+        "label": "social_share"
+      }
+    ]
+  },
+  "defaultEndpoints": {
+    "dataLayer": true,
+    "analyticsUrl": "/api/analytics",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "defaultPrivacy": {
+    "anonymizeIP": true,
+    "excludeSensitiveFields": ["password", "credit_card", "cvv", "ssn"],
+    "respectDoNotTrack": true,
+    "consentRequired": false
+  }
+}

@@ -2,14 +2,14 @@
 
 ## Branches
 
-| Branch | Purpose | Protection Rules |
-|--------|---------|------------------|
-| `main` | Production-ready code | Require PR + review, no direct pushes |
-| `dev` | Integration branch for development | Require PR, no direct pushes |
-| `feature/*` | New features (e.g. `feature/hero-section`) | Delete after merge |
-| `bugfix/*` | Bug fixes for dev (e.g. `bugfix/nav-scroll`) | Delete after merge |
-| `hotfix/*` | Urgent production fixes (e.g. `hotfix/typo-footer`) | Merge to `main` + `dev`, delete after |
-| `release/*` | Release preparation (e.g. `release/v1.0.0`) | Merge to `main` + `dev`, tag on main |
+| Branch      | Purpose                                             | Protection Rules                      |
+| ----------- | --------------------------------------------------- | ------------------------------------- |
+| `main`      | Production-ready code                               | Require PR + review, no direct pushes |
+| `dev`       | Integration branch for development                  | Require PR, no direct pushes          |
+| `feature/*` | New features (e.g. `feature/hero-section`)          | Delete after merge                    |
+| `bugfix/*`  | Bug fixes for dev (e.g. `bugfix/nav-scroll`)        | Delete after merge                    |
+| `hotfix/*`  | Urgent production fixes (e.g. `hotfix/typo-footer`) | Merge to `main` + `dev`, delete after |
+| `release/*` | Release preparation (e.g. `release/v1.0.0`)         | Merge to `main` + `dev`, tag on main  |
 
 ## Workflow
 

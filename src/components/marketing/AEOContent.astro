@@ -1,157 +1,155 @@
 ---
-// AEO Content Component - Answer Engine Optimization
+// src/components/AEOContent.astro
+import aeoContentConfig from '../../data/marketing/aeo-content-config.json';
+
 interface Props {
-  questions?: Array<{
-    question: string;
-    answer: string;
-    category?: string;
-  }>;
-  howTo?: Array<{
-    name: string;
-    steps: string[];
-  }>;
-  definitions?: Array<{
-    term: string;
-    definition: string;
-  }>;
+  content?: AEOContent;
+  metadata?: AEOMetadata;
+  output?: AEOOutputConfig;
 }
 
-const {
-  questions = [
-    {
-      question: "¿Qué es CrediScore?",
-      answer: "CrediScore es la primera infraestructura de confianza técnica en Venezuela que utiliza un Sistema de Apoyo a Decisiones (DSS) para evaluar tu salud económica y reputación comercial en tiempo real.",
-      category: "General"
-    },
-    {
-      question: "¿Cómo funciona el scoring de CrediScore?",
-      answer: "CrediScore analiza tus comportamientos de pago y cumplimiento de palabra mediante tecnología de punta, generando un puntaje que refleja tu nivel de confianza técnica y comercial.",
-      category: "Proceso"
-    },
-    {
-      question: "¿Cuánto tiempo toma obtener mi Score?",
-      answer: "El proceso de evaluación es instantáneo. Una vez que completes el formulario de verificación, recibirás tu puntaje de confianza en tiempo real.",
-      category: "Proceso"
-    },
-    {
-      question: "¿Es seguro compartir mis datos con CrediScore?",
-      answer: "Sí, utilizamos encriptación de nivel bancario y cumplimos con las mejores prácticas de seguridad de datos para proteger tu información personal y financiera.",
-      category: "Seguridad"
-    },
-    {
-      question: "¿Qué beneficios tiene un Score alto?",
-      answer: "Un Score alto te da acceso a mejores tasas de interés, mayores límites de crédito, aprobaciones rápidas y acceso exclusivo a productos financieros premium.",
-      category: "Beneficios"
-    },
-    {
-      question: "¿Cómo puedo mejorar mi Score?",
-      answer: "Puedes mejorar tu Score manteniendo un historial de pagos puntual, cumpliendo tus compromisos comerciales, y manteniendo buenas relaciones comerciales verificables.",
-      category: "Mejora"
-    },
-    {
-      question: "¿CrediScore es un banco?",
-      answer: "No, CrediScore no es una entidad financiera. Somos una plataforma tecnológica que certifica tu reputación comercial para facilitar tus transacciones y oportunidades financieras.",
-      category: "General"
-    },
-    {
-      question: "¿Empresas pueden usar CrediScore?",
-      answer: "Sí, las empresas usan CrediScore para validar perfiles de clientes, proveedores y socios comerciales, reduciendo el riesgo y aumentando la confianza en sus transacciones.",
-      category: "Empresas"
-    }
-  ],
-  howTo = [
-    {
-      name: "Cómo obtener tu Score CrediScore",
-      steps: [
-        "Regístrate en la plataforma CrediScore",
-        "Completa el formulario de verificación de identidad",
-        "Proporciona información comercial relevante",
-        "Recibe tu puntaje de confianza instantáneamente",
-        "Comienza a usar tu Score para acceder a oportunidades"
-      ]
-    },
-    {
-      name: "Cómo usar tu Pasaporte de Confiabilidad",
-      steps: [
-        "Descarga tu certificado de Score",
-        "Comparte tu perfil con empresas o proveedores",
-        "Demuestra tu reputación comercial verificada",
-        "Accede a mejores condiciones comerciales",
-        "Construye tu historial de confianza"
-      ]
-    }
-  ],
-  definitions = [
-    {
-      term: "Score de Confianza",
-      definition: "Puntaje numérico que refleja tu nivel de confiabilidad comercial basado en tu historial de comportamientos y cumplimiento."
-    },
-    {
-      term: "DSS (Sistema de Apoyo a Decisiones)",
-      definition: "Sistema tecnológico que analiza múltiples variables para proporcionar recomendaciones basadas en datos y patrones de comportamiento."
-    },
-    {
-      term: "Infraestructura de Confianza",
-      definition: "Plataforma tecnológica que permite validar y certificar la reputación comercial de individuos y empresas."
-    },
-    {
-      term: "Pasaporte de Confiabilidad",
-      definition: "Certificado digital que acredita tu nivel de confianza técnica y comercial para facilitar transacciones y oportunidades."
-    },
-    {
-      term: "Reputación Comercial",
-      definition: "Percepción colectiva sobre tu fiabilidad y cumplimiento en el entorno comercial basada en historial verificable."
-    }
-  ]
-} = Astro.props;
----
+// Declarative content types
+type FAQItem = {
+  question: string;
+  answer: string;
+  category?: string;
+  keywords?: string[];
+};
 
-<!-- AEO Content - Hidden from display but readable by search engines -->
-<script type="application/ld+json">
-{
+type HowToItem = {
+  name: string;
+  description?: string;
+  steps: Array<string | { text: string; tip?: string }>;
+  estimatedTime?: string;
+  supplies?: string[];
+};
+
+type DefinitionItem = {
+  term: string;
+  definition: string;
+  alternateNames?: string[];
+  url?: string;
+};
+
+type AEOContent = {
+  faq?: FAQItem[];
+  howTo?: HowToItem[];
+  definitions?: DefinitionItem[];
+};
+
+type AEOMetadata = {
+  headline?: string;
+  description?: string;
+  articleBody?: string;
+  author?: string;
+  publisher?: string;
+  datePublished?: string;
+  keywords?: string[];
+};
+
+type AEOOutputConfig = {
+  emitFAQ?: boolean;
+  emitHowTo?: boolean;
+  emitDefinitions?: boolean;
+  emitArticle?: boolean;
+  prettyPrint?: boolean;
+};
+
+// Default configuration loaded from JSON (declarative, easily overrideable)
+const defaultContent: AEOContent = aeoContentConfig.defaultContent;
+
+const defaultMetadata: AEOMetadata = aeoContentConfig.defaultMetadata;
+
+const defaultOutput: AEOOutputConfig = aeoContentConfig.defaultOutput;
+
+// Merge props with defaults (declarative, immutable)
+const {
+  content = {},
+  metadata = {},
+  output = {}
+} = Astro.props;
+
+const merged = {
+  content: { ...defaultContent, ...content },
+  metadata: { ...defaultMetadata, ...metadata },
+  output: { ...defaultOutput, ...output }
+};
+
+// ─────────────────────────────────────────────────────────────
+// JSON-LD Generators (Pure, declarative functions)
+// ─────────────────────────────────────────────────────────────
+const escapeJSON = (str: string) => 
+  str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '');
+
+const generateFAQ = (items: FAQItem[]) => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  "mainEntity": [
-    {questions.map((item, index) => `
-    {
-      "@type": "Question",
-      "name": "${item.question}",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "${item.answer}"
-      }
-    }`).join(',')}
-  ]
-}
-</script>
+  "mainEntity": items.map(q => ({
+    "@type": "Question",
+    "name": q.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": q.answer
+    },
+    ...(q.keywords?.length && { "keywords": q.keywords.join(", ") })
+  }))
+});
 
-<!-- Additional structured content for LLMs -->
-<script type="application/ld+json">
-{
+const generateHowTo = (items: HowToItem[]) => items.map(h => ({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": h.name,
+  ...(h.description && { "description": h.description }),
+  ...(h.estimatedTime && { "totalTime": h.estimatedTime }),
+  ...(h.supplies?.length && { "tool": h.supplies.map(s => ({ "@type": "HowToSupply", "name": s })) }),
+  "step": h.steps.map((s, i) => {
+    const step = typeof s === 'string' ? { text: s } : s;
+    return {
+      "@type": "HowToStep",
+      "position": i + 1,
+      "text": step.text,
+      ...(step.tip && { "itemListElement": { "@type": "HowToTip", "text": step.tip } })
+    };
+  })
+}));
+
+const generateDefinitions = (items: DefinitionItem[]) => items.map(d => ({
+  "@context": "https://schema.org",
+  "@type": "DefinedTerm",
+  "name": d.term,
+  "description": d.definition,
+  ...(d.alternateNames?.length && { "alternateName": d.alternateNames }),
+  ...(d.url && { "url": d.url })
+}));
+
+const generateArticle = (meta: AEOMetadata, howTo?: HowToItem[], definitions?: DefinitionItem[]) => ({
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "¿Qué es CrediScore y cómo funciona?",
-  "description": "CrediScore es la primera infraestructura de confianza técnica en Venezuela que utiliza un Sistema de Apoyo a Decisiones (DSS) para evaluar tu salud económica y reputación comercial.",
-  "articleBody": "CrediScore es la primera infraestructura de confianza técnica en Venezuela que utiliza un Sistema de Apoyo a Decisiones (DSS) para evaluar tu salud económica y reputación comercial. La plataforma analiza tus comportamientos de pago y cumplimiento de palabra para generar un puntaje de confianza que te abre puertas a oportunidades financieras y comerciales. Beneficios principales: Evaluación instantánea de tu reputación comercial, Acceso a mejores condiciones financieras, Certificación verificable de tu confianza técnica, Reducción de riesgo en transacciones comerciales, Mayor acceso a oportunidades de negocio.",
-  "howTo": {
-    "@type": "HowTo",
-    "name": "Cómo obtener tu Score CrediScore",
-    "steps": [
-      {howTo[0].steps.map((step, index) => `
-      {
-        "@type": "HowToStep",
-        "position": ${index + 1},
-        "text": "${step}"
-      }`).join(',')}
-    ]
-  },
-  "definedTerms": [
-    {definitions.map((def, index) => `
-    {
-      "@type": "DefinedTerm",
-      "name": "${def.term}",
-      "description": "${def.definition}"
-    }`).join(',')}
-  ]
-}
-</script>
+  "headline": meta.headline,
+  "description": meta.description,
+  "articleBody": meta.articleBody,
+  ...(meta.author && { "author": { "@type": "Organization", "name": meta.author } }),
+  ...(meta.publisher && { "publisher": { "@type": "Organization", "name": meta.publisher } }),
+  ...(meta.datePublished && { "datePublished": meta.datePublished }),
+  ...(meta.keywords?.length && { "keywords": meta.keywords.join(", ") }),
+  ...(howTo?.[0] && { "howTo": generateHowTo([howTo[0]])[0] }),
+  ...(definitions?.length && { "definedTerm": generateDefinitions(definitions) })
+});
+---
+
+<!-- AEO Structured Data - Declarative JSON-LD Injection -->
+{merged.output.emitFAQ && merged.content.faq?.length && (
+  <script type="application/ld+json" set:html={JSON.stringify(generateFAQ(merged.content.faq), null, merged.output.prettyPrint ? 2 : 0)} />
+)}
+
+{merged.output.emitHowTo && merged.content.howTo?.length && (
+  <script type="application/ld+json" set:html={JSON.stringify(generateHowTo(merged.content.howTo), null, merged.output.prettyPrint ? 2 : 0)} />
+)}
+
+{merged.output.emitDefinitions && merged.content.definitions?.length && (
+  <script type="application/ld+json" set:html={JSON.stringify(generateDefinitions(merged.content.definitions), null, merged.output.prettyPrint ? 2 : 0)} />
+)}
+
+{merged.output.emitArticle && (
+  <script type="application/ld+json" set:html={JSON.stringify(generateArticle(merged.metadata, merged.content.howTo, merged.content.definitions), null, merged.output.prettyPrint ? 2 : 0)} />
+)}

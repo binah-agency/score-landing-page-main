@@ -1,0 +1,256 @@
+---
+// Server-side Analytics Component
+// Lightweight client-side script for events that can't be captured server-side
+import serverSideAnalyticsConfig from '../../data/marketing/server-side-analytics-config.json';
+
+interface Props {
+  config?: {
+    trackScroll?: boolean;
+    trackTime?: boolean;
+    trackClicks?: boolean;
+    trackVisibility?: boolean;
+    debug?: boolean;
+  };
+}
+
+const { config = {} } = Astro.props;
+
+// Default configuration loaded from JSON
+const trackingConfig = {
+  ...serverSideAnalyticsConfig.defaultConfig,
+  ...config,
+  debug: config.debug ?? import.meta.env.DEV
+};
+---
+
+<script define:vars={trackingConfig}>
+  // Lightweight analytics for client-side only events
+  class LightweightAnalytics {
+    constructor(config) {
+      this.config = config;
+      this.sessionId = this.getSessionId();
+      this.startTime = Date.now();
+      this.timeOnPage = 0;
+      this.maxScroll = 0;
+      this.hasTracked = new Set();
+      this.events = [];
+      
+      if (this.config.debug) {
+        console.log('🔍 Lightweight Analytics initialized');
+      }
+      
+      this.init();
+    }
+    
+    getSessionId() {
+      // Get session ID from server cookie or create new one
+      const match = document.cookie.match(/aem_session_id=([^;]+)/);
+      return match ? match[1] : crypto.randomUUID();
+    }
+    
+    init() {
+      // Track scroll depth
+      if (this.config.trackScroll) {
+        this.initScrollTracking();
+      }
+      
+      // Track time on page
+      if (this.config.trackTime) {
+        this.initTimeTracking();
+      }
+      
+      // Track visibility changes
+      if (this.config.trackVisibility) {
+        this.initVisibilityTracking();
+      }
+      
+      // Track page unload
+      this.initUnloadTracking();
+    }
+    
+    async sendEvent(eventName, data = {}) {
+      const event = {
+        event: eventName,
+        timestamp: new Date().toISOString(),
+        session_id: this.sessionId,
+        page: location.pathname,
+        ...data
+      };
+      
+      this.events.push(event);
+      
+      if (this.config.debug) {
+        console.log(`📊 ${eventName}:`, event);
+      }
+      
+      // Send to server
+      try {
+        await fetch('/api/analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Session-ID': this.sessionId
+          },
+          body: JSON.stringify(event),
+          keepalive: true
+        });
+      } catch (error) {
+        if (this.config.debug) {
+          console.error('Analytics send error:', error);
+        }
+      }
+    }
+    
+    initScrollTracking() {
+      let scrollTimeout;
+      
+      const handleScroll = () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const scrollPercent = Math.round(
+            (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+          );
+          
+          // Track scroll milestones
+          const milestones = [25, 50, 75, 90];
+          milestones.forEach(milestone => {
+            if (scrollPercent >= milestone && !this.hasTracked.has(`scroll_${milestone}`)) {
+              this.hasTracked.add(`scroll_${milestone}`);
+              this.maxScroll = Math.max(this.maxScroll, scrollPercent);
+              
+              this.sendEvent('scroll_milestone', {
+                scroll_depth: milestone,
+                max_scroll_depth: this.maxScroll,
+                engagement_type: 'scroll'
+              });
+            }
+          });
+        }, 100);
+      };
+      
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+    
+    initTimeTracking() {
+      // Track time milestones
+      const milestones = [30, 60, 180]; // seconds
+      
+      setInterval(() => {
+        this.timeOnPage = Math.floor((Date.now() - this.startTime) / 1000);
+        
+        milestones.forEach(seconds => {
+          if (this.timeOnPage >= seconds && !this.hasTracked.has(`time_${seconds}`)) {
+            this.hasTracked.add(`time_${seconds}`);
+            
+            this.sendEvent('time_milestone', {
+              time_on_page: this.timeOnPage,
+              milestone: seconds,
+              engagement_type: 'time'
+            });
+          }
+        });
+      }, 1000);
+    }
+    
+    initVisibilityTracking() {
+      document.addEventListener('visibilitychange', () => {
+        this.sendEvent('visibility_change', {
+          hidden: document.hidden,
+          time_on_page: this.timeOnPage,
+          engagement_type: 'visibility'
+        });
+      });
+    }
+    
+    initUnloadTracking() {
+      const handleUnload = () => {
+        this.sendEvent('page_unload', {
+          time_on_page: this.timeOnPage,
+          max_scroll_depth: this.maxScroll,
+          total_events: this.events.length,
+          session_duration: Date.now() - this.startTime
+        });
+      };
+      
+      window.addEventListener('beforeunload', handleUnload);
+      window.addEventListener('pagehide', handleUnload);
+    }
+    
+    // Public API for manual tracking
+    track(eventName, data) {
+      this.sendEvent(eventName, data);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.lightweightAnalytics = new LightweightAnalytics(trackingConfig);
+    });
+  } else {
+    window.lightweightAnalytics = new LightweightAnalytics(trackingConfig);
+  }
+</script>
+
+<!-- Consent Management -->
+<script>
+  // Simple consent management for GDPR compliance
+  window.analyticsConsent = {
+    granted: false,
+    
+    grant: function() {
+      this.granted = true;
+      document.cookie = 'analytics_consent=granted; path=/; max-age=31536000; SameSite=Strict';
+      
+      // Re-initialize analytics if consent was just granted
+      if (window.lightweightAnalytics) {
+        window.lightweightAnalytics.sendEvent('consent_granted', {
+          consent_type: 'analytics'
+        });
+      }
+    },
+    
+    revoke: function() {
+      this.granted = false;
+      document.cookie = 'analytics_consent=; path=/; max-age=0; SameSite=Strict';
+    },
+    
+    hasConsent: function() {
+      return document.cookie.includes('analytics_consent=granted') || this.granted;
+    }
+  };
+  
+  // Check for existing consent
+  if (window.analyticsConsent?.hasConsent() && window.lightweightAnalytics) {
+    // Analytics already initialized with consent
+  }
+</script>
+
+<!-- Optional: Consent Banner (can be moved to separate component) -->
+<div id="analytics-consent" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; color: white; padding: 1rem; z-index: 9999; text-align: center;">
+  <p style="margin: 0 0 0.5rem 0;">
+    We use analytics to understand how you use our site and improve your experience.
+  </p>
+  <button 
+    onclick="analyticsConsent.grant(); this.parentElement.style.display='none';" 
+    style="background: #007acc; color: white; border: none; padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer;"
+  >
+    Accept
+  </button>
+  <button 
+    onclick="this.parentElement.style.display='none';" 
+    style="background: #666; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer;"
+  >
+    Decline
+  </button>
+</div>
+
+<script>
+  // Show consent banner if no consent exists
+  if (!window.analyticsConsent?.hasConsent()) {
+    const consentBanner = document.getElementById('analytics-consent');
+    if (consentBanner) {
+      consentBanner.style.display = 'block';
+    }
+  }
+</script>

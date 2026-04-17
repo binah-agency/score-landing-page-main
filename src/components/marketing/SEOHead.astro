@@ -1,95 +1,344 @@
 ---
-// SEO Head Component - Meta tags, Open Graph, Twitter Cards
+// src/components/SEOHead.astro
+import seoHeadConfig from '../../data/marketing/seo-head-config.json';
+
 interface Props {
-  title?: string;
-  description?: string;
-  keywords?: string;
-  author?: string;
-  image?: string;
-  url?: string;
-  type?: string;
-  siteName?: string;
-  locale?: string;
-  canonical?: string;
-  noindex?: boolean;
-  nofollow?: boolean;
+  page?: PageMeta;
+  openGraph?: OpenGraphConfig;
+  twitter?: TwitterConfig;
+  additional?: AdditionalMetaConfig;
+  performance?: PerformanceConfig;
+  output?: OutputConfig;
 }
 
-import seoData from '../../data/seo.json';
-import PerformanceLinks from '../ui/atoms/PerformanceLinks.astro';
+// ───────── Declarative Type Definitions ─────────
+type PageMeta = {
+  title: string;
+  description: string;
+  keywords?: string[];  // Array instead of comma-string
+  author?: string;
+  url: string;
+  canonical?: string;
+  type?: 'website' | 'article' | 'product' | 'profile';
+  locale?: string;  // e.g., "es_VE"
+  publishedTime?: string;  // ISO date for articles
+  modifiedTime?: string;
+  
+  // Robots control
+  robots?: {
+    index?: boolean;   // Default: true
+    follow?: boolean;  // Default: true
+    maxSnippet?: string;  // e.g., "-1" for unlimited
+    maxImagePreview?: 'none' | 'standard' | 'large';
+    noarchive?: boolean;
+  };
+};
 
+type ImageMeta = {
+  url?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  type?: string;  // MIME type: "image/jpeg"
+};
+
+type OpenGraphConfig = {
+  enabled?: boolean;  // Default: true
+  siteName?: string;
+  image?: ImageMeta;
+  audio?: { url: string; type?: string };
+  video?: { url: string; type?: string; width?: number; height?: number };
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string;
+    section?: string;
+    tags?: string[];
+  };
+};
+
+type TwitterConfig = {
+  enabled?: boolean;  // Default: true
+  card?: 'summary' | 'summary_large_image' | 'app' | 'player';
+  site?: string;  // @username
+  creator?: string;  // @username
+  image?: ImageMeta;  // Overrides OG image if provided
+};
+
+type AdditionalMetaConfig = {
+  enabled?: boolean;  // Default: true
+  
+  // Geographic
+  geo?: {
+    region?: string;  // ISO country: "VE"
+    placename?: string;  // "Caracas"
+    position?: { lat: string; long: string };  // For ICBM tag
+  };
+  
+  // Content classification
+  language?: string;  // "es"
+  distribution?: 'global' | 'local';
+  rating?: 'general' | 'safe-for-kids' | 'RTA-5042-1996-1400-1577-RTA';
+  revisitAfter?: string;  // "7 days"
+  
+  // Custom meta tags
+  custom?: Array<{ name: string; content: string; property?: string }>;
+};
+
+type PerformanceConfig = {
+  dnsPrefetch?: string[];  // Domains for DNS prefetch
+  preconnect?: Array<{ href: string; crossorigin?: boolean }>;  // Critical origins
+  preload?: Array<{ href: string; as: string; type?: string; crossorigin?: boolean }>;
+  modulePreload?: string[];  // ES module URLs
+};
+
+type OutputConfig = {
+  emitCharset?: boolean;  // Default: true
+  emitViewport?: boolean;  // Default: true
+  emitGenerator?: boolean;  // Default: true
+  emitFavicons?: boolean;  // Default: true
+};
+
+type FaviconsConfig = {
+  svg?: string;
+  ico?: string;
+  appleTouchIcon?: string;
+  png32?: string;
+  png16?: string;
+  manifest?: string;  // webmanifest URL
+};
+
+// ───────── Default Configuration Loaded from JSON (Declarative Source of Truth) ─────────
+const defaultPage: PageMeta = seoHeadConfig.defaultPage as PageMeta;
+
+const defaultOG: OpenGraphConfig = seoHeadConfig.defaultOG as OpenGraphConfig;
+
+const defaultTwitter: TwitterConfig = seoHeadConfig.defaultTwitter as TwitterConfig;
+
+const defaultAdditional: AdditionalMetaConfig = seoHeadConfig.defaultAdditional as AdditionalMetaConfig;
+
+const defaultPerformance: PerformanceConfig = seoHeadConfig.defaultPerformance as PerformanceConfig;
+
+const defaultFavicons: FaviconsConfig = seoHeadConfig.defaultFavicons as FaviconsConfig;
+
+const defaultOutput: OutputConfig = seoHeadConfig.defaultOutput as OutputConfig;
+
+// ───────── Merge Props with Defaults (Immutable, Deep Merge) ─────────
 const {
-  title = seoData.meta.title,
-  description = seoData.meta.description,
-  keywords = seoData.meta.keywords,
-  author = seoData.meta.author,
-  image = seoData.meta.image,
-  url = seoData.meta.url,
-  type = seoData.meta.type,
-  siteName = seoData.meta.siteName,
-  locale = seoData.meta.locale,
-  canonical = seoData.meta.canonical,
-  noindex = seoData.meta.noindex,
-  nofollow = seoData.meta.nofollow
+  page = {} as PageMeta,
+  openGraph = {} as OpenGraphConfig,
+  twitter = {} as TwitterConfig,
+  additional = {} as AdditionalMetaConfig,
+  performance = {} as PerformanceConfig,
+  output = {} as OutputConfig
 } = Astro.props;
 
-const robots = noindex || nofollow 
-  ? `${noindex ? 'noindex' : 'index'},${nofollow ? 'nofollow' : 'follow'}`
-  : 'index,follow';
+const cfg = {
+  page: { ...defaultPage, ...page, robots: { ...defaultPage.robots, ...page.robots } },
+  openGraph: { ...defaultOG, ...openGraph, image: { ...defaultOG.image, ...openGraph.image } },
+  twitter: { ...defaultTwitter, ...twitter, image: { ...defaultTwitter.image, ...twitter.image } },
+  additional: { ...defaultAdditional, ...additional, geo: { ...defaultAdditional.geo, ...additional.geo } },
+  performance: { ...defaultPerformance, ...performance },
+  output: { ...defaultOutput, ...output },
+  favicons: defaultFavicons  // Extend via prop if needed
+};
+
+// ───────── Pure Helper Functions (Declarative, Testable) ─────────
+const escapeAttr = (str: string) => str.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+const generateRobotsContent = (r: PageMeta['robots']): string => {
+  if (!r) return 'index,follow';
+  const parts = [
+    r.index === false ? 'noindex' : 'index',
+    r.follow === false ? 'nofollow' : 'follow'
+  ];
+  if (r.maxSnippet) parts.push(`max-snippet:${r.maxSnippet}`);
+  if (r.maxImagePreview) parts.push(`max-image-preview:${r.maxImagePreview}`);
+  if (r.noarchive) parts.push('noarchive');
+  return parts.join(',');
+};
+
+const generateCanonical = (page: PageMeta): string => {
+  return page.canonical || page.url;
+};
+
+const generateOGTags = (page: PageMeta, og: OpenGraphConfig) => {
+  if (!og.enabled) return [];
+  
+  const tags = [
+    { property: 'og:type', content: page.type || 'website' },
+    { property: 'og:url', content: page.url },
+    { property: 'og:title', content: page.title },
+    { property: 'og:description', content: page.description },
+    { property: 'og:site_name', content: og.siteName },
+    { property: 'og:locale', content: page.locale }
+  ];
+  
+  if (og.image?.url) {
+    tags.push(
+      { property: 'og:image', content: og.image.url },
+      { property: 'og:image:alt', content: og.image.alt }
+    );
+    if (og.image.width) tags.push({ property: 'og:image:width', content: String(og.image.width) });
+    if (og.image.height) tags.push({ property: 'og:image:height', content: String(og.image.height) });
+    if (og.image.type) tags.push({ property: 'og:image:type', content: og.image.type });
+  }
+  
+  if (og.article) {
+    if (og.article.publishedTime) tags.push({ property: 'article:published_time', content: og.article.publishedTime });
+    if (og.article.modifiedTime) tags.push({ property: 'article:modified_time', content: og.article.modifiedTime });
+    if (og.article.author) tags.push({ property: 'article:author', content: og.article.author });
+    if (og.article.section) tags.push({ property: 'article:section', content: og.article.section });
+    if (og.article.tags?.length) {
+      og.article.tags.forEach(tag => tags.push({ property: 'article:tag', content: tag }));
+    }
+  }
+  
+  return tags;
+};
+
+const generateTwitterTags = (page: PageMeta, tw: TwitterConfig) => {
+  if (!tw.enabled) return [];
+  
+  const tags = [
+    { name: 'twitter:card', content: tw.card || 'summary_large_image' },
+    { name: 'twitter:url', content: page.url },
+    { name: 'twitter:title', content: page.title },
+    { name: 'twitter:description', content: page.description }
+  ];
+  
+  if (tw.site) tags.push({ name: 'twitter:site', content: tw.site });
+  if (tw.creator) tags.push({ name: 'twitter:creator', content: tw.creator });
+  
+  // Use Twitter-specific image or fallback to OG
+  const img = tw.image?.url ? tw.image : (tw.enabled ? cfg.openGraph.image : undefined);
+  if (img?.url) {
+    tags.push(
+      { name: 'twitter:image', content: img.url },
+      { name: 'twitter:image:alt', content: img.alt || '' }
+    );
+  }
+  
+  return tags;
+};
+
+const generateAdditionalTags = (add: AdditionalMetaConfig) => {
+  if (!add.enabled) return [];
+  
+  const tags: Array<{ name?: string; property?: string; content: string }> = [];
+  
+  if (add.geo) {
+    if (add.geo.region) tags.push({ name: 'geo.region', content: add.geo.region });
+    if (add.geo.placename) tags.push({ name: 'geo.placename', content: add.geo.placename });
+    if (add.geo.position) {
+      tags.push({ name: 'ICBM', content: `${add.geo.position.lat}, ${add.geo.position.long}` });
+    }
+  }
+  
+  if (add.language) tags.push({ name: 'language', content: add.language });
+  if (add.distribution) tags.push({ name: 'distribution', content: add.distribution });
+  if (add.rating) tags.push({ name: 'rating', content: add.rating });
+  if (add.revisitAfter) tags.push({ name: 'revisit-after', content: add.revisitAfter });
+  
+  if (add.custom?.length) {
+    add.custom.forEach(c => {
+      tags.push({
+        ...(c.property ? { property: c.property } : { name: c.name }),
+        content: c.content
+      });
+    });
+  }
+  
+  return tags;
+};
+
+const generatePerformanceTags = (perf: PerformanceConfig) => {
+  const tags: Array<{ type: 'dns-prefetch' | 'preconnect' | 'preload' | 'modulepreload'; attrs: Record<string, string> }> = [];
+  
+  if (perf.dnsPrefetch?.length) {
+    perf.dnsPrefetch.forEach(href => {
+      tags.push({ type: 'dns-prefetch', attrs: { href } });
+    });
+  }
+  
+  if (perf.preconnect?.length) {
+    perf.preconnect.forEach(({ href, crossorigin }) => {
+      tags.push({ 
+        type: 'preconnect', 
+        attrs: { href, ...(crossorigin && { crossorigin: 'anonymous' }) } 
+      });
+    });
+  }
+  
+  if (perf.preload?.length) {
+    perf.preload.forEach(({ href, as, type, crossorigin }) => {
+      tags.push({
+        type: 'preload',
+        attrs: {
+          href,
+          as,
+          ...(type && { type }),
+          ...(crossorigin && { crossorigin: 'anonymous' })
+        }
+      });
+    });
+  }
+  
+  if (perf.modulePreload?.length) {
+    perf.modulePreload.forEach(href => {
+      tags.push({ type: 'modulepreload', attrs: { href } });
+    });
+  }
+  
+  return tags;
+};
 ---
 
-<!-- Basic Meta Tags -->
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="generator" content={Astro.generator} />
+<!-- SEO Head - Declarative Meta Tag Injection -->
+<head>
+  <!-- Core Meta Tags -->
+  {cfg.output.emitCharset && <meta charset="utf-8" />}
+  {cfg.output.emitViewport && <meta name="viewport" content="width=device-width, initial-scale=1" />}
+  {cfg.output.emitGenerator && <meta name="generator" content={Astro.generator} />}
 
-<title>{title}</title>
-<meta name="description" content={description} />
-<meta name="keywords" content={keywords} />
-<meta name="author" content={author} />
-<meta name="robots" content={robots} />
+  <title>{cfg.page.title}</title>
+  <meta name="description" content={cfg.page.description} />
+  {cfg.page.keywords?.length && <meta name="keywords" content={cfg.page.keywords.join(', ')} />}
+  {cfg.page.author && <meta name="author" content={cfg.page.author} />}
+  <meta name="robots" content={generateRobotsContent(cfg.page.robots)} />
 
-<!-- Canonical URL -->
-<link rel="canonical" href={canonical} />
+  <!-- Canonical URL -->
+  <link rel="canonical" href={generateCanonical(cfg.page)} />
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content={seoData.openGraph.type} />
-<meta property="og:url" content={seoData.openGraph.image.url} />
-<meta property="og:title" content={seoData.openGraph.image.alt} />
-<meta property="og:description" content={seoData.openGraph.image.alt} />
-<meta property="og:image" content={seoData.openGraph.image.url} />
-<meta property="og:image:width" content={seoData.openGraph.image.width} />
-<meta property="og:image:height" content={seoData.openGraph.image.height} />
-<meta property="og:image:alt" content={seoData.openGraph.image.alt} />
-<meta property="og:site_name" content={seoData.openGraph.locale} />
-<meta property="og:locale" content={seoData.openGraph.locale} />
+  <!-- Open Graph Tags -->
+  {cfg.openGraph.enabled && generateOGTags(cfg.page, cfg.openGraph).map(tag => (
+    <meta property={tag.property} content={tag.content} />
+  ))}
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content={seoData.twitter.card} />
-<meta name="twitter:url" content={seoData.openGraph.image.url} />
-<meta name="twitter:title" content={seoData.openGraph.image.alt} />
-<meta name="twitter:description" content={seoData.openGraph.image.alt} />
-<meta name="twitter:image" content={seoData.openGraph.image.url} />
-<meta name="twitter:image:alt" content={seoData.openGraph.image.alt} />
+  <!-- Twitter Card Tags -->
+  {cfg.twitter.enabled && generateTwitterTags(cfg.page, cfg.twitter).map(tag => (
+    <meta name={tag.name} content={tag.content} />
+  ))}
 
-<!-- Additional SEO Meta Tags -->
-<meta name="language" content={seoData.additional.language} />
-<meta name="geo.region" content={seoData.additional.geo.region} />
-<meta name="geo.placename" content={seoData.additional.geo.placeName} />
-<meta name="ICBM" content={seoData.additional.icbm} />
-<meta name="distribution" content={seoData.additional.distribution} />
-<meta name="rating" content={seoData.additional.rating} />
-<meta name="revisit-after" content={seoData.additional.revisitAfter} />
+  <!-- Additional SEO Tags -->
+  {cfg.additional.enabled && generateAdditionalTags(cfg.additional).map(tag => (
+    <meta {...(tag.name && { name: tag.name })} {...(tag.property && { property: tag.property })} content={tag.content} />
+  ))}
 
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href={seoData.favicon.svg} />
-<link rel="alternate icon" href={seoData.favicon.ico} />
-<link rel="apple-touch-icon" sizes="180x180" href={seoData.favicon.appleTouchIcon} />
-<link rel="icon" type="image/png" sizes="32x32" href={seoData.favicon.png32} />
-<link rel="icon" type="image/png" sizes="16x16" href={seoData.favicon.png16} />
+  <!-- Favicon Links -->
+  {cfg.output.emitFavicons && (
+    <>
+      <link rel="icon" type="image/svg+xml" href={cfg.favicons.svg} />
+      <link rel="alternate icon" href={cfg.favicons.ico} />
+      <link rel="apple-touch-icon" sizes="180x180" href={cfg.favicons.appleTouchIcon} />
+      <link rel="icon" type="image/png" sizes="32x32" href={cfg.favicons.png32} />
+      <link rel="icon" type="image/png" sizes="16x16" href={cfg.favicons.png16} />
+      {cfg.favicons.manifest && <link rel="manifest" href={cfg.favicons.manifest} />}
+    </>
+  )}
 
-<!-- DNS Prefetch for Performance -->
-<PerformanceLinks dnsPrefetch={seoData.performance.dnsPrefetch} />
-
-<!-- Preconnect for Critical Resources -->
-<PerformanceLinks preconnect={seoData.performance.preconnect} />
+  <!-- Performance Hints -->
+  {generatePerformanceTags(cfg.performance).map(({ type, attrs }) => (
+    <link rel={type} {...attrs} />
+  ))}
+</head>
