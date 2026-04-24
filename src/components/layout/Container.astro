@@ -1,6 +1,5 @@
 ---
 // Container Component - Flexible container with responsive behavior
-import { tokens } from '../ui/design-system/index.js';
 
 interface Props {
   children: any;
@@ -34,7 +33,7 @@ const sizeClasses = {
   '6xl': 'max-w-6xl',
   '7xl': 'max-w-7xl',
   full: 'max-w-full'
-};
+} as const;
 
 const paddingClasses = {
   none: '',
@@ -42,7 +41,7 @@ const paddingClasses = {
   md: 'px-4 sm:px-6 lg:px-8',
   lg: 'px-6 sm:px-8 lg:px-12',
   xl: 'px-8 sm:px-12 lg:px-16'
-};
+} as const;
 
 const centeredClasses = centered ? 'mx-auto' : '';
 const fluidClasses = fluid ? 'w-full' : '';
@@ -51,12 +50,12 @@ const fluidClasses = fluid ? 'w-full' : '';
 <Tag
   class={[
     'w-full',
-    !fluid && sizeClasses[size],
+    !fluid && sizeClasses[size as keyof typeof sizeClasses],
     centeredClasses,
     fluidClasses,
-    paddingClasses[padding],
+    paddingClasses[padding as keyof typeof paddingClasses],
     className
-  ].join(' ')}
+  ].filter(Boolean).join(' ')}
 >
   {children}
 </Tag>

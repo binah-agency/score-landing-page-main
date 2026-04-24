@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <!-- Copy the header content here to test -->
+    <header class="fixed top-6 left-0 right-0 z-50 mx-auto w-full max-w-[1682px] bg-white/40 backdrop-blur-xl border-b border-white/18 shadow-2xl shadow-slate-900/20 rounded-full" >
+      <!-- Desktop Header -->
+      <div class="hidden h-16 items-center rounded-full bg-transparent/10 backdrop-blur-sm px-6 py-3 lg:flex">
+        Logo desktop
+        <!-- Navigation would go here -->
+        Nav items
+        <!-- HeaderActions would go here -->
+        Actions
+      </div>
+
+      <!-- Tablet Header (md screens) -->
+      <div class="hidden h-16 items-center justify-between rounded-full bg-transparent/10 backdrop-blur-sm px-4 py-2 md:flex lg:hidden">
+        Logo tablet
+        <button class="p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200" aria-label="Open menu" onclick="toggleMobileMenu()">
+          Menu icon
+        </button>
+      </div>
+
+      <!-- Mobile Header -->
+      <div class="flex h-16 items-center justify-between rounded-[60px] bg-transparent/10 backdrop-blur-sm px-4 py-2 md:hidden">
+        Logo mobile
+        <button class="p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200" aria-label="Open menu" onclick="toggleMobileMenu()">
+          Menu icon
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Menu Panel (Hidden by default) -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 flex items-end bg-black/50 backdrop-blur-sm hidden">
+      <div class="w-full max-w-xs bg-white/20 backdrop-blur-xl border-t border-white/10 p-6 space-y-4">
+        <div class="flex-col space-y-3">
+          Nav items (mobile)
+        </div>
+        <div class="flex space-x-3">
+          Action 1
+          Action 2
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mobile menu toggle functionality
+      function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        if (menu) {
+          menu.classList.toggle('hidden');
+        }
+      }
+    </script>
+</body>
+</html>

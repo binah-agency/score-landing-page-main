@@ -25,12 +25,41 @@ const heroCollection = defineCollection({
       navigation: z.array(z.object({
         text: z.string(),
         href: z.string(),
+        active: z.boolean().optional(),
       })),
       actions: z.array(z.object({
         text: z.string(),
         href: z.string(),
         primary: z.boolean(),
+        icon: z.string().optional(),
       })),
+      mobile: z.object({
+        menuToggle: z.object({
+          text: z.string(),
+          icon: z.string(),
+        }).optional(),
+      }).optional(),
+    }),
+    content: z.object({
+      badge: z.object({
+        text: z.string(),
+      }).optional(),
+      banner: z.object({
+        text: z.string(),
+      }).optional(),
+      tagline: z.object({
+        lines: z.array(z.string()),
+      }).optional(),
+      claim: z.string().optional(),
+      cta: z.object({
+        text: z.string(),
+        href: z.string(),
+      }).optional(),
+      mobile: z.object({
+        banner: z.object({
+          lines: z.array(z.string()),
+        }).optional(),
+      }).optional(),
     }),
   }),
 });

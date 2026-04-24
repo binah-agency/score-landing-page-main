@@ -21,6 +21,7 @@ export interface Props {
 }
 
 const { onConsentUpdate, onSettingsClick, className = '' } = Astro.props;
+
 ---
 
 <!-- Cookie Banner -->
@@ -33,37 +34,37 @@ const { onConsentUpdate, onSettingsClick, className = '' } = Astro.props;
     </div>
   </div>
   
-  <CookieActions 
-    onAcceptAll={onConsentUpdate ? () => {
-      const consent: CookieConsentData = {
-        analytics_storage: 'granted',
-        ad_storage: 'granted',
-        ad_user_data: 'granted',
-        ad_personalization: 'granted',
-        functionality_storage: 'granted',
-        personalization_storage: 'granted',
-        security_storage: 'granted'
-      };
-      
-      if (onConsentUpdate) {
-        onConsentUpdate(consent);
-      }
-    }}
-    onAcceptEssential={onConsentUpdate ? () => {
-      const consent: CookieConsentData = {
-        analytics_storage: 'denied',
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'granted',
-        personalization_storage: 'granted',
-        security_storage: 'granted'
-      };
-      
-      if (onConsentUpdate) {
-        onConsentUpdate(consent);
-      }
-    }}
-    onSettingsClick={onSettingsClick}
-  />
+   <CookieActions 
+     onAcceptAll={onConsentUpdate ? (() => {
+       const consent = {
+         analytics_storage: 'granted' as const,
+         ad_storage: 'granted' as const,
+         ad_user_data: 'granted' as const,
+         ad_personalization: 'granted' as const,
+         functionality_storage: 'granted' as const,
+         personalization_storage: 'granted' as const,
+         security_storage: 'granted' as const
+       };
+       
+       if (onConsentUpdate) {
+         onConsentUpdate(consent);
+       }
+     }) : undefined}
+     onAcceptEssential={onConsentUpdate ? (() => {
+       const consent = {
+         analytics_storage: 'denied' as const,
+         ad_storage: 'denied' as const,
+         ad_user_data: 'denied' as const,
+         ad_personalization: 'denied' as const,
+         functionality_storage: 'granted' as const,
+         personalization_storage: 'granted' as const,
+         security_storage: 'granted' as const
+       };
+       
+       if (onConsentUpdate) {
+         onConsentUpdate(consent);
+       }
+     }) : undefined}
+     onSettingsClick={onSettingsClick}
+   />
 </div>

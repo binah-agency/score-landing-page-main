@@ -50,13 +50,13 @@ const directionClasses = {
   col: 'flex-col',
   'row-reverse': 'flex-row-reverse',
   'col-reverse': 'flex-col-reverse'
-};
+} as const;
 
 const wrapClasses = {
   nowrap: 'flex-nowrap',
   wrap: 'flex-wrap',
   'wrap-reverse': 'flex-wrap-reverse'
-};
+} as const;
 
 const justifyClasses = {
   start: 'justify-start',
@@ -65,7 +65,7 @@ const justifyClasses = {
   between: 'justify-between',
   around: 'justify-around',
   evenly: 'justify-evenly'
-};
+} as const;
 
 const alignClasses = {
   start: 'items-start',
@@ -73,7 +73,7 @@ const alignClasses = {
   center: 'items-center',
   stretch: 'items-stretch',
   baseline: 'items-baseline'
-};
+} as const;
 
 const gapClasses = {
   none: 'gap-0',
@@ -83,29 +83,29 @@ const gapClasses = {
   xl: 'gap-8',
   '2xl': 'gap-10',
   '3xl': 'gap-12'
-};
+} as const;
 
 // Build responsive classes
-const responsiveClasses = [];
+const responsiveClasses: string[] = [];
 if (responsive.sm) {
-  if (responsive.sm.direction) responsiveClasses.push(`sm:${directionClasses[responsive.sm.direction]}`);
-  if (responsive.sm.justify) responsiveClasses.push(`sm:${justifyClasses[responsive.sm.justify]}`);
-  if (responsive.sm.align) responsiveClasses.push(`sm:${alignClasses[responsive.sm.align]}`);
+  if (responsive.sm.direction) responsiveClasses.push(`sm:${directionClasses[responsive.sm.direction as keyof typeof directionClasses]}`);
+  if (responsive.sm.justify) responsiveClasses.push(`sm:${justifyClasses[responsive.sm.justify as keyof typeof justifyClasses]}`);
+  if (responsive.sm.align) responsiveClasses.push(`sm:${alignClasses[responsive.sm.align as keyof typeof alignClasses]}`);
 }
 if (responsive.md) {
-  if (responsive.md.direction) responsiveClasses.push(`md:${directionClasses[responsive.md.direction]}`);
-  if (responsive.md.justify) responsiveClasses.push(`md:${justifyClasses[responsive.md.justify]}`);
-  if (responsive.md.align) responsiveClasses.push(`md:${alignClasses[responsive.md.align]}`);
+  if (responsive.md.direction) responsiveClasses.push(`md:${directionClasses[responsive.md.direction as keyof typeof directionClasses]}`);
+  if (responsive.md.justify) responsiveClasses.push(`md:${justifyClasses[responsive.md.justify as keyof typeof justifyClasses]}`);
+  if (responsive.md.align) responsiveClasses.push(`md:${alignClasses[responsive.md.align as keyof typeof alignClasses]}`);
 }
 if (responsive.lg) {
-  if (responsive.lg.direction) responsiveClasses.push(`lg:${directionClasses[responsive.lg.direction]}`);
-  if (responsive.lg.justify) responsiveClasses.push(`lg:${justifyClasses[responsive.lg.justify]}`);
-  if (responsive.lg.align) responsiveClasses.push(`lg:${alignClasses[responsive.lg.align]}`);
+  if (responsive.lg.direction) responsiveClasses.push(`lg:${directionClasses[responsive.lg.direction as keyof typeof directionClasses]}`);
+  if (responsive.lg.justify) responsiveClasses.push(`lg:${justifyClasses[responsive.lg.justify as keyof typeof justifyClasses]}`);
+  if (responsive.lg.align) responsiveClasses.push(`lg:${alignClasses[responsive.lg.align as keyof typeof alignClasses]}`);
 }
 if (responsive.xl) {
-  if (responsive.xl.direction) responsiveClasses.push(`xl:${directionClasses[responsive.xl.direction]}`);
-  if (responsive.xl.justify) responsiveClasses.push(`xl:${justifyClasses[responsive.xl.justify]}`);
-  if (responsive.xl.align) responsiveClasses.push(`xl:${alignClasses[responsive.xl.align]}`);
+  if (responsive.xl.direction) responsiveClasses.push(`xl:${directionClasses[responsive.xl.direction as keyof typeof directionClasses]}`);
+  if (responsive.xl.justify) responsiveClasses.push(`xl:${justifyClasses[responsive.xl.justify as keyof typeof justifyClasses]}`);
+  if (responsive.xl.align) responsiveClasses.push(`xl:${alignClasses[responsive.xl.align as keyof typeof alignClasses]}`);
 }
 ---
 
