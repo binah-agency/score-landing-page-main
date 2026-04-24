@@ -1,75 +1,30 @@
 ---
-// CtaSection - Potencia tu score Diario
-// Dimensiones de Figma: cards 494px, gap 45px
+import ctaData from '../../data/content/content.cta.json';
+import CtaCard from '../ui/molecules/CtaCard.astro';
 
-const cards = [
-  {
-    title: 'Puntualidad en Facturas',
-    text: 'Pagar tus facturas de condominio y servicios  3 días antes de la fecha límiteotorga bonos  de score extra',
-  },
-  {
-    title: 'Transparencia de Información',
-    text: 'Mantener tu perfil actualizado con docuentos verificables reduce tu perfil de  riesgo ante el DSS',
-  },
-  {
-    title: 'Mezcla Crediticia',
-    text: 'Tener registros activos tanto en servicios  (condominio) como en comercio (facturas) diversifica tu I',
-  },
-];
+const { section } = ctaData;
 ---
 
-<section class="w-full bg-[var(--color-black)]" id="cta">
+<section class="w-full bg-[var(--color-black)]" id={section.id}>
   <div class="mx-auto flex w-full max-w-[1920px] flex-col items-center justify-center gap-[40px] p-[10px] py-[60px]">
-    
-    <!-- Título: 48px bold -->
     <h2 class="font-montserrat text-[48px] font-bold leading-[48px] text-white">
-      Potencia tu score Diario
+      {section.title}
     </h2>
 
-    <!-- Cards Container: gap 45px -->
     <div class="flex flex-col items-center gap-[45px] px-5 lg:flex-row lg:px-0">
-      {
-        cards.map((card) => (
-          <article class="flex w-full max-w-[494px] flex-col items-center rounded-[24px] px-[12px] py-[24px] lg:w-[494px]">
-            <div class="flex h-[111px] w-full items-start">
-              
-              <!-- Ícono verde circular con flecha rotada 45° -->
-              <div class="flex items-center p-[10px]">
-                <div class="flex h-[57px] w-[57px] items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
-                  <img 
-                    src="/icons/arrow-up.svg" 
-                    alt="arrow" 
-                    class="h-[40px] w-[40px] rotate-45"
-                  />
-                </div>
-              </div>
-              
-              <!-- Container texto -->
-              <div class="flex flex-1 flex-col items-start pt-[16px]">
-                <!-- Título: 24px bold -->
-                <p class="font-montserrat text-[24px] font-bold leading-[32px] text-white">
-                  {card.title}
-                </p>
-                
-                <!-- Descripción: 14px medium -->
-                <p class="mt-2 font-montserrat text-[14px] font-medium leading-[16px] text-[var(--color-azulhorizonte40)]">
-                  {card.text}
-                </p>
-              </div>
-            </div>
-          </article>
-        ))
-      }
+      {section.cards.map((card) => (
+        <CtaCard card={card} />
+      ))}
     </div>
 
-    <!-- Botón CTA: 451px, 50px alto -->
     <div class="flex w-[451px] flex-col items-start p-[10px]">
       <a 
-        href="#" 
+        href={section.cta.href}
+        aria-label={section.cta.text}
         class="flex h-[50px] w-full items-center justify-center rounded-[8px] bg-[var(--color-verdevitalidad)] p-[10px]"
       >
         <span class="font-montserrat text-[24px] font-semibold text-white">
-          Ver Guía Completa de Mejora
+          {section.cta.text}
         </span>
       </a>
     </div>

@@ -1,0 +1,36 @@
+{
+  "section": {
+    "id": "use-cases",
+    "title": "Confianza Técnica",
+    "cards": [
+      {
+        "title": "Analítica Predictiva",
+        "text": "Superamos los modelos tradicionales con algoritmos que valoran tu historial de cumplimiento real"
+      },
+      {
+        "title": "Transparencia",
+        "text": "Operamos bajo estrictos protocolos de consentimiento y privacidad"
+      },
+      {
+        "title": "Soberanía de Datos",
+        "text": "Tu información está protegida en los centros de datos más avanzados del país, bajo estándares de seguridad de grado bancario"
+      },
+      {
+        "title": "Analítica Predictiva",
+        "text": "Superamos los modelos tradicionales con algoritmos que valoran tu historial de cumplimiento real"
+      },
+      {
+        "title": "Transparencia",
+        "text": "Operamos bajo estrictos protocolos de consentimiento y privacidad"
+      },
+      {
+        "title": "Soberanía de Datos",
+        "text": "Tu información está protegida en los centros de datos más avanzados del país, bajo estándares de seguridad de grado bancario"
+      },
+      {
+        "title": "Analítica Predictiva",
+        "text": "Superamos los modelos tradicionales con algoritmos que valoran tu historial de cumplimiento real"
+      }
+    ]
+  }
+}

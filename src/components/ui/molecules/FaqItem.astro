@@ -1,0 +1,46 @@
+---
+export interface FaqItemData {
+  number: string;
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  item: FaqItemData;
+  index: number;
+  className?: string;
+}
+
+const { item, index, className = '' } = Astro.props;
+---
+
+<article 
+  class={`faq-item group w-full cursor-pointer border-b border-[#7a7a7a] last:border-b-0 ${className}`}
+  data-index={index}
+>
+  <div class="faq-surface flex w-full gap-[52px] bg-[var(--color-azulhorizonte)] px-[60px] py-[52px] transition-colors duration-300">
+    <span class="faq-number font-inter text-[48px] font-bold leading-[1.2] tracking-[0.25px] text-[#a5d470] transition-colors duration-300">
+      {item.number}
+    </span>
+    
+    <div class="flex flex-1 flex-col gap-[24px] pt-[3px]">
+      <div class="flex items-start gap-[16px]">
+        <p class="faq-question flex-1 font-inter text-[32px] font-bold leading-[1.2] text-white transition-colors duration-300">
+          {item.question}
+        </p>
+        
+        <button class="faq-btn flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)] transition-all duration-300">
+          <span class="faq-icon text-[24px] font-bold text-white transition-transform duration-300">+</span>
+        </button>
+      </div>
+      
+      <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-out">
+        <div class="overflow-hidden">
+          <p class="font-inter text-[20px] font-normal leading-[1.4] text-[#4a4a4a] whitespace-pre-line pb-2">
+            {item.answer}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

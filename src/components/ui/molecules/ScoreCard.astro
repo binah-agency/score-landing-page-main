@@ -1,0 +1,73 @@
+---
+export interface ScoreData {
+  score: number;
+  scoreLabel: string;
+}
+
+export interface Notification {
+  label: string;
+  value: string;
+  valueColor: string;
+}
+
+export interface Props {
+  title: string;
+  badge: string;
+  score: ScoreData;
+  notifications: Notification[];
+  className?: string;
+}
+
+const { title, badge, score, notifications, className = '' } = Astro.props;
+---
+
+<div class={`flex h-[610px] w-[657px] shrink-0 flex-col items-center gap-6 rounded-[36px] bg-white shadow-[0_15px_59px_rgba(0,0,0,0.15)] ${className}`}>
+  <div class="flex w-full items-center justify-between p-10">
+    <p class="font-montserrat text-[36px] font-bold leading-[64px] text-[var(--color-black)]">
+      {title}
+    </p>
+    <div class="flex h-[55px] w-[202px] items-center justify-center rounded-lg bg-[var(--color-azulhorizonte)] p-3">
+      <span class="font-montserrat text-[24px] font-bold text-white">{badge}</span>
+    </div>
+  </div>
+
+  <div class="relative h-[296px] w-[296px]">
+    <svg class="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 296 296">
+      <circle cx="148" cy="148" r="137" stroke="#e5e7eb" stroke-width="11" fill="none" />
+    </svg>
+    <svg class="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 296 296">
+      <circle 
+        cx="148" 
+        cy="148" 
+        r="137" 
+        stroke="#86B545" 
+        stroke-width="11" 
+        fill="none"
+        stroke-dasharray="861"
+        stroke-dashoffset="172"
+        stroke-linecap="round"
+      />
+    </svg>
+    <div class="absolute inset-0 flex flex-col items-center justify-center">
+      <p class="font-montserrat text-[72px] font-bold leading-[64px] text-[var(--color-azulhorizonte)]">
+        {score.score}
+      </p>
+      <p class="mt-2 font-montserrat text-[16px] font-semibold leading-[64px] text-[var(--color-verdevitalidad)]">
+        {score.scoreLabel}
+      </p>
+    </div>
+  </div>
+
+  <div class="flex w-[629px] flex-col gap-[14px] text-[16px]">
+    {notifications.map((notification) => (
+      <div class="flex w-full items-start justify-between rounded-lg bg-white p-2 tracking-[-0.03em]">
+        <p class="font-montserrat font-semibold text-[var(--color-black)]">
+          {notification.label}
+        </p>
+        <p class={`font-montserrat font-bold tracking-[-0.03em] ${notification.valueColor}`}>
+          {notification.value}
+        </p>
+      </div>
+    ))}
+  </div>
+</div>

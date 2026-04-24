@@ -1,0 +1,32 @@
+---
+export interface TrustCardData {
+  title: string;
+  text: string;
+}
+
+export interface Props {
+  card: TrustCardData;
+  index: number;
+  className?: string;
+}
+
+const { card, index, className = '' } = Astro.props;
+---
+
+<article 
+  class={`trust-card absolute flex cursor-pointer flex-col items-center justify-center rounded-[36px] bg-[var(--color-azulhorizonte)] p-[40px] text-white transition-all duration-700 ease-out ${className}`}
+  data-index={index}
+>
+  <div class="flex w-full flex-col items-center gap-[20px] px-[10px]">
+    <div class="flex flex-col items-center justify-center py-[10px]">
+      <p class="text-center font-montserrat text-[36px] font-bold leading-[40px] text-white">
+        {card.title}
+      </p>
+    </div>
+    <div class="flex w-full flex-col items-start gap-[10px]">
+      <p class="text-center font-montserrat text-[20px] font-medium leading-[28px] text-white">
+        {card.text}
+      </p>
+    </div>
+  </div>
+</article>

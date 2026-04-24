@@ -1,0 +1,18 @@
+---
+export interface Props {
+  companyName: string;
+  description: string;
+  className?: string;
+}
+
+const { companyName, description, className = '' } = Astro.props;
+---
+
+<div class={`flex w-full flex-col items-start gap-[10px] ${className}`}>
+  <h3 class="font-montserrat text-[20px] font-extrabold leading-[80px] text-white">
+    {companyName}
+  </h3>
+  <p class="font-montserrat text-[14px] font-medium leading-[28px] text-white">
+    {description}
+  </p>
+</div>

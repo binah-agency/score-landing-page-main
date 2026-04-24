@@ -36,7 +36,25 @@
     },
     "cta": {
       "text": "Comienza tu viaje financiero hoy",
-      "subtext": "Únete a más de 50,000 venezolanos que ya confían en Crediscore"
+      "href": "#"
+    },
+    "scoreCard": {
+      "title": "Tu perfil financiero",
+      "badge": "HÍBRIDO",
+      "score": 742,
+      "scoreLabel": "SCORE ÓPTIMO",
+      "notifications": [
+        {
+          "label": "Alejandro Marín",
+          "value": "+15Pts",
+          "valueColor": "text-[#6a9a35]"
+        },
+        {
+          "label": "Perfíl empresarial verificado",
+          "value": "Completado",
+          "valueColor": "text-[var(--color-azulhorizonte)]"
+        }
+      ]
     }
   }
 }

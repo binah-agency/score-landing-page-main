@@ -1,0 +1,32 @@
+{
+  "section": {
+    "id": "core-modules",
+    "title": {
+      "subtitle": "MÓDULOS ESPECIALIZADOS",
+      "main": "Ecosistema que construye confianza"
+    },
+    "description": "Cada módulo permite navegar, observar y gestionar solicitudes de forma ordenada e individual, alimentando un perfíl único o híbrillo",
+    "modules": {
+      "empresa": {
+        "id": "credi-empresa",
+        "title": "Credi Empresa",
+        "subtitle": "Pymes, Emprendedores y Franquiciados",
+        "primaryText": "Liquidez inteligente para tu negocio.",
+        "secondaryText": "Evaluamos el flujo de caja y reputación para financiar tu expansión e inventario",
+        "features": ["Software Analítico de Trazabilidad", "Agilidad Comercial", "Reconstrucción de Líneas de Comercialización."],
+        "ctaText": "Impulsa tu Empresa",
+        "ctaHref": "#"
+      },
+      "persona": {
+        "id": "credi-persona",
+        "title": "Credi Persona",
+        "subtitle": "Pymes, Emprendedores y Franquiciados",
+        "primaryText": "Tu responsabilidad te da el poder de elegir.",
+        "secondaryText": "Convierte tus pagos habituales en una llave para tu sincronización financiera.",
+        "features": ["Impulso Profesional", "Calidad de Vida", "Sello de Validez"],
+        "ctaText": "Potencia tu Perfil",
+        "ctaHref": "#"
+      }
+    }
+  }
+}

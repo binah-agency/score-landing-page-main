@@ -1,0 +1,20 @@
+---
+export interface Props {
+  text: string;
+  size?: '64' | '48' | '36' | '24';
+  color?: string;
+}
+
+const { text, size = '64', color = 'text-white' } = Astro.props;
+
+const sizeClasses = {
+  '64': 'text-[64px] leading-[80px]',
+  '48': 'text-[48px] leading-[60px]',
+  '36': 'text-[36px] leading-normal',
+  '24': 'text-[24px] leading-normal',
+};
+---
+
+<h2 class={`font-montserrat font-extrabold ${sizeClasses[size]} ${color}`}>
+  {text}
+</h2>

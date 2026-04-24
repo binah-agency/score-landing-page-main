@@ -1,0 +1,18 @@
+{
+  "badges": [
+    {
+      "id": "google-play",
+      "name": "Google Play",
+      "href": "#",
+      "image": "/images/google-play-badge.png",
+      "alt": "Disponible en Google Play"
+    },
+    {
+      "id": "app-store",
+      "name": "App Store",
+      "href": "#",
+      "image": "/images/app-store-badge.svg",
+      "alt": "Descargar en App Store"
+    }
+  ]
+}

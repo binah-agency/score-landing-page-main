@@ -1,0 +1,11 @@
+{
+  "section": {
+    "id": "app-download",
+    "title": "¡Construye tu Confianza<br/>AHORA!",
+    "subtitle": "No te quedes atrás y empieza<br/>a certificar el valor de tu cumplimiento",
+    "phoneMockup": {
+      "src": "/assest/tlfn.png",
+      "alt": "CrediScore App"
+    }
+  }
+}

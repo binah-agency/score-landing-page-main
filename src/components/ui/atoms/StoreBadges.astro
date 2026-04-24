@@ -1,0 +1,27 @@
+---
+export interface StoreBadge {
+  id: string;
+  name: string;
+  href: string;
+  image: string;
+  alt: string;
+}
+
+export interface Props {
+  badges: StoreBadge[];
+}
+
+const { badges } = Astro.props;
+---
+
+<div class="flex flex-col items-start gap-[30px]">
+  {badges.map((badge) => (
+    <a href={badge.href} class="transition-opacity hover:opacity-90">
+      <img 
+        src={badge.image} 
+        alt={badge.alt} 
+        class="h-[100px] w-[300px] object-cover" 
+      />
+    </a>
+  ))}
+</div>

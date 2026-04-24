@@ -1,4 +1,7 @@
 {
+  "section": {
+    "id": "hero"
+  },
   "header": {
     "logo": {
       "alt": "Crediscore",
@@ -31,12 +34,14 @@
     ],
     "actions": [
       {
+        "id": "learn-more",
         "text": "Quiero saber más",
         "href": "#faq",
         "primary": false,
         "icon": "info"
       },
       {
+        "id": "app-download",
         "text": "Descargar App",
         "href": "#download",
         "primary": true,

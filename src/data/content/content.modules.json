@@ -1,0 +1,42 @@
+{
+  "section": {
+    "id": "modules",
+    "cards": [
+      {
+        "title": "Empresarial",
+        "icon": "/icons/briefcase.svg",
+        "description": "Potencia el crecimiento de tu empresa. Monitorea proveedores, clientes y accede a reportes detallados de solvencia comercial con nuestro DSS.",
+        "items": ["Análisis de Riesgo B2B", "Historial de pagos empresariales", "Verificación de solvencia"],
+        "accent": "text-[var(--color-azulhorizonte-alt)]"
+      },
+      {
+        "title": "Inmobiliaria",
+        "icon": "/icons/home.svg",
+        "description": "Gestión inteligente de perfiles para arrendamiento y compra-venta. Crea confianza inmediata con propietarios y agencias mediante tu score verificado.",
+        "items": ["Pre-calificación inquilinos", "Gestión de fianzas", "Reportes de cumplimiento"],
+        "accent": "text-[var(--color-verdevitalidad)]"
+      },
+      {
+        "title": "Condominios",
+        "icon": "/icons/building.svg",
+        "description": "Eleva la plusvalía de tu inmueble incentivando una cultura de cumplimiento que beneficia a todos",
+        "items": ["Certifica que la propiedad está en una comunidad solvente", "Puntualidad de servicios comunitarios", "Reducción de morosidad mediante el Score"],
+        "accent": "text-[var(--color-azulhorizonte-alt)]"
+      }
+    ],
+    "features": [
+      {
+        "id": "dss",
+        "icon": "/icons/database.svg",
+        "title": "DSS",
+        "subtitle": "Sistema de Apoyo a Decisiones"
+      },
+      {
+        "id": "analytics",
+        "icon": "/icons/graph.svg",
+        "title": "Analítica",
+        "subtitle": "Modelos de Precisión"
+      }
+    ]
+  }
+}

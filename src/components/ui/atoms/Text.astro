@@ -1,0 +1,28 @@
+---
+export interface Props {
+  text: string;
+  size?: '36' | '24' | '18' | '16';
+  color?: string;
+  weight?: 'extrabold' | 'bold' | 'semibold' | 'normal';
+}
+
+const { text, size = '36', color = 'text-white', weight = 'extrabold' } = Astro.props;
+
+const sizeClasses = {
+  '36': 'text-[36px]',
+  '24': 'text-[24px]',
+  '18': 'text-[18px]',
+  '16': 'text-[16px]',
+};
+
+const weightClasses = {
+  'extrabold': 'font-extrabold',
+  'bold': 'font-bold',
+  'semibold': 'font-semibold',
+  'normal': 'font-normal',
+};
+---
+
+<p class={`font-montserrat ${sizeClasses[size]} ${weightClasses[weight]} leading-normal ${color}`}>
+  {text}
+</p>

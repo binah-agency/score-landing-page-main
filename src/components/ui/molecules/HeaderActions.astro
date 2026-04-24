@@ -1,5 +1,6 @@
 ---
 export interface ActionItem {
+  id: string;
   text: string;
   href: string;
   primary?: boolean;
@@ -14,7 +15,7 @@ const { actions } = Astro.props;
 
 <div class="flex w-[500px] items-center justify-center gap-4 p-[10px]">
   {actions.map((action) => (
-    <a href={action.href} class={`flex h-[55px] w-[202px] items-center justify-center rounded-lg px-3 py-[10px] text-[20px] font-semibold transition-colors ${
+    <a id={`cs-${action.id}`} href={action.href} class={`flex h-[55px] w-[202px] items-center justify-center rounded-lg px-3 py-[10px] text-[20px] font-semibold transition-colors ${
       action.primary 
         ? 'bg-[var(--color-azulhorizonte)] text-white hover:bg-[var(--color-azulhorizonte-alt)]'
         : 'border-2 border-[var(--color-azulhorizonte)] text-[var(--color-azulhorizonte)] hover:bg-[var(--color-azulhorizonte)] hover:text-white whitespace-nowrap'

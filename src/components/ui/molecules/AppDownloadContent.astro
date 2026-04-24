@@ -1,0 +1,35 @@
+---
+export interface ContentData {
+  title: string;
+  subtitle: string;
+}
+
+export interface Props {
+  content: ContentData;
+  socialIcons: any[];
+  storeBadges: any[];
+}
+
+const { content, socialIcons, storeBadges } = Astro.props;
+import Heading from '../atoms/Heading.astro';
+import Text from '../atoms/Text.astro';
+import SocialIcons from '../atoms/SocialIcons.astro';
+import StoreBadges from '../atoms/StoreBadges.astro';
+---
+
+<div class="flex w-[820px] flex-col items-start gap-[43px]">
+  <!-- Título principal: 64px extrabold -->
+  <Heading text={content.title} size="64" color="text-white" />
+  
+  <!-- Subtítulo: 36px extrabold -->
+  <Text text={content.subtitle} size="36" color="text-white" weight="extrabold" />
+  
+  <!-- Badges y redes sociales -->
+  <div class="flex items-start gap-[65px]">
+    <!-- Badges de stores -->
+    <StoreBadges badges={storeBadges} />
+    
+    <!-- Iconos de redes sociales -->
+    <SocialIcons icons={socialIcons} />
+  </div>
+</div>

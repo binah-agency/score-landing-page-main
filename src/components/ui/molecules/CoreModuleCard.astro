@@ -1,0 +1,59 @@
+---
+export interface CoreModuleData {
+  id: string;
+  title: string;
+  subtitle: string;
+  primaryText: string;
+  secondaryText: string;
+  features: string[];
+  ctaText: string;
+  ctaHref: string;
+}
+
+export interface Props {
+  module: CoreModuleData;
+  theme: 'blue' | 'green';
+  className?: string;
+}
+
+const { module, theme, className = '' } = Astro.props;
+
+const themeClasses = {
+  blue: {
+    bg: 'bg-[var(--color-azulhorizonte-alt)]',
+    buttonBorder: 'border-[var(--color-verdevitalidad)]',
+    buttonBg: 'bg-[var(--color-verdevitalidad)]',
+  },
+  green: {
+    bg: 'bg-[var(--color-verdevitalidad)]',
+    buttonBorder: 'border-[var(--color-azulhorizonte-alt)]',
+    buttonBg: 'bg-[var(--color-azulhorizonte-alt)]',
+  },
+};
+
+const styles = themeClasses[theme];
+---
+
+<article class={`flex flex-col gap-8 rounded-[32px] ${styles.bg} p-8 text-white ${className}`}>
+  <div>
+    <h3 class="text-[48px] font-bold leading-[1.1]">{module.title}</h3>
+    <p class="mt-3 text-[20px] font-semibold italic">{module.subtitle}</p>
+  </div>
+  <div class="space-y-8">
+    <div>
+      <p class="text-[24px] font-semibold italic">{module.primaryText}</p>
+      <p class="mt-3 text-[20px] font-medium leading-[1.4]">{module.secondaryText}</p>
+    </div>
+    <p class="text-[20px] font-bold leading-[1.4]">
+      {module.features.join('<br/>')}
+    </p>
+  </div>
+  <a href={module.ctaHref} class="inline-flex h-[56px] w-full items-center gap-3 rounded-[8px] border-2 px-2 text-[18px] font-semibold {styles.buttonBorder} {styles.buttonBg} text-white">
+    <span class="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full {styles.buttonBg}">
+      <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-45">
+        <path d="M20 8V32M20 8L10 18M20 8L30 18" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    {module.ctaText}
+  </a>
+</article>

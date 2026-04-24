@@ -1,0 +1,44 @@
+---
+export interface ModuleCardData {
+  title: string;
+  icon: string;
+  description: string;
+  items: string[];
+  accent: string;
+}
+
+export interface Props {
+  card: ModuleCardData;
+  className?: string;
+}
+
+const { card, className = '' } = Astro.props;
+---
+
+<article class={`flex min-h-[500px] w-full flex-col rounded-[30px] bg-white p-[30px] lg:w-[380px] ${className}`}>
+  <div class="h-[70px] w-[70px] overflow-hidden">
+    <img src={card.icon} alt={card.title} class="h-full w-full" />
+  </div>
+  
+  <div class="mt-2 flex flex-1 flex-col items-start">
+    <p class="font-montserrat text-[28px] font-bold leading-[34px] text-[var(--color-black)]">
+      {card.title}
+    </p>
+    
+    <div class="mt-2 flex w-full flex-col gap-[4px]">
+      <p class="font-montserrat text-[16px] font-medium leading-[22px] text-[var(--color-black)]">
+        {card.description}
+      </p>
+      
+      <ul class="mt-11 list-disc pl-[24px] font-montserrat text-[15px] font-medium leading-[22px] text-[var(--color-black)]">
+        {card.items.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    
+    <div class="mt-auto flex w-full items-center justify-center pt-4">
+      <a href="#" class:list={['font-montserrat text-[20px] font-bold leading-[32px]', card.accent]}>
+        Saber más
+      </a>
+    </div>
+  </div>
+</article>

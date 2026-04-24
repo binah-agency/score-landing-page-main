@@ -1,61 +1,19 @@
 ---
-// FaqSection - Preguntas Frecuentes con acordeón animado
-// Estado cerrado: fondo azul, texto blanco, botón + verde
-// Estado abierto: fondo blanco, texto azul, botón x azul
-
 import faqData from '../../data/content/content.faq.json';
+import FaqItem from '../ui/molecules/FaqItem.astro';
 
 const { faqs } = faqData;
 ---
 
 <section class="w-full bg-[#4a4a4a] px-[48px] py-[64px]" id="faq">
   <div class="mx-auto flex w-full max-w-[1180px] flex-col items-start overflow-hidden rounded-[40px]">
-    {
-      faqs.map((faq, index) => (
-        <article 
-          class="faq-item group w-full cursor-pointer border-b border-[#7a7a7a] last:border-b-0"
-          data-index={index}
-        >
-          <!-- Contenedor principal -->
-          <div class="faq-surface flex w-full gap-[52px] bg-[var(--color-azulhorizonte)] px-[60px] py-[52px] transition-colors duration-300">
-            <!-- Número -->
-            <span class="faq-number font-inter text-[48px] font-bold leading-[1.2] tracking-[0.25px] text-[#a5d470] transition-colors duration-300">
-              {faq.number}
-            </span>
-            
-            <!-- Contenido -->
-            <div class="flex flex-1 flex-col gap-[24px] pt-[3px]">
-              <!-- Header -->
-              <div class="flex items-start gap-[16px]">
-                <!-- Pregunta -->
-                <p class="faq-question flex-1 font-inter text-[32px] font-bold leading-[1.2] text-white transition-colors duration-300">
-                  {faq.question}
-                </p>
-                
-                <!-- Botón -->
-                <button class="faq-btn flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-full bg-[var(--color-verdevitalidad)] transition-all duration-300">
-                  <span class="faq-icon text-[24px] font-bold text-white transition-transform duration-300">+</span>
-                </button>
-              </div>
-              
-              <!-- Respuesta (animación slide down) -->
-              <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300 ease-out">
-                <div class="overflow-hidden">
-                  <p class="font-inter text-[20px] font-normal leading-[1.4] text-[#4a4a4a] whitespace-pre-line pb-2">
-                    {faq.answer}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>
-      ))
-    }
+    {faqs.map((faq, index) => (
+      <FaqItem item={faq} index={index} />
+    ))}
   </div>
 </section>
 
 <style>
-  /* Estado abierto */
   .faq-item.open .faq-surface {
     background-color: white;
   }
@@ -82,21 +40,54 @@ const { faqs } = faqData;
 </style>
 
 <script>
+  import { gsap } from 'gsap';
+  
   document.addEventListener('DOMContentLoaded', () => {
     const faqItems = document.querySelectorAll('.faq-item');
+    const answerElements = document.querySelectorAll('.faq-answer');
     
-    faqItems.forEach((item) => {
+    if (!faqItems.length || !answerElements.length) return;
+
+    // Set initial state - all answers closed
+    answerElements.forEach((answer) => {
+      (answer as HTMLElement).style.height = '0px';
+      (answer as HTMLElement).style.overflow = 'hidden';
+    });
+
+    faqItems.forEach((item, index) => {
       item.addEventListener('click', () => {
         const isOpen = item.classList.contains('open');
         
-        // Cerrar todos los demás
-        faqItems.forEach((otherItem) => {
+        // Close all items
+        faqItems.forEach((otherItem, otherIndex) => {
           otherItem.classList.remove('open');
+          
+          // Animate close
+          const otherAnswer = answerElements[otherIndex] as HTMLElement;
+          gsap.to(otherAnswer, {
+            height: 0,
+            duration: 0.3,
+            ease: 'power2.inOut'
+          });
         });
         
-        // Toggle el actual
+        // Toggle current if not open
         if (!isOpen) {
           item.classList.add('open');
+          
+          // Animate open
+          const answer = answerElements[index] as HTMLElement;
+          const content = answer.querySelector('div') as HTMLElement;
+          const contentHeight = content.scrollHeight;
+          
+          gsap.to(answer, {
+            height: contentHeight + 'px',
+            duration: 0.3,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              answer.style.height = 'auto';
+            }
+          });
         }
       });
     });

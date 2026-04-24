@@ -1,0 +1,37 @@
+---
+export interface CtaCardData {
+  title: string;
+  text: string;
+  icon?: string;
+}
+
+export interface Props {
+  card: CtaCardData;
+  className?: string;
+}
+
+const { card, className = '' } = Astro.props;
+---
+
+<article class={`flex w-full max-w-[494px] flex-col items-center rounded-[24px] px-[12px] py-[24px] lg:w-[494px] ${className}`}>
+  <div class="flex h-[111px] w-full items-start">
+    <div class="flex items-center p-[10px]">
+      <div class="flex h-[57px] w-[57px] items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
+        <img 
+          src="/icons/arrow-up.svg" 
+          alt="arrow" 
+          class="h-[40px] w-[40px] rotate-45"
+        />
+      </div>
+    </div>
+    
+    <div class="flex flex-1 flex-col items-start pt-[16px]">
+      <p class="font-montserrat text-[24px] font-bold leading-[32px] text-white">
+        {card.title}
+      </p>
+      <p class="mt-2 font-montserrat text-[14px] font-medium leading-[16px] text-[var(--color-azulhorizonte40)]">
+        {card.text}
+      </p>
+    </div>
+  </div>
+</article>

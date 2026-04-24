@@ -1,0 +1,22 @@
+{
+  "footer": {
+    "company": {
+      "name": "Crediscore",
+      "description": "CrediScore es la infraestructura tecnológica líder en Venezuela que certifica tu reputación comercial. Transformamos el comportamiento de cumplimiento en un estándar de confianza técnica mediante analítica avanzada."
+    },
+    "quickLinks": [
+      { "label": "Quiénes somos", "href": "#" },
+      { "label": "Servicios", "href": "#" },
+      { "label": "Credi Persona", "href": "#" },
+      { "label": "Credi Empresa", "href": "#" },
+      { "label": "Términos y Condiciones", "href": "/terminos-y-condiciones" },
+      { "label": "Política de Privacidad", "href": "/privacidad" }
+    ],
+    "cta": {
+      "title": "Certifica tu Reputación Comercial",
+      "buttonText": "Descargar App",
+      "href": "#"
+    },
+    "copyright": "2026 CREDISCORE VENEZUELA. TODOS LOS DERECHOS RESERVADOS"
+  }
+}

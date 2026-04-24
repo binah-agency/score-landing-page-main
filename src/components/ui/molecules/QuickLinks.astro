@@ -1,0 +1,21 @@
+---
+export interface QuickLink {
+  label: string;
+  href: string;
+}
+
+export interface Props {
+  links: QuickLink[];
+  className?: string;
+}
+
+const { links, className = '' } = Astro.props;
+---
+
+<nav class={`flex flex-col font-montserrat text-[16px] font-medium leading-[30px] text-white ${className}`}>
+  {links.map((link) => (
+    <a href={link.href} class="transition-colors hover:text-[var(--color-verdevitalidad)]">
+      {link.label}
+    </a>
+  ))}
+</nav>

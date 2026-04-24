@@ -119,9 +119,7 @@ const gaConfig = {
     }),
 
     conversion: (id, value = 0, currency = 'VES') => 
-      gtag('event', 'conversion', { 
-        send_to: id, value, currency, transaction_id: id 
-      }),
+      gtag('event', 'conversion', { send_to: id, value, currency, ...gaConfig.conversion }),
 
     timing: (cat, name, val, label = '') => 
       gtag('event', 'timing_complete', { 

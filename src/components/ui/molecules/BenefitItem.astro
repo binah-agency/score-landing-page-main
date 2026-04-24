@@ -1,0 +1,29 @@
+---
+export interface Benefit {
+  title: string;
+  description: string;
+  icon?: string;
+}
+
+export interface Props {
+  benefit: Benefit;
+  index: number;
+  className?: string;
+}
+
+const { benefit, index, className = '' } = Astro.props;
+---
+
+<div class={`flex items-start gap-3 ${className}`}>
+  <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-azulhorizonte)]">
+    <span class="text-white text-sm font-bold">{index + 1}</span>
+  </div>
+  <div>
+    <p class="font-montserrat text-[18px] font-bold text-[var(--color-black)]">
+      {benefit.title}
+    </p>
+    <p class="font-montserrat text-[16px] text-[var(--color-gray600)] mt-1">
+      {benefit.description}
+    </p>
+  </div>
+</div>

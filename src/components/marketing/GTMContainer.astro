@@ -11,7 +11,7 @@ declare global {
 }
 
 interface Props {
-  id: string;
+  id?: string;
   config?: GTMConfig;
   autoTrack?: AutoTrackConfig;
   dataLayer?: DataLayerDefaults;
@@ -52,7 +52,7 @@ type ConsentConfig = {
 
 // Merge props with sensible defaults loaded from JSON (declarative, not imperative)
 const {
-  id = "GTM-NKMKSDN5",
+  id = "",
   config = {},
   autoTrack = gtmContainerConfig.defaultAutoTrack,
   dataLayer = gtmContainerConfig.defaultDataLayer,

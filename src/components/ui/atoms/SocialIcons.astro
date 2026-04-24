@@ -1,0 +1,28 @@
+---
+export interface SocialIcon {
+  id: string;
+  name: string;
+  href: string;
+  path: string;
+}
+
+export interface Props {
+  icons: SocialIcon[];
+}
+
+const { icons } = Astro.props;
+---
+
+<div class="flex w-[60px] flex-col gap-[10px]">
+  {icons.map((icon) => (
+    <a 
+      href={icon.href} 
+      class="flex h-[60px] w-[60px] items-center justify-center rounded-[14px] bg-white transition-transform hover:scale-105"
+      aria-label={icon.name}
+    >
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="#3467b0">
+        <path d={icon.path} />
+      </svg>
+    </a>
+  ))}
+</div>

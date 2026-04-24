@@ -1,0 +1,18 @@
+---
+export interface Props {
+  line1: string;
+  line2: string;
+  className?: string;
+}
+
+const { line1, line2, className = '' } = Astro.props;
+---
+
+<div class={`flex w-full flex-col items-start pb-2 ${className}`}>
+  <p class="w-full font-montserrat text-[48px] font-bold capitalize leading-[64px] tracking-[-0.03em] text-[var(--color-black)]">
+    {line1}
+  </p>
+  <p class="w-full font-montserrat text-[48px] font-bold capitalize leading-[64px] tracking-[-0.03em] text-[var(--color-azulhorizonte)]">
+    {line2}
+  </p>
+</div>

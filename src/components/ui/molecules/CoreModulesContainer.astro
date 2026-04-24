@@ -1,0 +1,118 @@
+---
+export interface CoreModuleData {
+  id: string;
+  title: string;
+  subtitle: string;
+  primaryText: string;
+  secondaryText: string;
+  features: string[];
+  ctaText: string;
+  ctaHref: string;
+}
+
+export interface DesktopModuleData {
+  id: string;
+  title: string;
+  subtitle: string;
+  primaryText: string;
+  secondaryText: string;
+  features: string[];
+  ctaText: string;
+  ctaHref: string;
+}
+
+export interface Props {
+  leftModule: DesktopModuleData;
+  rightModule: DesktopModuleData;
+  className?: string;
+}
+
+const { leftModule, rightModule, className = '' } = Astro.props;
+---
+
+<div class={`relative mx-auto h-[850px] w-full max-w-[1494px] rounded-[40px] bg-white ${className}`}>
+  <div class="absolute left-0 top-0 flex items-start">
+    <div class="h-[850px] w-[967px] rounded-bl-[40px] rounded-tl-[40px] bg-[var(--color-azulhorizonte-alt)]"></div>
+    <div class="h-[201px] w-[527px] rounded-br-[40px] rounded-tr-[40px] bg-[var(--color-azulhorizonte-alt)]"></div>
+  </div>
+
+  <div class="absolute left-[882px] top-[201px] flex h-[648px] w-[612px] items-center rounded-[32px] bg-white p-[20px]">
+    <div class="flex h-full w-full items-center justify-center rounded-[32px] bg-[var(--color-verdevitalidad)]">
+      <div class="flex h-full w-full flex-col items-center justify-between px-6 py-8">
+        <div class="flex flex-col items-start">
+          <p class="font-montserrat text-[54px] font-bold leading-[1.1] text-white">
+            {rightModule.title}
+          </p>
+          <p class="font-montserrat text-[20px] font-semibold italic leading-[24px] text-white">
+            {rightModule.subtitle}
+          </p>
+        </div>
+
+        <div class="flex w-full flex-col items-start gap-4">
+          <p class="font-montserrat text-[27px] font-bold italic leading-[1.4] text-white">
+            {rightModule.primaryText}
+          </p>
+          <p class="font-montserrat text-[27px] font-medium leading-[1.4] text-white">
+            {rightModule.secondaryText}
+          </p>
+        </div>
+
+        <p class="self-start font-montserrat text-[27px] font-bold leading-[1.4] text-white">
+          {rightModule.features.join('<br/>')}
+        </p>
+
+        <a href={rightModule.ctaHref} class="inline-flex h-[65px] items-center gap-2 rounded-[8px] border-2 border-[var(--color-azulhorizonte-alt)] pr-5">
+          <span class="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[var(--color-azulhorizonte-alt)]">
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-45">
+              <path d="M20 8V32M20 8L10 18M20 8L30 18" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="font-montserrat text-[20px] font-semibold text-white">
+            {rightModule.ctaText}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute left-[71px] top-[79px] flex flex-col items-start gap-[34px]">
+    <div class="flex flex-col items-start gap-[10px]">
+      <p class="font-montserrat text-[98px] font-bold leading-[1] text-white">
+        {leftModule.title}
+      </p>
+      <p class="font-montserrat text-[27px] font-semibold italic leading-[1.4] text-white">
+        {leftModule.subtitle}
+      </p>
+    </div>
+
+    <div class="flex w-full flex-col items-start gap-[80px] py-[27px]">
+      <div class="flex w-full flex-col items-start gap-[60px]">
+        <div class="flex w-full flex-col items-start">
+          <p class="font-montserrat text-[27px] font-semibold italic leading-[1.3] text-white">
+            {leftModule.primaryText}
+          </p>
+          <p class="mt-2 font-montserrat text-[27px] font-medium leading-[1.5] text-white">
+            {leftModule.secondaryText}
+          </p>
+        </div>
+
+        <p class="font-montserrat text-[27px] font-bold leading-[1.5] text-white">
+          {leftModule.features.join('<br/>')}
+        </p>
+      </div>
+
+      <div class="flex w-full justify-center">
+        <a href={leftModule.ctaHref} class="inline-flex h-[65px] items-center gap-2 rounded-[8px] border-2 border-[var(--color-verdevitalidad)] pr-5">
+          <span class="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[var(--color-verdevitalidad)]">
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="rotate-45">
+              <path d="M20 8V32M20 8L10 18M20 8L30 18" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="font-montserrat text-[20px] font-semibold text-white">
+            {leftModule.ctaText}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
